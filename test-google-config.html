@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar Configuration Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+        .status-success { color: #198754; }
+        .status-error { color: #dc3545; }
+        .status-warning { color: #fd7e14; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            <i class="bi bi-gear me-2"></i>
+            Google Calendar Configuration Test
+        </h1>
+
+        <!-- Current Configuration -->
+        <div class="test-section">
+            <h3>Current Configuration</h3>
+            <div id="currentConfig" class="code-block">Loading configuration...</div>
+        </div>
+
+        <!-- Configuration Validation -->
+        <div class="test-section">
+            <h3>Configuration Validation</h3>
+            <div id="validationResults" class="code-block">Running validation...</div>
+        </div>
+
+        <!-- OAuth Test -->
+        <div class="test-section">
+            <h3>OAuth Connection Test</h3>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary" onclick="testOAuthConnection()">
+                    <i class="bi bi-google me-2"></i>Test Google OAuth Connection
+                </button>
+            </div>
+            <div id="oauthResults" class="code-block">Click the button above to test OAuth connection...</div>
+        </div>
+
+        <!-- Manual Configuration -->
+        <div class="test-section">
+            <h3>Manual Configuration Check</h3>
+            <div class="alert alert-info">
+                <h5>Google Cloud Console Setup Required:</h5>
+                <ol>
+                    <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Select your project</li>
+                    <li>Go to <strong>APIs & Services > Credentials</strong></li>
+                    <li>Find your OAuth 2.0 Client ID and click on it</li>
+                    <li>Add these <strong>Authorized redirect URIs</strong>:
+                        <ul>
+                            <li><code>http://localhost:8001/QuickNotesAI-SLN/task.html</code></li>
+                            <li><code>http://localhost:8001/QuickNotesAI-SLN/</code></li>
+                            <li><code>http://localhost:8001/</code></li>
+                            <li><code>http://127.0.0.1:8001/QuickNotesAI-SLN/task.html</code></li>
+                            <li><code>http://127.0.0.1:8001/QuickNotesAI-SLN/</code></li>
+                            <li><code>http://127.0.0.1:8001/</code></li>
+                        </ul>
+                    </li>
+                    <li>Add these <strong>Authorized JavaScript origins</strong>:
+                        <ul>
+                            <li><code>http://localhost:8001</code></li>
+                            <li><code>http://127.0.0.1:8001</code></li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>Save</strong></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Debug Information -->
+        <div class="test-section">
+            <h3>Debug Information</h3>
+            <div id="debugInfo" class="code-block">Loading debug information...</div>
+        </div>
+    </div>
+
+    <!-- Load Google API -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Load our scripts -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+
+    <script>
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toastContainer = document.createElement('div');
+            toastContainer.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                max-width: 300px;
+            `;
+            
+            const alertClass = type === 'success' ? 'alert-success' : 
+                             type === 'error' ? 'alert-danger' : 
+                             type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            toastContainer.innerHTML = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(toastContainer);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (toastContainer.parentNode) {
+                    toastContainer.parentNode.removeChild(toastContainer);
+                }
+            }, 5000);
+        }
+
+        // Display current configuration
+        function displayCurrentConfig() {
+            const configDiv = document.getElementById('currentConfig');
+            if (window.googleConfig) {
+                configDiv.innerHTML = JSON.stringify(window.googleConfig, null, 2);
+            } else {
+                configDiv.innerHTML = 'Configuration not found!';
+            }
+        }
+
+        // Display validation results
+        function displayValidationResults() {
+            const validationDiv = document.getElementById('validationResults');
+            if (window.validateGoogleConfiguration) {
+                const validation = window.validateGoogleConfiguration();
+                let html = '';
+                
+                if (validation.isValid) {
+                    html += '<span class="status-success">✓ Configuration is valid</span>\n';
+                } else {
+                    html += '<span class="status-error">✗ Configuration has issues:</span>\n';
+                    validation.issues.forEach(issue => {
+                        html += `  - ${issue}\n`;
+                    });
+                }
+                
+                validationDiv.innerHTML = html;
+            } else {
+                validationDiv.innerHTML = 'Validation function not available';
+            }
+        }
+
+        // Test OAuth connection
+        async function testOAuthConnection() {
+            const oauthDiv = document.getElementById('oauthResults');
+            oauthDiv.innerHTML = 'Testing OAuth connection...\n';
+            
+            try {
+                // Check if Google API is loaded
+                if (!window.gapi) {
+                    throw new Error('Google API not loaded');
+                }
+                
+                oauthDiv.innerHTML += '✓ Google API loaded\n';
+                
+                // Check if configuration exists
+                if (!window.googleConfig) {
+                    throw new Error('Google configuration not found');
+                }
+                
+                oauthDiv.innerHTML += '✓ Configuration found\n';
+                
+                // Check if gcal is available
+                if (!window.gcal) {
+                    throw new Error('Google Calendar service not loaded');
+                }
+                
+                oauthDiv.innerHTML += '✓ Google Calendar service loaded\n';
+                
+                // Try to initialize
+                if (window.gcal.init) {
+                    await window.gcal.init();
+                    oauthDiv.innerHTML += '✓ Google Calendar initialized\n';
+                }
+                
+                // Check connection status
+                if (window.gcal.isSignedIn) {
+                    const isSignedIn = window.gcal.isSignedIn();
+                    oauthDiv.innerHTML += `✓ Connection status: ${isSignedIn ? 'Connected' : 'Not connected'}\n`;
+                }
+                
+                oauthDiv.innerHTML += '\n<span class="status-success">OAuth test completed successfully!</span>';
+                showToast('OAuth test completed successfully!', 'success');
+                
+            } catch (error) {
+                oauthDiv.innerHTML += `\n<span class="status-error">Error: ${error.message}</span>`;
+                showToast(`OAuth test failed: ${error.message}`, 'error');
+                console.error('[OAuth Test] Error:', error);
+            }
+        }
+
+        // Display debug information
+        function displayDebugInfo() {
+            const debugDiv = document.getElementById('debugInfo');
+            const info = {
+                currentUrl: window.location.href,
+                currentDomain: window.location.hostname,
+                currentPort: window.location.port,
+                userAgent: navigator.userAgent,
+                googleApiLoaded: !!window.gapi,
+                googleCalendarLoaded: !!window.gcal,
+                googleConfigLoaded: !!window.googleConfig,
+                timestamp: new Date().toISOString()
+            };
+            
+            debugDiv.innerHTML = JSON.stringify(info, null, 2);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCurrentConfig();
+            displayValidationResults();
+            displayDebugInfo();
+            
+            // Auto-refresh validation every 5 seconds
+            setInterval(displayValidationResults, 5000);
+        });
+    </script>
+</body>
+</html> 

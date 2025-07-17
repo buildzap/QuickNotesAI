@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickNotes AI - Test Runner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .test-item { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .test-pass { background-color: #d4edda; border-color: #c3e6cb; }
+        .test-fail { background-color: #f8d7da; border-color: #f5c6cb; }
+        .test-info { background-color: #d1ecf1; border-color: #bee5eb; }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">QuickNotes AI - Test Runner</h1>
+        
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Quick Test Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="testResults">
+                            <div class="test-item test-info">
+                                <strong>Environment Check:</strong> Running...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Manual Testing Checklist</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Authentication</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auth1">
+                                    <label class="form-check-label" for="auth1">Google Sign-in works</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auth2">
+                                    <label class="form-check-label" for="auth2">Email registration works</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auth3">
+                                    <label class="form-check-label" for="auth3">Session persistence works</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Core Features</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="core1">
+                                    <label class="form-check-label" for="core1">Voice input functions</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="core2">
+                                    <label class="form-check-label" for="core2">Task management works</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="core3">
+                                    <label class="form-check-label" for="core3">Google Calendar sync works</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Quick Navigation</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="index.html" class="btn btn-outline-primary">Index Page</a>
+                            <a href="login.html" class="btn btn-outline-success">Login</a>
+                            <a href="task.html" class="btn btn-outline-info">Tasks</a>
+                            <a href="dashboard.html" class="btn btn-outline-secondary">Dashboard</a>
+                            <a href="premium.html" class="btn btn-outline-warning">Premium</a>
+                            <a href="test-gcal.html" class="btn btn-outline-danger">Calendar Test</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Run environment checks
+        function runTests() {
+            const results = document.getElementById('testResults');
+            let html = '';
+
+            // Check HTTPS/Localhost
+            const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+            html += `<div class="test-item ${isSecure ? 'test-pass' : 'test-fail'}">
+                <strong>Secure Context:</strong> ${isSecure ? 'PASS' : 'FAIL'} - ${isSecure ? 'HTTPS or localhost' : 'Requires HTTPS for voice input'}
+            </div>`;
+
+            // Check Firebase
+            const hasFirebase = typeof firebase !== 'undefined';
+            html += `<div class="test-item ${hasFirebase ? 'test-pass' : 'test-fail'}">
+                <strong>Firebase SDK:</strong> ${hasFirebase ? 'PASS' : 'FAIL'} - ${hasFirebase ? 'Loaded' : 'Not loaded'}
+            </div>`;
+
+            // Check Chart.js
+            const hasChartJS = typeof Chart !== 'undefined';
+            html += `<div class="test-item ${hasChartJS ? 'test-pass' : 'test-fail'}">
+                <strong>Chart.js:</strong> ${hasChartJS ? 'PASS' : 'FAIL'} - ${hasChartJS ? 'Loaded' : 'Not loaded'}
+            </div>`;
+
+            // Check Web Speech API
+            const hasSpeechAPI = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+            html += `<div class="test-item ${hasSpeechAPI ? 'test-pass' : 'test-fail'}">
+                <strong>Web Speech API:</strong> ${hasSpeechAPI ? 'PASS' : 'FAIL'} - ${hasSpeechAPI ? 'Available' : 'Not available'}
+            </div>`;
+
+            // Check Google API
+            const hasGoogleAPI = typeof gapi !== 'undefined' || typeof google !== 'undefined';
+            html += `<div class="test-item ${hasGoogleAPI ? 'test-pass' : 'test-fail'}">
+                <strong>Google API:</strong> ${hasGoogleAPI ? 'PASS' : 'FAIL'} - ${hasGoogleAPI ? 'Loaded' : 'Not loaded'}
+            </div>`;
+
+            results.innerHTML = html;
+        }
+
+        // Run tests on page load
+        document.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Google Apps Script URL</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-box { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .result { background: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 3px; white-space: pre-wrap; font-family: monospace; }
+        .error { background: #ffe6e6; color: #d32f2f; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Google Apps Script URL</h1>
+    
+    <div class="test-box">
+        <h3>Current URL being tested:</h3>
+        <p><code>https://script.google.com/macros/s/AKfycbyQ6OToO0N6eIQgLFydl4z4gzikyFW5H-mEAfXtdwxvKVsNTOl65npHd4w86IEntzfZ/exec</code></p>
+    </div>
+    
+    <div class="test-box">
+        <h3>Test 1: Direct GET Request</h3>
+        <button onclick="testDirectGET()">Test Direct GET</button>
+        <div id="getResult" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-box">
+        <h3>Test 2: Direct POST Request</h3>
+        <button onclick="testDirectPOST()">Test Direct POST</button>
+        <div id="postResult" class="result">Click the button to test...</div>
+    </div>
+    
+    <div class="test-box">
+        <h3>Test 3: Proxy Test</h3>
+        <button onclick="testProxy()">Test Proxy</button>
+        <div id="proxyResult" class="result">Click the button to test...</div>
+    </div>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyQ6OToO0N6eIQgLFydl4z4gzikyFW5H-mEAfXtdwxvKVsNTOl65npHd4w86IEntzfZ/exec';
+        
+        async function testDirectGET() {
+            const resultDiv = document.getElementById('getResult');
+            resultDiv.textContent = 'Testing...';
+            resultDiv.className = 'result';
+            
+            try {
+                console.log('Testing direct GET to:', GAS_URL);
+                const response = await fetch(GAS_URL, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const data = await response.text();
+                console.log('Response data:', data);
+                
+                resultDiv.textContent = `Status: ${response.status}\n\nHeaders:\n${JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)}\n\nResponse (first 500 chars):\n${data.substring(0, 500)}${data.length > 500 ? '...' : ''}`;
+                
+                if (data.includes('<!DOCTYPE') || data.includes('<html')) {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent += '\n\n❌ ERROR: Response is HTML, not JSON!';
+                } else {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent += '\n\n✅ SUCCESS: Response appears to be JSON';
+                }
+            } catch (error) {
+                console.error('GET Error:', error);
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testDirectPOST() {
+            const resultDiv = document.getElementById('postResult');
+            resultDiv.textContent = 'Testing...';
+            resultDiv.className = 'result';
+            
+            try {
+                console.log('Testing direct POST to:', GAS_URL);
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'testConnection'
+                    }),
+                    mode: 'cors'
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.text();
+                console.log('Response data:', data);
+                
+                resultDiv.textContent = `Status: ${response.status}\n\nResponse (first 500 chars):\n${data.substring(0, 500)}${data.length > 500 ? '...' : ''}`;
+                
+                if (data.includes('<!DOCTYPE') || data.includes('<html')) {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent += '\n\n❌ ERROR: Response is HTML, not JSON!';
+                } else {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent += '\n\n✅ SUCCESS: Response appears to be JSON';
+                }
+            } catch (error) {
+                console.error('POST Error:', error);
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        async function testProxy() {
+            const resultDiv = document.getElementById('proxyResult');
+            resultDiv.textContent = 'Testing...';
+            resultDiv.className = 'result';
+            
+            try {
+                console.log('Testing proxy endpoint');
+                const response = await fetch('/api/test-gas', {
+                    method: 'GET'
+                });
+                
+                console.log('Proxy response status:', response.status);
+                const data = await response.json();
+                console.log('Proxy response data:', data);
+                
+                resultDiv.textContent = `Status: ${response.status}\n\nResponse:\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                console.error('Proxy Error:', error);
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html> 

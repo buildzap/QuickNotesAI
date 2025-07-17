@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar Fixes Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Google Calendar Fixes Test</h1>
+    
+    <div class="test-section">
+        <h2>📋 Configuration Tests</h2>
+        <div id="configResults"></div>
+        <button class="btn-primary" onclick="runConfigTests()">Run Configuration Tests</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Validation Tests</h2>
+        <div id="validationResults"></div>
+        <button class="btn-success" onclick="runValidationTests()">Run Validation Tests</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🚀 Integration Tests</h2>
+        <div id="integrationResults"></div>
+        <button class="btn-warning" onclick="runIntegrationTests()">Run Integration Tests</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Test Results Summary</h2>
+        <div id="summaryResults"></div>
+    </div>
+    
+    <!-- Load scripts in the correct order -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+    <script src="js/calendarService.js"></script>
+    <script src="js/task.js"></script>
+    
+    <script>
+        let testResults = {
+            config: { passed: 0, failed: 0, total: 0 },
+            validation: { passed: 0, failed: 0, total: 0 },
+            integration: { passed: 0, failed: 0, total: 0 }
+        };
+        
+        function addResult(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            container.appendChild(div);
+            
+            // Update test results
+            const category = containerId.replace('Results', '');
+            if (type === 'success') {
+                testResults[category].passed++;
+            } else if (type === 'error') {
+                testResults[category].failed++;
+            }
+            testResults[category].total++;
+            
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            const summary = document.getElementById('summaryResults');
+            const totalPassed = testResults.config.passed + testResults.validation.passed + testResults.integration.passed;
+            const totalFailed = testResults.config.failed + testResults.validation.failed + testResults.integration.failed;
+            const totalTests = totalPassed + totalFailed;
+            
+            summary.innerHTML = `
+                <div class="test-result ${totalFailed === 0 ? 'success' : 'warning'}">
+                    <h3>📊 Test Summary</h3>
+                    <p><strong>Total Tests:</strong> ${totalTests}</p>
+                    <p><strong>Passed:</strong> ${totalPassed} ✅</p>
+                    <p><strong>Failed:</strong> ${totalFailed} ❌</p>
+                    <p><strong>Success Rate:</strong> ${totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 0}%</p>
+                    
+                    <h4>Breakdown:</h4>
+                    <ul>
+                        <li>Configuration Tests: ${testResults.config.passed}/${testResults.config.total} passed</li>
+                        <li>Validation Tests: ${testResults.validation.passed}/${testResults.validation.total} passed</li>
+                        <li>Integration Tests: ${testResults.integration.passed}/${testResults.integration.total} passed</li>
+                    </ul>
+                </div>
+            `;
+        }
+        
+        function runConfigTests() {
+            const container = document.getElementById('configResults');
+            container.innerHTML = '';
+            testResults.config = { passed: 0, failed: 0, total: 0 };
+            
+            console.log('Running configuration tests...');
+            
+            // Test 1: Check if googleConfig exists
+            if (window.googleConfig) {
+                addResult('configResults', '✅ googleConfig object exists', 'success');
+            } else {
+                addResult('configResults', '❌ googleConfig object not found', 'error');
+                return;
+            }
+            
+            // Test 2: Check if authorizedDomains is an array
+            if (window.googleConfig.authorizedDomains && Array.isArray(window.googleConfig.authorizedDomains)) {
+                addResult('configResults', `✅ authorizedDomains is an array with ${window.googleConfig.authorizedDomains.length} items`, 'success');
+            } else {
+                addResult('configResults', '❌ authorizedDomains is not an array or is missing', 'error');
+            }
+            
+            // Test 3: Check current domain
+            const currentDomain = window.location.hostname;
+            addResult('configResults', `📍 Current domain: ${currentDomain}`, 'info');
+            
+            // Test 4: Check if current domain is authorized
+            if (window.googleConfig.authorizedDomains && window.googleConfig.authorizedDomains.includes(currentDomain)) {
+                addResult('configResults', `✅ Current domain '${currentDomain}' is authorized`, 'success');
+            } else {
+                addResult('configResults', `❌ Current domain '${currentDomain}' is NOT authorized`, 'error');
+            }
+            
+            // Test 5: Check all configuration properties
+            const requiredProps = ['clientId', 'apiKey', 'scopes', 'discoveryDocs', 'authorizedDomains'];
+            const missingProps = requiredProps.filter(prop => !window.googleConfig[prop]);
+            
+            if (missingProps.length === 0) {
+                addResult('configResults', '✅ All required configuration properties are present', 'success');
+            } else {
+                addResult('configResults', `❌ Missing configuration properties: ${missingProps.join(', ')}`, 'error');
+            }
+            
+            // Test 6: Check for null/undefined values
+            const nullChecks = [];
+            if (!window.googleConfig.clientId) nullChecks.push('clientId');
+            if (!window.googleConfig.apiKey) nullChecks.push('apiKey');
+            if (!window.googleConfig.authorizedDomains) nullChecks.push('authorizedDomains');
+            
+            if (nullChecks.length === 0) {
+                addResult('configResults', '✅ No null/undefined values found', 'success');
+            } else {
+                addResult('configResults', `❌ Null/undefined values found: ${nullChecks.join(', ')}`, 'error');
+            }
+        }
+        
+        function runValidationTests() {
+            const container = document.getElementById('validationResults');
+            container.innerHTML = '';
+            testResults.validation = { passed: 0, failed: 0, total: 0 };
+            
+            console.log('Running validation tests...');
+            
+            // Test 1: Check if validation function exists
+            if (window.validateGoogleConfiguration) {
+                addResult('validationResults', '✅ validateGoogleConfiguration function exists', 'success');
+            } else {
+                addResult('validationResults', '❌ validateGoogleConfiguration function not found', 'error');
+                return;
+            }
+            
+            // Test 2: Run validation function
+            try {
+                const validation = window.validateGoogleConfiguration();
+                if (validation.isValid) {
+                    addResult('validationResults', '✅ Configuration validation passed', 'success');
+                } else {
+                    addResult('validationResults', `❌ Configuration validation failed: ${validation.issues.join(', ')}`, 'error');
+                }
+            } catch (error) {
+                addResult('validationResults', `❌ Validation function threw error: ${error.message}`, 'error');
+            }
+            
+            // Test 3: Test includes() method safety
+            try {
+                const currentDomain = window.location.hostname;
+                const authorizedDomains = window.googleConfig?.authorizedDomains || [];
+                
+                if (Array.isArray(authorizedDomains)) {
+                    const isAuthorized = authorizedDomains.includes(currentDomain);
+                    addResult('validationResults', `✅ includes() method works safely - Domain authorized: ${isAuthorized}`, 'success');
+                } else {
+                    addResult('validationResults', '❌ authorizedDomains is not an array', 'error');
+                }
+            } catch (error) {
+                addResult('validationResults', `❌ includes() method failed: ${error.message}`, 'error');
+            }
+            
+            // Test 4: Test error display function
+            if (window.showGoogleConfigurationError) {
+                addResult('validationResults', '✅ showGoogleConfigurationError function exists', 'success');
+            } else {
+                addResult('validationResults', '❌ showGoogleConfigurationError function not found', 'error');
+            }
+        }
+        
+        function runIntegrationTests() {
+            const container = document.getElementById('integrationResults');
+            container.innerHTML = '';
+            testResults.integration = { passed: 0, failed: 0, total: 0 };
+            
+            console.log('Running integration tests...');
+            
+            // Test 1: Check if gcal object exists
+            if (window.gcal) {
+                addResult('integrationResults', '✅ gcal object exists', 'success');
+            } else {
+                addResult('integrationResults', '❌ gcal object not found', 'error');
+                return;
+            }
+            
+            // Test 2: Check if calendarService exists
+            if (window.calendarService) {
+                addResult('integrationResults', '✅ calendarService object exists', 'success');
+            } else {
+                addResult('integrationResults', '❌ calendarService object not found', 'warning');
+            }
+            
+            // Test 3: Check if required gcal methods exist
+            const requiredMethods = ['initGoogleCalendarApi', 'signIn', 'signOut', 'isSignedIn'];
+            const missingMethods = requiredMethods.filter(method => !window.gcal[method]);
+            
+            if (missingMethods.length === 0) {
+                addResult('integrationResults', '✅ All required gcal methods exist', 'success');
+            } else {
+                addResult('integrationResults', `❌ Missing gcal methods: ${missingMethods.join(', ')}`, 'error');
+            }
+            
+            // Test 4: Test configuration validation in gcal
+            if (window.gcal.checkConfiguration) {
+                try {
+                    const config = window.gcal.checkConfiguration();
+                    addResult('integrationResults', `✅ gcal.checkConfiguration works - Valid: ${config.isValid}`, 'success');
+                } catch (error) {
+                    addResult('integrationResults', `❌ gcal.checkConfiguration failed: ${error.message}`, 'error');
+                }
+            } else {
+                addResult('integrationResults', '❌ gcal.checkConfiguration method not found', 'error');
+            }
+            
+            // Test 5: Check if Google APIs are available
+            if (typeof google !== 'undefined') {
+                addResult('integrationResults', '✅ Google APIs are loaded', 'success');
+            } else {
+                addResult('integrationResults', '⚠️ Google APIs not loaded (this is normal if not on HTTPS)', 'warning');
+            }
+        }
+        
+        // Run initial tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                runConfigTests();
+                runValidationTests();
+                runIntegrationTests();
+            }, 500); // Small delay to ensure all scripts are loaded
+        });
+    </script>
+</body>
+</html> 

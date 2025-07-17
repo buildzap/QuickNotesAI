@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync Button Debug Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .debug-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .status-good { color: #198754; }
+        .status-warning { color: #fd7e14; }
+        .status-error { color: #dc3545; }
+        .debug-output {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            <i class="bi bi-bug text-warning"></i>
+            Sync Button Debug Test
+        </h1>
+        
+        <div class="alert alert-info">
+            <strong>Purpose:</strong> This page helps debug why the "Sync Task to Google Calendar" button might be disabled.
+        </div>
+
+        <!-- Debug Controls -->
+        <div class="debug-section">
+            <h3><i class="bi bi-tools"></i> Debug Controls</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary mb-2" onclick="checkSyncButtonState()">
+                        <i class="bi bi-search"></i> Check Button State
+                    </button>
+                    <button class="btn btn-warning mb-2" onclick="forceEnableSyncButton()">
+                        <i class="bi bi-unlock"></i> Force Enable Button
+                    </button>
+                    <button class="btn btn-info mb-2" onclick="updateSyncButton()">
+                        <i class="bi bi-arrow-clockwise"></i> Update Button State
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success mb-2" onclick="testGoogleSignIn()">
+                        <i class="bi bi-google"></i> Test Google Sign-In
+                    </button>
+                    <button class="btn btn-secondary mb-2" onclick="clearDebugOutput()">
+                        <i class="bi bi-trash"></i> Clear Output
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current State Display -->
+        <div class="debug-section">
+            <h3><i class="bi bi-info-circle"></i> Current State</h3>
+            <div id="current-state">Click "Check Button State" to see current status...</div>
+        </div>
+
+        <!-- Debug Output -->
+        <div class="debug-section">
+            <h3><i class="bi bi-terminal"></i> Debug Output</h3>
+            <div id="debug-output" class="debug-output">Debug output will appear here...</div>
+        </div>
+
+        <!-- Manual Test Tasks -->
+        <div class="debug-section">
+            <h3><i class="bi bi-list-check"></i> Manual Test Tasks</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Test Task Selection</h5>
+                    <button class="btn btn-outline-primary mb-2" onclick="selectTestTask('task-1')">
+                        Select Task 1
+                    </button>
+                    <button class="btn btn-outline-primary mb-2" onclick="selectTestTask('task-2')">
+                        Select Task 2
+                    </button>
+                    <button class="btn btn-outline-secondary mb-2" onclick="clearTaskSelection()">
+                        Clear Selection
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <h5>Test Google Calendar</h5>
+                    <button class="btn btn-outline-success mb-2" onclick="testGoogleConnection()">
+                        Test Connection
+                    </button>
+                    <button class="btn btn-outline-warning mb-2" onclick="simulateSignIn()">
+                        Simulate Sign-In
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="debug-section">
+            <h3><i class="bi bi-question-circle"></i> How to Use</h3>
+            <ol>
+                <li>Click "Check Button State" to see the current status</li>
+                <li>If the button is disabled, check the debug output for reasons</li>
+                <li>Use "Force Enable Button" to temporarily enable it for testing</li>
+                <li>Use "Test Google Sign-In" to verify OAuth is working</li>
+                <li>Select a test task to simulate task selection</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+    <script src="js/task.js"></script>
+    
+    <script>
+        // Debug output management
+        function log(message, type = 'info') {
+            const output = document.getElementById('debug-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            output.textContent += logEntry;
+            output.scrollTop = output.scrollHeight;
+            console.log(message);
+        }
+
+        function clearDebugOutput() {
+            document.getElementById('debug-output').textContent = '';
+        }
+
+        // Override console.log to also show in debug output
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (args[0] && typeof args[0] === 'string' && args[0].includes('[Task]')) {
+                log(args.join(' '), 'debug');
+            }
+        };
+
+        // Debug functions
+        function checkSyncButtonState() {
+            log('=== Checking Sync Button State ===');
+            
+            // Check if debug functions exist
+            if (window.checkSyncButtonState) {
+                window.checkSyncButtonState();
+            } else {
+                log('ERROR: checkSyncButtonState function not available');
+            }
+            
+            // Update current state display
+            updateCurrentStateDisplay();
+        }
+
+        function forceEnableSyncButton() {
+            log('=== Force Enabling Sync Button ===');
+            
+            if (window.forceEnableSyncButton) {
+                window.forceEnableSyncButton();
+                log('SUCCESS: Sync button force enabled');
+            } else {
+                log('ERROR: forceEnableSyncButton function not available');
+            }
+            
+            updateCurrentStateDisplay();
+        }
+
+        function updateSyncButton() {
+            log('=== Updating Sync Button State ===');
+            
+            if (window.updateSyncButton) {
+                window.updateSyncButton();
+                log('SUCCESS: Sync button state updated');
+            } else {
+                log('ERROR: updateSyncButton function not available');
+            }
+            
+            updateCurrentStateDisplay();
+        }
+
+        function testGoogleSignIn() {
+            log('=== Testing Google Sign-In ===');
+            
+            if (window.gcal && window.gcal.isSignedIn) {
+                const isSignedIn = window.gcal.isSignedIn();
+                log(`Google Calendar Sign-In Status: ${isSignedIn}`);
+                
+                // Check localStorage
+                const accessToken = localStorage.getItem('gcal_access_token');
+                const tokenExpiry = localStorage.getItem('gcal_token_expiry');
+                log(`Access Token: ${accessToken ? 'Present' : 'Not present'}`);
+                log(`Token Expiry: ${tokenExpiry ? 'Present' : 'Not present'}`);
+                
+                if (accessToken && tokenExpiry) {
+                    const expiryDate = new Date(tokenExpiry);
+                    const isValid = expiryDate > new Date();
+                    log(`Token Valid: ${isValid}`);
+                }
+            } else {
+                log('ERROR: Google Calendar API not available');
+            }
+        }
+
+        function selectTestTask(taskId) {
+            log(`=== Selecting Test Task: ${taskId} ===`);
+            
+            if (window.taskState) {
+                window.taskState.selectedTaskId = taskId;
+                log(`SUCCESS: Task ${taskId} selected`);
+                
+                if (window.updateSelectedTaskDisplay) {
+                    window.updateSelectedTaskDisplay();
+                }
+                
+                if (window.updateSyncButton) {
+                    window.updateSyncButton();
+                }
+            } else {
+                log('ERROR: taskState not available');
+            }
+            
+            updateCurrentStateDisplay();
+        }
+
+        function clearTaskSelection() {
+            log('=== Clearing Task Selection ===');
+            
+            if (window.taskState) {
+                window.taskState.selectedTaskId = null;
+                log('SUCCESS: Task selection cleared');
+                
+                if (window.updateSelectedTaskDisplay) {
+                    window.updateSelectedTaskDisplay();
+                }
+                
+                if (window.updateSyncButton) {
+                    window.updateSyncButton();
+                }
+            } else {
+                log('ERROR: taskState not available');
+            }
+            
+            updateCurrentStateDisplay();
+        }
+
+        function testGoogleConnection() {
+            log('=== Testing Google Calendar Connection ===');
+            
+            if (window.gcal && window.gcal.signIn) {
+                log('Google Calendar signIn method available');
+            } else {
+                log('ERROR: Google Calendar signIn method not available');
+            }
+            
+            if (window.gcal && window.gcal.isSignedIn) {
+                const isSignedIn = window.gcal.isSignedIn();
+                log(`Current sign-in status: ${isSignedIn}`);
+            } else {
+                log('ERROR: Google Calendar isSignedIn method not available');
+            }
+        }
+
+        function simulateSignIn() {
+            log('=== Simulating Google Sign-In ===');
+            
+            // Simulate having a valid token
+            const fakeToken = 'fake-access-token-' + Date.now();
+            const expiryDate = new Date(Date.now() + 3600 * 1000).toISOString();
+            
+            localStorage.setItem('gcal_access_token', fakeToken);
+            localStorage.setItem('gcal_token_expiry', expiryDate);
+            
+            log('SUCCESS: Simulated sign-in with fake token');
+            log(`Fake token stored: ${fakeToken}`);
+            log(`Expiry set to: ${expiryDate}`);
+            
+            if (window.updateSyncButton) {
+                window.updateSyncButton();
+            }
+            
+            updateCurrentStateDisplay();
+        }
+
+        function updateCurrentStateDisplay() {
+            const stateDiv = document.getElementById('current-state');
+            
+            // Get sync button state
+            const syncBtn = document.getElementById('sync-to-google-calendar');
+            const buttonState = syncBtn ? {
+                found: true,
+                disabled: syncBtn.disabled,
+                opacityClass: syncBtn.classList.contains('opacity-50'),
+                title: syncBtn.title
+            } : { found: false };
+            
+            // Get Google Calendar state
+            const gcalState = {
+                exists: !!window.gcal,
+                isSignedIn: window.gcal?.isSignedIn ? window.gcal.isSignedIn() : 'Method not available',
+                hasToken: !!localStorage.getItem('gcal_access_token'),
+                hasExpiry: !!localStorage.getItem('gcal_token_expiry')
+            };
+            
+            // Get task state
+            const taskState = {
+                exists: !!window.taskState,
+                selectedTaskId: window.taskState?.selectedTaskId || 'None'
+            };
+            
+            stateDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Sync Button</h6>
+                        <ul class="list-unstyled">
+                            <li>Found: <span class="${buttonState.found ? 'status-good' : 'status-error'}">${buttonState.found}</span></li>
+                            ${buttonState.found ? `
+                                <li>Disabled: <span class="${buttonState.disabled ? 'status-error' : 'status-good'}">${buttonState.disabled}</span></li>
+                                <li>Opacity: <span class="${buttonState.opacityClass ? 'status-error' : 'status-good'}">${buttonState.opacityClass}</span></li>
+                                <li>Title: <small>${buttonState.title}</small></li>
+                            ` : ''}
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Google Calendar</h6>
+                        <ul class="list-unstyled">
+                            <li>Exists: <span class="${gcalState.exists ? 'status-good' : 'status-error'}">${gcalState.exists}</span></li>
+                            <li>Signed In: <span class="${gcalState.isSignedIn === true ? 'status-good' : 'status-error'}">${gcalState.isSignedIn}</span></li>
+                            <li>Has Token: <span class="${gcalState.hasToken ? 'status-good' : 'status-error'}">${gcalState.hasToken}</span></li>
+                            <li>Has Expiry: <span class="${gcalState.hasExpiry ? 'status-good' : 'status-error'}">${gcalState.hasExpiry}</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Task State</h6>
+                        <ul class="list-unstyled">
+                            <li>Exists: <span class="${taskState.exists ? 'status-good' : 'status-error'}">${taskState.exists}</span></li>
+                            <li>Selected Task: <span class="${taskState.selectedTaskId !== 'None' ? 'status-good' : 'status-warning'}">${taskState.selectedTaskId}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Auto-check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('=== Page Loaded ===');
+            setTimeout(() => {
+                checkSyncButtonState();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

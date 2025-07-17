@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar 403 Error Fix Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .test-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .status-good { color: #198754; }
+        .status-warning { color: #fd7e14; }
+        .status-error { color: #dc3545; }
+        .config-display {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            <i class="bi bi-calendar-check text-primary"></i>
+            Google Calendar 403 Error Fix Test
+        </h1>
+        
+        <div class="alert alert-info">
+            <strong>Purpose:</strong> This page helps diagnose and fix 403 errors with Google Calendar integration.
+        </div>
+
+        <!-- Configuration Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-gear"></i> Configuration Test</h3>
+            <div id="config-status">Loading...</div>
+            <button class="btn btn-primary mt-2" onclick="testConfiguration()">Test Configuration</button>
+        </div>
+
+        <!-- API Key Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-key"></i> API Key Test</h3>
+            <div id="api-key-status">Click test to check API key...</div>
+            <button class="btn btn-warning mt-2" onclick="testApiKey()">Test API Key</button>
+        </div>
+
+        <!-- OAuth Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-shield-check"></i> OAuth Test</h3>
+            <div id="oauth-status">Click test to check OAuth...</div>
+            <button class="btn btn-info mt-2" onclick="testOAuth()">Test OAuth</button>
+        </div>
+
+        <!-- Domain Authorization Test -->
+        <div class="test-section">
+            <h3><i class="bi bi-globe"></i> Domain Authorization Test</h3>
+            <div id="domain-status">Click test to check domain...</div>
+            <button class="btn btn-success mt-2" onclick="testDomainAuth()">Test Domain</button>
+        </div>
+
+        <!-- Manual Fix Instructions -->
+        <div class="test-section">
+            <h3><i class="bi bi-tools"></i> Manual Fix Instructions</h3>
+            <div class="alert alert-warning">
+                <strong>If you're getting 403 errors, follow these steps:</strong>
+                <ol class="mt-2">
+                    <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Select your project</li>
+                    <li>Go to "APIs & Services" > "Library"</li>
+                    <li>Search for "Google Calendar API" and click "Enable"</li>
+                    <li>Go to "APIs & Services" > "Credentials"</li>
+                    <li>Find your API Key and click "Edit"</li>
+                    <li>Under "API restrictions", select "Restrict key" and choose "Google Calendar API"</li>
+                    <li>Under "Application restrictions", select "HTTP referrers" and add:
+                        <ul>
+                            <li><code>http://localhost:8001/*</code></li>
+                            <li><code>http://127.0.0.1:8001/*</code></li>
+                        </ul>
+                    </li>
+                    <li>Click "Save"</li>
+                    <li>Wait 5-10 minutes for changes to propagate</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Debug Information -->
+        <div class="test-section">
+            <h3><i class="bi bi-bug"></i> Debug Information</h3>
+            <div id="debug-info">Click "Show Debug Info" to see current configuration...</div>
+            <button class="btn btn-secondary mt-2" onclick="showDebugInfo()">Show Debug Info</button>
+        </div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+    
+    <script>
+        // Test configuration
+        function testConfiguration() {
+            const statusDiv = document.getElementById('config-status');
+            statusDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing...';
+            
+            try {
+                const validation = window.validateGoogleConfiguration();
+                if (validation.isValid) {
+                    statusDiv.innerHTML = '<span class="status-good"><i class="bi bi-check-circle"></i> Configuration is valid</span>';
+                } else {
+                    statusDiv.innerHTML = `
+                        <span class="status-error"><i class="bi bi-x-circle"></i> Configuration issues found:</span>
+                        <ul class="mt-2">
+                            ${validation.issues.map(issue => `<li>${issue}</li>`).join('')}
+                        </ul>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="status-error"><i class="bi bi-x-circle"></i> Error testing configuration: ${error.message}</span>`;
+            }
+        }
+
+        // Test API key
+        async function testApiKey() {
+            const statusDiv = document.getElementById('api-key-status');
+            statusDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing API key...';
+            
+            try {
+                if (!window.googleConfig || !window.googleConfig.apiKey) {
+                    statusDiv.innerHTML = '<span class="status-error"><i class="bi bi-x-circle"></i> No API key configured</span>';
+                    return;
+                }
+
+                // Test API key with a simple Calendar API call
+                const response = await fetch(`https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${window.googleConfig.apiKey}`, {
+                    method: 'GET'
+                });
+
+                if (response.status === 200) {
+                    statusDiv.innerHTML = '<span class="status-good"><i class="bi bi-check-circle"></i> API key is working</span>';
+                } else if (response.status === 403) {
+                    statusDiv.innerHTML = `
+                        <span class="status-error"><i class="bi bi-x-circle"></i> API key returned 403 (Forbidden)</span>
+                        <br><small class="text-muted">This means the API key doesn't have Calendar API access or domain restrictions are blocking it.</small>
+                    `;
+                } else if (response.status === 400) {
+                    statusDiv.innerHTML = '<span class="status-error"><i class="bi bi-x-circle"></i> API key is invalid (400)</span>';
+                } else {
+                    statusDiv.innerHTML = `<span class="status-warning"><i class="bi bi-exclamation-triangle"></i> API key returned status ${response.status}</span>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="status-error"><i class="bi bi-x-circle"></i> Error testing API key: ${error.message}</span>`;
+            }
+        }
+
+        // Test OAuth
+        async function testOAuth() {
+            const statusDiv = document.getElementById('oauth-status');
+            statusDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing OAuth...';
+            
+            try {
+                if (!window.googleConfig || !window.googleConfig.clientId) {
+                    statusDiv.innerHTML = '<span class="status-error"><i class="bi bi-x-circle"></i> No Client ID configured</span>';
+                    return;
+                }
+
+                // Check if Google Identity Services is loaded
+                if (!window.google || !window.google.accounts) {
+                    statusDiv.innerHTML = '<span class="status-warning"><i class="bi bi-exclamation-triangle"></i> Google Identity Services not loaded</span>';
+                    return;
+                }
+
+                statusDiv.innerHTML = '<span class="status-good"><i class="bi bi-check-circle"></i> OAuth configuration appears valid</span>';
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="status-error"><i class="bi bi-x-circle"></i> Error testing OAuth: ${error.message}</span>`;
+            }
+        }
+
+        // Test domain authorization
+        function testDomainAuth() {
+            const statusDiv = document.getElementById('domain-status');
+            statusDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Testing domain...';
+            
+            try {
+                const currentDomain = window.location.hostname;
+                const authorizedDomains = window.googleConfig?.authorizedDomains || [];
+                
+                if (authorizedDomains.includes(currentDomain)) {
+                    statusDiv.innerHTML = `<span class="status-good"><i class="bi bi-check-circle"></i> Domain '${currentDomain}' is authorized</span>`;
+                } else {
+                    statusDiv.innerHTML = `
+                        <span class="status-error"><i class="bi bi-x-circle"></i> Domain '${currentDomain}' is not authorized</span>
+                        <br><small class="text-muted">Add '${currentDomain}' to the authorizedDomains array in google-config.js</small>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="status-error"><i class="bi bi-x-circle"></i> Error testing domain: ${error.message}</span>`;
+            }
+        }
+
+        // Show debug information
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            
+            const debugInfo = {
+                currentUrl: window.location.href,
+                currentDomain: window.location.hostname,
+                userAgent: navigator.userAgent,
+                googleConfig: window.googleConfig ? {
+                    clientId: window.googleConfig.clientId ? 'Configured' : 'Not configured',
+                    apiKey: window.googleConfig.apiKey ? 'Configured' : 'Not configured',
+                    authorizedDomains: window.googleConfig.authorizedDomains || [],
+                    redirectUris: window.googleConfig.redirectUris || []
+                } : 'Not loaded',
+                gapiLoaded: !!window.gapi,
+                googleLoaded: !!window.google,
+                localStorage: {
+                    gcal_access_token: localStorage.getItem('gcal_access_token') ? 'Present' : 'Not present',
+                    gcal_token_expiry: localStorage.getItem('gcal_token_expiry') ? 'Present' : 'Not present'
+                }
+            };
+            
+            debugDiv.innerHTML = `
+                <div class="config-display">
+                    <pre>${JSON.stringify(debugInfo, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        // Auto-run configuration test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(testConfiguration, 1000);
+        });
+    </script>
+</body>
+</html> 

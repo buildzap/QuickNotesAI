@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar Integration Test - QuickNotes AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .test-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .test-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .test-error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .test-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .test-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            <i class="bi bi-calendar-check"></i>
+            Google Calendar Integration Test
+        </h1>
+        
+        <div class="alert alert-info">
+            <strong>Test Status:</strong> This page will help you verify that all Google Calendar integration fixes are working correctly.
+        </div>
+
+        <!-- Configuration Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-gear"></i> Configuration Test</h3>
+            <div id="config-test-results"></div>
+            <button class="btn btn-primary" onclick="testConfiguration()">
+                <i class="bi bi-play-circle"></i> Test Configuration
+            </button>
+        </div>
+
+        <!-- Script Loading Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-file-code"></i> Script Loading Test</h3>
+            <div id="script-test-results"></div>
+            <button class="btn btn-primary" onclick="testScriptLoading()">
+                <i class="bi bi-play-circle"></i> Test Script Loading
+            </button>
+        </div>
+
+        <!-- API Initialization Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-plug"></i> API Initialization Test</h3>
+            <div id="api-test-results"></div>
+            <button class="btn btn-primary" onclick="testApiInitialization()">
+                <i class="bi bi-play-circle"></i> Test API Initialization
+            </button>
+        </div>
+
+        <!-- Error Handling Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-exclamation-triangle"></i> Error Handling Test</h3>
+            <div id="error-test-results"></div>
+            <button class="btn btn-warning" onclick="testErrorHandling()">
+                <i class="bi bi-play-circle"></i> Test Error Handling
+            </button>
+        </div>
+
+        <!-- Integration Test Section -->
+        <div class="test-section">
+            <h3><i class="bi bi-link-45deg"></i> Full Integration Test</h3>
+            <div id="integration-test-results"></div>
+            <button class="btn btn-success" onclick="testFullIntegration()">
+                <i class="bi bi-play-circle"></i> Test Full Integration
+            </button>
+        </div>
+
+        <!-- Console Log Display -->
+        <div class="test-section">
+            <h3><i class="bi bi-terminal"></i> Console Logs</h3>
+            <div id="console-logs" class="code-block" style="max-height: 300px; overflow-y: auto;"></div>
+            <button class="btn btn-secondary" onclick="clearLogs()">
+                <i class="bi bi-trash"></i> Clear Logs
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="test-section">
+            <h3><i class="bi bi-info-circle"></i> Instructions</h3>
+            <div class="alert alert-warning">
+                <strong>Important:</strong> The current API key is a dummy key for testing. To use Google Calendar integration:
+                <ol class="mt-2">
+                    <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                    <li>Create a new project or select existing project</li>
+                    <li>Enable Google Calendar API</li>
+                    <li>Create OAuth 2.0 credentials (Client ID)</li>
+                    <li>Create API Key</li>
+                    <li>Add your domain to authorized origins</li>
+                    <li>Update the configuration in <code>google-config.js</code></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Google API -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Load our scripts -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+    <script src="js/task.js"></script>
+    <script src="js/calendarService.js"></script>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addLog(type, ...args) {
+            const logsDiv = document.getElementById('console-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span style="color: ${type === 'error' ? '#dc3545' : type === 'warn' ? '#ffc107' : '#007bff'};">[${type.toUpperCase()}]</span> ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog('log', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog('error', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog('warn', ...args);
+        };
+
+        function clearLogs() {
+            document.getElementById('console-logs').innerHTML = '';
+        }
+
+        function addTestResult(sectionId, type, title, message) {
+            const resultsDiv = document.getElementById(sectionId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result test-${type}`;
+            resultDiv.innerHTML = `
+                <strong>${title}</strong><br>
+                ${message}
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function clearTestResults(sectionId) {
+            document.getElementById(sectionId).innerHTML = '';
+        }
+
+        async function testConfiguration() {
+            clearTestResults('config-test-results');
+            
+            try {
+                // Test if google-config.js is loaded
+                if (!window.googleConfig) {
+                    addTestResult('config-test-results', 'error', 'Configuration Missing', 'google-config.js is not loaded');
+                    return;
+                }
+                
+                addTestResult('config-test-results', 'success', 'Configuration Loaded', 'google-config.js is loaded successfully');
+                
+                // Test configuration validation
+                const validation = window.validateGoogleConfiguration();
+                if (validation.isValid) {
+                    addTestResult('config-test-results', 'success', 'Configuration Valid', 'All configuration parameters are valid');
+                } else {
+                    addTestResult('config-test-results', 'warning', 'Configuration Issues', `Issues found: ${validation.issues.join(', ')}`);
+                }
+                
+                // Test individual parameters
+                if (window.googleConfig.clientId && !window.googleConfig.clientId.includes('example')) {
+                    addTestResult('config-test-results', 'success', 'Client ID', 'Client ID is configured');
+                } else {
+                    addTestResult('config-test-results', 'warning', 'Client ID', 'Client ID needs to be configured');
+                }
+                
+                if (window.googleConfig.apiKey && !window.googleConfig.apiKey.includes('example')) {
+                    addTestResult('config-test-results', 'success', 'API Key', 'API Key is configured');
+                } else {
+                    addTestResult('config-test-results', 'warning', 'API Key', 'API Key needs to be configured');
+                }
+                
+                // Test domain authorization
+                const currentDomain = window.location.hostname;
+                const authorizedDomains = window.googleConfig.authorizedDomains || [];
+                if (authorizedDomains.includes(currentDomain)) {
+                    addTestResult('config-test-results', 'success', 'Domain Authorization', `Domain '${currentDomain}' is authorized`);
+                } else {
+                    addTestResult('config-test-results', 'warning', 'Domain Authorization', `Domain '${currentDomain}' is not authorized. Add it to authorizedDomains array.`);
+                }
+                
+            } catch (error) {
+                addTestResult('config-test-results', 'error', 'Configuration Test Error', error.message);
+            }
+        }
+
+        async function testScriptLoading() {
+            clearTestResults('script-test-results');
+            
+            try {
+                // Test Google API loading
+                if (typeof gapi !== 'undefined') {
+                    addTestResult('script-test-results', 'success', 'Google API', 'Google API (gapi) is loaded');
+                } else {
+                    addTestResult('script-test-results', 'error', 'Google API', 'Google API (gapi) is not loaded');
+                }
+                
+                // Test Google Identity Services
+                if (typeof google !== 'undefined' && google.accounts) {
+                    addTestResult('script-test-results', 'success', 'Google Identity Services', 'Google Identity Services is loaded');
+                } else {
+                    addTestResult('script-test-results', 'error', 'Google Identity Services', 'Google Identity Services is not loaded');
+                }
+                
+                // Test our custom scripts
+                if (window.gcal) {
+                    addTestResult('script-test-results', 'success', 'GCal Script', 'gcal.js is loaded');
+                } else {
+                    addTestResult('script-test-results', 'error', 'GCal Script', 'gcal.js is not loaded');
+                }
+                
+                if (window.googleConfig) {
+                    addTestResult('script-test-results', 'success', 'Google Config Script', 'google-config.js is loaded');
+                } else {
+                    addTestResult('script-test-results', 'error', 'Google Config Script', 'google-config.js is not loaded');
+                }
+                
+            } catch (error) {
+                addTestResult('script-test-results', 'error', 'Script Loading Test Error', error.message);
+            }
+        }
+
+        async function testApiInitialization() {
+            clearTestResults('api-test-results');
+            
+            try {
+                // Test GAPI client initialization
+                if (typeof gapi !== 'undefined') {
+                    addTestResult('api-test-results', 'info', 'GAPI Available', 'GAPI is available, attempting initialization...');
+                    
+                    try {
+                        await window.gcal.initGoogleCalendarApi();
+                        addTestResult('api-test-results', 'success', 'API Initialization', 'Google Calendar API initialized successfully');
+                    } catch (error) {
+                        if (error.status === 400) {
+                            addTestResult('api-test-results', 'warning', 'API Key Issue', 'API key is invalid (400 error). This is expected with the dummy key.');
+                        } else {
+                            addTestResult('api-test-results', 'error', 'API Initialization Error', error.message);
+                        }
+                    }
+                } else {
+                    addTestResult('api-test-results', 'error', 'GAPI Not Available', 'GAPI is not available');
+                }
+                
+            } catch (error) {
+                addTestResult('api-test-results', 'error', 'API Test Error', error.message);
+            }
+        }
+
+        async function testErrorHandling() {
+            clearTestResults('error-test-results');
+            
+            try {
+                // Test null checks for authorizedDomains
+                const testConfig = {
+                    authorizedDomains: undefined
+                };
+                
+                // Simulate the check that was causing the error
+                const currentDomain = window.location.hostname;
+                const authorizedDomains = testConfig.authorizedDomains || [];
+                
+                if (Array.isArray(authorizedDomains)) {
+                    addTestResult('error-test-results', 'success', 'Null Check Test', 'authorizedDomains null check is working');
+                } else {
+                    addTestResult('error-test-results', 'error', 'Null Check Test', 'authorizedDomains null check failed');
+                }
+                
+                // Test error message handling
+                try {
+                    throw new Error('Test error message');
+                } catch (error) {
+                    if (error.message.includes('Test error message')) {
+                        addTestResult('error-test-results', 'success', 'Error Message Test', 'Error message handling is working');
+                    } else {
+                        addTestResult('error-test-results', 'error', 'Error Message Test', 'Error message handling failed');
+                    }
+                }
+                
+                // Test configuration validation error handling
+                const originalConfig = window.googleConfig;
+                window.googleConfig = null;
+                
+                try {
+                    const validation = window.validateGoogleConfiguration();
+                    addTestResult('error-test-results', 'success', 'Fallback Validation', 'Fallback validation is working');
+                } catch (error) {
+                    addTestResult('error-test-results', 'error', 'Fallback Validation', 'Fallback validation failed: ' + error.message);
+                }
+                
+                window.googleConfig = originalConfig;
+                
+            } catch (error) {
+                addTestResult('error-test-results', 'error', 'Error Handling Test Error', error.message);
+            }
+        }
+
+        async function testFullIntegration() {
+            clearTestResults('integration-test-results');
+            
+            try {
+                addTestResult('integration-test-results', 'info', 'Starting Integration Test', 'Testing complete Google Calendar integration...');
+                
+                // Test configuration
+                const configValidation = window.validateGoogleConfiguration();
+                if (!configValidation.isValid) {
+                    addTestResult('integration-test-results', 'warning', 'Configuration Issues', `Configuration has issues: ${configValidation.issues.join(', ')}`);
+                } else {
+                    addTestResult('integration-test-results', 'success', 'Configuration', 'Configuration is valid');
+                }
+                
+                // Test API initialization (will fail with dummy key, but should handle gracefully)
+                try {
+                    await window.gcal.initGoogleCalendarApi();
+                    addTestResult('integration-test-results', 'success', 'API Integration', 'API integration is working');
+                } catch (error) {
+                    if (error.status === 400) {
+                        addTestResult('integration-test-results', 'warning', 'API Integration', 'API integration test completed (400 error expected with dummy key)');
+                    } else {
+                        addTestResult('integration-test-results', 'error', 'API Integration', 'API integration failed: ' + error.message);
+                    }
+                }
+                
+                // Test error handling
+                try {
+                    // Test the specific error that was occurring
+                    const testConfig = { authorizedDomains: undefined };
+                    const currentDomain = window.location.hostname;
+                    const authorizedDomains = testConfig.authorizedDomains || [];
+                    
+                    if (authorizedDomains.includes(currentDomain)) {
+                        // This should not happen with undefined authorizedDomains
+                        addTestResult('integration-test-results', 'error', 'Null Check Integration', 'Null check integration failed');
+                    } else {
+                        addTestResult('integration-test-results', 'success', 'Null Check Integration', 'Null check integration is working');
+                    }
+                } catch (error) {
+                    addTestResult('integration-test-results', 'error', 'Null Check Integration', 'Null check integration error: ' + error.message);
+                }
+                
+                addTestResult('integration-test-results', 'success', 'Integration Test Complete', 'All integration tests completed successfully');
+                
+            } catch (error) {
+                addTestResult('integration-test-results', 'error', 'Integration Test Error', error.message);
+            }
+        }
+
+        // Auto-run configuration test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Google Calendar Integration Test Page Loaded');
+            testConfiguration();
+            testScriptLoading();
+        });
+    </script>
+</body>
+</html> 

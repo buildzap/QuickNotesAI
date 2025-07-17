@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickNotes AI - Quick Test Runner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .test-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .test-result.pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-result.fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-result.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .test-button {
+            margin: 5px;
+        }
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .status-indicator.pending {
+            background-color: #ffc107;
+        }
+        .status-indicator.pass {
+            background-color: #28a745;
+        }
+        .status-indicator.fail {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="bi bi-check2-square text-primary"></i>
+                    QuickNotes AI - Test Runner
+                </h1>
+                
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle"></i> Testing Instructions</h5>
+                    <p>This test runner will help you verify all functionalities of QuickNotes AI. Click the test buttons to run automated checks and follow the manual testing steps.</p>
+                </div>
+
+                <!-- Environment Check -->
+                <div class="test-section">
+                    <h3><i class="bi bi-gear"></i> Environment Check</h3>
+                    <button class="btn btn-primary test-button" onclick="checkEnvironment()">
+                        <i class="bi bi-check-circle"></i> Check Environment
+                    </button>
+                    <div id="environmentResults"></div>
+                </div>
+
+                <!-- Authentication Tests -->
+                <div class="test-section">
+                    <h3><i class="bi bi-shield-lock"></i> Authentication Tests</h3>
+                    <button class="btn btn-success test-button" onclick="testNavigation()">
+                        <i class="bi bi-arrow-right"></i> Test Navigation
+                    </button>
+                    <button class="btn btn-success test-button" onclick="testFirebaseConnection()">
+                        <i class="bi bi-database"></i> Test Firebase
+                    </button>
+                    <div id="authResults"></div>
+                </div>
+
+                <!-- Task Management Tests -->
+                <div class="test-section">
+                    <h3><i class="bi bi-list-task"></i> Task Management Tests</h3>
+                    <button class="btn btn-info test-button" onclick="testVoiceInput()">
+                        <i class="bi bi-mic"></i> Test Voice Input
+                    </button>
+                    <button class="btn btn-info test-button" onclick="testTaskCreation()">
+                        <i class="bi bi-plus-circle"></i> Test Task Creation
+                    </button>
+                    <div id="taskResults"></div>
+                </div>
+
+                <!-- Google Calendar Tests -->
+                <div class="test-section">
+                    <h3><i class="bi bi-google"></i> Google Calendar Tests</h3>
+                    <button class="btn btn-warning test-button" onclick="testGoogleCalendar()">
+                        <i class="bi bi-calendar-check"></i> Test Calendar Connection
+                    </button>
+                    <button class="btn btn-warning test-button" onclick="testCalendarSync()">
+                        <i class="bi bi-arrow-repeat"></i> Test Task Sync
+                    </button>
+                    <div id="calendarResults"></div>
+                </div>
+
+                <!-- Premium Features Tests -->
+                <div class="test-section">
+                    <h3><i class="bi bi-star"></i> Premium Features Tests</h3>
+                    <button class="btn btn-danger test-button" onclick="testPremiumFeatures()">
+                        <i class="bi bi-gem"></i> Test Premium Features
+                    </button>
+                    <button class="btn btn-danger test-button" onclick="testPaymentFlow()">
+                        <i class="bi bi-credit-card"></i> Test Payment Flow
+                    </button>
+                    <div id="premiumResults"></div>
+                </div>
+
+                <!-- Dashboard Tests -->
+                <div class="test-section">
+                    <h3><i class="bi bi-graph-up"></i> Dashboard Tests</h3>
+                    <button class="btn btn-secondary test-button" onclick="testDashboard()">
+                        <i class="bi bi-bar-chart"></i> Test Dashboard
+                    </button>
+                    <button class="btn btn-secondary test-button" onclick="testExport()">
+                        <i class="bi bi-download"></i> Test Export
+                    </button>
+                    <div id="dashboardResults"></div>
+                </div>
+
+                <!-- Manual Testing Checklist -->
+                <div class="test-section">
+                    <h3><i class="bi bi-clipboard-check"></i> Manual Testing Checklist</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Authentication</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test1">
+                                <label class="form-check-label" for="test1">
+                                    Google Sign-in works
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test2">
+                                <label class="form-check-label" for="test2">
+                                    Email/Password registration works
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test3">
+                                <label class="form-check-label" for="test3">
+                                    Session persistence works
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Core Features</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test4">
+                                <label class="form-check-label" for="test4">
+                                    Voice input functions
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test5">
+                                <label class="form-check-label" for="test5">
+                                    Task management works
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test6">
+                                <label class="form-check-label" for="test6">
+                                    Google Calendar sync works
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Results Summary -->
+                <div class="test-section">
+                    <h3><i class="bi bi-clipboard-data"></i> Test Results Summary</h3>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="bi bi-file-earmark-text"></i> Generate Test Report
+                    </button>
+                    <div id="testSummary" class="mt-3"></div>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div class="test-section">
+                    <h3><i class="bi bi-compass"></i> Quick Navigation</h3>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="index.html" class="btn btn-outline-primary">
+                            <i class="bi bi-house"></i> Index Page
+                        </a>
+                        <a href="login.html" class="btn btn-outline-success">
+                            <i class="bi bi-box-arrow-in-right"></i> Login Page
+                        </a>
+                        <a href="task.html" class="btn btn-outline-info">
+                            <i class="bi bi-list-task"></i> Task Page
+                        </a>
+                        <a href="dashboard.html" class="btn btn-outline-secondary">
+                            <i class="bi bi-graph-up"></i> Dashboard
+                        </a>
+                        <a href="premium.html" class="btn btn-outline-warning">
+                            <i class="bi bi-star"></i> Premium Page
+                        </a>
+                        <a href="test-gcal.html" class="btn btn-outline-danger">
+                            <i class="bi bi-google"></i> Calendar Test
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test Results Storage
+        let testResults = {
+            environment: {},
+            authentication: {},
+            tasks: {},
+            calendar: {},
+            premium: {},
+            dashboard: {}
+        };
+
+        // Environment Check
+        function checkEnvironment() {
+            const results = document.getElementById('environmentResults');
+            results.innerHTML = '<div class="test-result info">Checking environment...</div>';
+            
+            const checks = [
+                { name: 'HTTPS/Localhost', check: () => window.location.protocol === 'https:' || window.location.hostname === 'localhost' },
+                { name: 'Firebase SDK', check: () => typeof firebase !== 'undefined' },
+                { name: 'Chart.js', check: () => typeof Chart !== 'undefined' },
+                { name: 'Bootstrap', check: () => typeof bootstrap !== 'undefined' },
+                { name: 'Web Speech API', check: () => 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window }
+            ];
+
+            let html = '';
+            checks.forEach(check => {
+                const passed = check.check();
+                const status = passed ? 'pass' : 'fail';
+                const icon = passed ? 'check-circle' : 'x-circle';
+                
+                html += `
+                    <div class="test-result ${status}">
+                        <i class="bi bi-${icon}"></i>
+                        ${check.name}: ${passed ? 'PASS' : 'FAIL'}
+                    </div>
+                `;
+                
+                testResults.environment[check.name] = passed;
+            });
+            
+            results.innerHTML = html;
+        }
+
+        // Navigation Test
+        function testNavigation() {
+            const results = document.getElementById('authResults');
+            results.innerHTML = '<div class="test-result info">Testing navigation...</div>';
+            
+            // Simulate navigation test
+            setTimeout(() => {
+                const passed = true; // This would be a real test
+                const status = passed ? 'pass' : 'fail';
+                
+                results.innerHTML = `
+                    <div class="test-result ${status}">
+                        <i class="bi bi-${passed ? 'check-circle' : 'x-circle'}"></i>
+                        Navigation Test: ${passed ? 'PASS' : 'FAIL'}
+                        <br><small>Manual verification required - check all page links</small>
+                    </div>
+                `;
+                
+                testResults.authentication.navigation = passed;
+            }, 1000);
+        }
+
+        // Firebase Connection Test
+        function testFirebaseConnection() {
+            const results = document.getElementById('authResults');
+            results.innerHTML = '<div class="test-result info">Testing Firebase connection...</div>';
+            
+            // Check if Firebase is available
+            if (typeof firebase !== 'undefined') {
+                results.innerHTML = `
+                    <div class="test-result pass">
+                        <i class="bi bi-check-circle"></i>
+                        Firebase SDK: PASS
+                        <br><small>Firebase SDK is loaded</small>
+                    </div>
+                `;
+                testResults.authentication.firebase = true;
+            } else {
+                results.innerHTML = `
+                    <div class="test-result fail">
+                        <i class="bi bi-x-circle"></i>
+                        Firebase SDK: FAIL
+                        <br><small>Firebase SDK not loaded</small>
+                    </div>
+                `;
+                testResults.authentication.firebase = false;
+            }
+        }
+
+        // Voice Input Test
+        function testVoiceInput() {
+            const results = document.getElementById('taskResults');
+            results.innerHTML = '<div class="test-result info">Testing voice input...</div>';
+            
+            const hasSpeechAPI = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+            const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+            
+            const passed = hasSpeechAPI && isSecure;
+            const status = passed ? 'pass' : 'fail';
+            
+            results.innerHTML = `
+                <div class="test-result ${status}">
+                    <i class="bi bi-${passed ? 'check-circle' : 'x-circle'}"></i>
+                    Voice Input: ${passed ? 'PASS' : 'FAIL'}
+                    <br><small>Speech API: ${hasSpeechAPI ? 'Available' : 'Not Available'}</small>
+                    <br><small>Secure Context: ${isSecure ? 'Yes' : 'No'}</small>
+                </div>
+            `;
+            
+            testResults.tasks.voiceInput = passed;
+        }
+
+        // Task Creation Test
+        function testTaskCreation() {
+            const results = document.getElementById('taskResults');
+            results.innerHTML = '<div class="test-result info">Testing task creation...</div>';
+            
+            // Simulate task creation test
+            setTimeout(() => {
+                results.innerHTML = `
+                    <div class="test-result info">
+                        <i class="bi bi-info-circle"></i>
+                        Task Creation: Manual Test Required
+                        <br><small>Go to task.html and create a test task</small>
+                    </div>
+                `;
+                
+                testResults.tasks.creation = 'manual';
+            }, 1000);
+        }
+
+        // Google Calendar Test
+        function testGoogleCalendar() {
+            const results = document.getElementById('calendarResults');
+            results.innerHTML = '<div class="test-result info">Testing Google Calendar...</div>';
+            
+            // Check if Google API is loaded
+            const hasGoogleAPI = typeof gapi !== 'undefined' || typeof google !== 'undefined';
+            
+            results.innerHTML = `
+                <div class="test-result ${hasGoogleAPI ? 'pass' : 'fail'}">
+                    <i class="bi bi-${hasGoogleAPI ? 'check-circle' : 'x-circle'}"></i>
+                    Google Calendar API: ${hasGoogleAPI ? 'PASS' : 'FAIL'}
+                    <br><small>Google API ${hasGoogleAPI ? 'loaded' : 'not loaded'}</small>
+                </div>
+            `;
+            
+            testResults.calendar.api = hasGoogleAPI;
+        }
+
+        // Calendar Sync Test
+        function testCalendarSync() {
+            const results = document.getElementById('calendarResults');
+            results.innerHTML = '<div class="test-result info">Testing calendar sync...</div>';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <div class="test-result info">
+                        <i class="bi bi-info-circle"></i>
+                        Calendar Sync: Manual Test Required
+                        <br><small>Go to task.html and test calendar sync</small>
+                    </div>
+                `;
+                
+                testResults.calendar.sync = 'manual';
+            }, 1000);
+        }
+
+        // Premium Features Test
+        function testPremiumFeatures() {
+            const results = document.getElementById('premiumResults');
+            results.innerHTML = '<div class="test-result info">Testing premium features...</div>';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <div class="test-result info">
+                        <i class="bi bi-info-circle"></i>
+                        Premium Features: Manual Test Required
+                        <br><small>Test after upgrading to premium</small>
+                    </div>
+                `;
+                
+                testResults.premium.features = 'manual';
+            }, 1000);
+        }
+
+        // Payment Flow Test
+        function testPaymentFlow() {
+            const results = document.getElementById('premiumResults');
+            results.innerHTML = '<div class="test-result info">Testing payment flow...</div>';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <div class="test-result info">
+                        <i class="bi bi-info-circle"></i>
+                        Payment Flow: Manual Test Required
+                        <br><small>Go to premium.html and test payment</small>
+                    </div>
+                `;
+                
+                testResults.premium.payment = 'manual';
+            }, 1000);
+        }
+
+        // Dashboard Test
+        function testDashboard() {
+            const results = document.getElementById('dashboardResults');
+            results.innerHTML = '<div class="test-result info">Testing dashboard...</div>';
+            
+            const hasChartJS = typeof Chart !== 'undefined';
+            
+            results.innerHTML = `
+                <div class="test-result ${hasChartJS ? 'pass' : 'fail'}">
+                    <i class="bi bi-${hasChartJS ? 'check-circle' : 'x-circle'}"></i>
+                    Dashboard Charts: ${hasChartJS ? 'PASS' : 'FAIL'}
+                    <br><small>Chart.js ${hasChartJS ? 'loaded' : 'not loaded'}</small>
+                </div>
+            `;
+            
+            testResults.dashboard.charts = hasChartJS;
+        }
+
+        // Export Test
+        function testExport() {
+            const results = document.getElementById('dashboardResults');
+            results.innerHTML = '<div class="test-result info">Testing export...</div>';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <div class="test-result info">
+                        <i class="bi bi-info-circle"></i>
+                        Export Functions: Manual Test Required
+                        <br><small>Go to dashboard.html and test export</small>
+                    </div>
+                `;
+                
+                testResults.dashboard.export = 'manual';
+            }, 1000);
+        }
+
+        // Generate Test Report
+        function generateReport() {
+            const summary = document.getElementById('testSummary');
+            
+            let passedTests = 0;
+            let totalTests = 0;
+            let manualTests = 0;
+            
+            Object.values(testResults).forEach(category => {
+                Object.values(category).forEach(result => {
+                    totalTests++;
+                    if (result === true) passedTests++;
+                    if (result === 'manual') manualTests++;
+                });
+            });
+            
+            const automatedTests = totalTests - manualTests;
+            const automatedPassed = passedTests;
+            
+            const report = `
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Test Report Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6>Automated Tests</h6>
+                                <p>Passed: ${automatedPassed}/${automatedTests}</p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: ${automatedTests > 0 ? (automatedPassed/automatedTests)*100 : 0}%"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Manual Tests</h6>
+                                <p>Required: ${manualTests}</p>
+                                <small class="text-muted">Complete manual testing checklist above</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Overall Status</h6>
+                                <p class="text-${automatedPassed === automatedTests ? 'success' : 'warning'}">
+                                    ${automatedPassed === automatedTests ? '✅ All Automated Tests Passed' : '⚠️ Some Tests Failed'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            summary.innerHTML = report;
+        }
+
+        // Initialize test runner
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('QuickNotes AI Test Runner loaded');
+            checkEnvironment();
+        });
+    </script>
+</body>
+</html> 

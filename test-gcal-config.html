@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Calendar Configuration Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Google Calendar Configuration Test</h1>
+        
+        <div id="results"></div>
+        
+        <button class="btn btn-primary" onclick="runTests()">Run Tests</button>
+        <button class="btn btn-secondary" onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <!-- Load Google API -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Load our scripts -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+
+    <script>
+        function addResult(type, title, message) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = `<strong>${title}</strong><br>${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function runTests() {
+            clearResults();
+            
+            // Test 1: Configuration Loading
+            addResult('info', 'Test 1: Configuration Loading', 'Checking if configuration files are loaded...');
+            
+            if (window.googleConfig) {
+                addResult('success', '✓ Configuration Loaded', 'google-config.js is loaded successfully');
+            } else {
+                addResult('error', '✗ Configuration Missing', 'google-config.js is not loaded');
+                return;
+            }
+            
+            // Test 2: Configuration Validation
+            addResult('info', 'Test 2: Configuration Validation', 'Validating configuration parameters...');
+            
+            const validation = window.validateGoogleConfiguration();
+            if (validation.isValid) {
+                addResult('success', '✓ Configuration Valid', 'All configuration parameters are valid');
+            } else {
+                addResult('warning', '⚠ Configuration Issues', `Issues found: ${validation.issues.join(', ')}`);
+            }
+            
+            // Test 3: API Key Check
+            addResult('info', 'Test 3: API Key Check', 'Checking API key configuration...');
+            
+            if (window.googleConfig.apiKey && !window.googleConfig.apiKey.includes('example')) {
+                addResult('success', '✓ API Key Configured', `API Key: ${window.googleConfig.apiKey.substring(0, 20)}...`);
+            } else {
+                addResult('error', '✗ API Key Missing', 'API Key is not configured or is using placeholder value');
+            }
+            
+            // Test 4: Client ID Check
+            addResult('info', 'Test 4: Client ID Check', 'Checking Client ID configuration...');
+            
+            if (window.googleConfig.clientId && !window.googleConfig.clientId.includes('example')) {
+                addResult('success', '✓ Client ID Configured', `Client ID: ${window.googleConfig.clientId.substring(0, 30)}...`);
+            } else {
+                addResult('error', '✗ Client ID Missing', 'Client ID is not configured or is using placeholder value');
+            }
+            
+            // Test 5: Domain Authorization
+            addResult('info', 'Test 5: Domain Authorization', 'Checking domain authorization...');
+            
+            const currentDomain = window.location.hostname;
+            const authorizedDomains = window.googleConfig.authorizedDomains || [];
+            
+            if (authorizedDomains.includes(currentDomain)) {
+                addResult('success', '✓ Domain Authorized', `Domain '${currentDomain}' is authorized`);
+            } else {
+                addResult('warning', '⚠ Domain Not Authorized', `Domain '${currentDomain}' is not authorized. Add it to authorizedDomains array.`);
+            }
+            
+            // Test 6: Google API Loading
+            addResult('info', 'Test 6: Google API Loading', 'Checking if Google API is loaded...');
+            
+            if (typeof gapi !== 'undefined') {
+                addResult('success', '✓ Google API Loaded', 'Google API (gapi) is loaded');
+            } else {
+                addResult('error', '✗ Google API Not Loaded', 'Google API (gapi) is not loaded');
+            }
+            
+            // Test 7: Google Identity Services
+            addResult('info', 'Test 7: Google Identity Services', 'Checking Google Identity Services...');
+            
+            if (typeof google !== 'undefined' && google.accounts) {
+                addResult('success', '✓ Google Identity Services Loaded', 'Google Identity Services is loaded');
+            } else {
+                addResult('error', '✗ Google Identity Services Not Loaded', 'Google Identity Services is not loaded');
+            }
+            
+            // Test 8: GCal Object
+            addResult('info', 'Test 8: GCal Object', 'Checking if GCal object is available...');
+            
+            if (window.gcal) {
+                addResult('success', '✓ GCal Object Available', 'GCal object is loaded and available');
+            } else {
+                addResult('error', '✗ GCal Object Missing', 'GCal object is not available');
+            }
+            
+            // Test 9: API Initialization (will show expected error with dummy key)
+            addResult('info', 'Test 9: API Initialization', 'Attempting to initialize Google Calendar API...');
+            
+            try {
+                if (window.gcal && window.gcal.initGoogleCalendarApi) {
+                    await window.gcal.initGoogleCalendarApi();
+                    addResult('success', '✓ API Initialized', 'Google Calendar API initialized successfully');
+                } else {
+                    addResult('error', '✗ API Init Function Missing', 'initGoogleCalendarApi function is not available');
+                }
+            } catch (error) {
+                if (error.status === 403) {
+                    addResult('warning', '⚠ API Access Denied (403)', 'This is expected with the current API key. Please enable Google Calendar API in Google Cloud Console.');
+                } else if (error.status === 400) {
+                    addResult('warning', '⚠ API Key Invalid (400)', 'API key format may be invalid. Please check your API key.');
+                } else {
+                    addResult('error', '✗ API Initialization Failed', `Error: ${error.message || error}`);
+                }
+            }
+            
+            // Test 10: Configuration Summary
+            addResult('info', 'Test 10: Configuration Summary', 'Configuration summary:');
+            
+            const summary = `
+                <strong>Current Configuration:</strong><br>
+                • API Key: ${window.googleConfig.apiKey ? window.googleConfig.apiKey.substring(0, 20) + '...' : 'Not set'}<br>
+                • Client ID: ${window.googleConfig.clientId ? window.googleConfig.clientId.substring(0, 30) + '...' : 'Not set'}<br>
+                • Authorized Domains: ${window.googleConfig.authorizedDomains ? window.googleConfig.authorizedDomains.join(', ') : 'None'}<br>
+                • Current Domain: ${window.location.hostname}<br>
+                • Protocol: ${window.location.protocol}<br>
+                • Port: ${window.location.port || '80/443'}
+            `;
+            
+            addResult('info', 'Configuration Summary', summary);
+        }
+
+        // Auto-run tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Google Calendar Configuration Test Page Loaded');
+            setTimeout(runTests, 1000); // Small delay to ensure scripts are loaded
+        });
+    </script>
+</body>
+</html> 
