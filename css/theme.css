@@ -1,0 +1,471 @@
+/* Comprehensive Theme System for QuickNotes AI */
+
+/* CSS Custom Properties for Light Theme */
+:root {
+    --primary-color: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary-color: #8b5cf6;
+    --accent-color: #06b6d4;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    
+    /* Background Colors */
+    --light-bg: #f8fafc;
+    --dark-bg: #111827;
+    --card-bg: #ffffff;
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+    --footer-bg: #1f2937;
+    
+    /* Text Colors */
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --text-light: #f9fafb;
+    
+    /* Border Colors */
+    --border-color: #e5e7eb;
+    --border-light: #f3f4f6;
+    
+    /* Shadow Variables */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    
+    /* Theme State */
+    --current-theme: 'light';
+}
+
+/* Dark Theme Overrides */
+[data-bs-theme="dark"] {
+    --card-bg: #1f2937;
+    --navbar-bg: rgba(17, 24, 39, 0.9);
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --border-light: #4b5563;
+    --current-theme: 'dark';
+}
+
+/* Base Body Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--light-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: var(--dark-bg);
+}
+
+/* Enhanced Navigation */
+.navbar {
+    backdrop-filter: blur(10px);
+    background: var(--navbar-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color) !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--text-primary) !important;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+.nav-link.active {
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Enhanced Cards */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+/* Enhanced Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background: var(--card-bg);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Text Utilities */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Background Utilities */
+.bg-light {
+    background-color: var(--light-bg) !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+    background-color: var(--dark-bg) !important;
+}
+
+.bg-white {
+    background-color: var(--card-bg) !important;
+}
+
+/* Footer */
+footer {
+    background: var(--footer-bg);
+    color: var(--text-light);
+    padding: 3rem 0 1.5rem;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+    
+    .theme-toggle-btn {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading Animation */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-light);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Theme Transition */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Input Method Chart Theme Support */
+.input-method-ratio-container {
+    transition: all 0.3s ease;
+}
+
+/* Chart.js theme support for Input Methods chart */
+#inputMethodChart {
+    filter: var(--chart-filter, none);
+}
+
+[data-bs-theme="dark"] #inputMethodChart {
+    --chart-filter: brightness(0.9) contrast(1.1);
+}
+
+/* Chart Legend Theme Support */
+.chartjs-render-monitor {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure chart legend text is always visible */
+.chartjs-legend-item {
+    color: var(--text-primary) !important;
+}
+
+/* Chart canvas theme support */
+canvas {
+    color: var(--text-primary) !important;
+}
+
+/* Chart legend text visibility */
+.chartjs-legend-item-text {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Ensure all chart text elements use theme colors */
+.chartjs-chart text {
+    fill: var(--text-primary) !important;
+}
+
+/* Chart legend container */
+.chartjs-legend {
+    color: var(--text-primary) !important;
+}
+
+/* Chart Axis Theme Support */
+.chartjs-chart canvas {
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Ensure chart axes are always visible */
+.chartjs-chart .chartjs-axis {
+    stroke: var(--border-color) !important;
+    stroke-width: 1px !important;
+}
+
+/* Chart grid lines */
+.chartjs-chart .chartjs-grid {
+    stroke: var(--border-color) !important;
+    stroke-opacity: 0.3 !important;
+}
+
+/* Chart tick marks */
+.chartjs-chart .chartjs-tick {
+    stroke: var(--border-color) !important;
+    stroke-width: 1px !important;
+}
+
+/* Chart axis labels */
+.chartjs-chart .chartjs-axis-label {
+    fill: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+}
+
+/* Chart tick labels */
+.chartjs-chart .chartjs-tick-label {
+    fill: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 11px !important;
+}
+
+/* Enhanced chart axis visibility */
+.chartjs-chart canvas {
+    border: 1px solid var(--border-color) !important;
+    background: var(--card-bg) !important;
+}
+
+/* Chart axis lines */
+.chartjs-chart .chartjs-axis-line {
+    stroke: var(--border-color) !important;
+    stroke-width: 1px !important;
+}
+
+/* Chart grid lines with better visibility */
+.chartjs-chart .chartjs-grid-line {
+    stroke: var(--border-color) !important;
+    stroke-opacity: 0.4 !important;
+    stroke-width: 1px !important;
+}
+
+/* Chart axis titles */
+.chartjs-chart .chartjs-axis-title {
+    fill: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+}
+
+/* Chart tick marks */
+.chartjs-chart .chartjs-tick-mark {
+    stroke: var(--border-color) !important;
+    stroke-width: 1px !important;
+}
+
+/* Ensure chart text elements are always visible */
+.chartjs-chart text {
+    fill: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Chart axis labels with better contrast */
+.chartjs-chart .chartjs-axis-label {
+    fill: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+}
+
+/* Additional chart legend styling for better visibility */
+.chartjs-legend-item {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    margin: 2px !important;
+    transition: all 0.3s ease !important;
+}
+
+.chartjs-legend-item:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Ensure chart text elements inherit theme colors */
+.chartjs-chart * {
+    color: var(--text-primary) !important;
+}
+
+/* Chart legend text with better contrast */
+.chartjs-legend-item span {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-bs-theme="dark"] .chartjs-legend-item span {
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Chart.js specific legend styling */
+.chartjs-legend {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ensure legend text is always readable */
+.chartjs-legend-item-text,
+.chartjs-legend-item-label {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    font-family: 'Inter', sans-serif !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* High contrast mode for better visibility */
+@media (prefers-contrast: high) {
+    .chartjs-legend-item-text,
+    .chartjs-legend-item-label {
+        font-weight: 700 !important;
+        text-shadow: 0 0 1px currentColor !important;
+    }
+} 

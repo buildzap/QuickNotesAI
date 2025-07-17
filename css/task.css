@@ -1,0 +1,390 @@
+/* Task Manager Specific Styles */
+.quick-create-form {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    color: white;
+}
+
+.quick-create-form .form-control,
+.quick-create-form .form-select {
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.quick-create-form .form-control:focus,
+.quick-create-form .form-select:focus {
+    background-color: white;
+}
+
+.task-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.task-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.task-card.priority-high { border-left-color: var(--bs-danger); }
+.task-card.priority-medium { border-left-color: var(--bs-warning); }
+.task-card.priority-low { border-left-color: var(--bs-success); }
+
+.stats-card {
+    height: 100%;
+    background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+    color: white;
+}
+
+.activity-item {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--bs-primary);
+    background-color: var(--bs-light);
+    transition: transform 0.2s ease;
+}
+
+.activity-item:hover {
+    transform: translateX(5px);
+}
+
+.chart-container {
+    height: 200px;
+    position: relative;
+}
+
+.completion-progress {
+    height: 0.5rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.completion-progress .progress-bar {
+    border-radius: 1rem;
+    transition: width 1s ease;
+}
+
+.voice-input-btn.recording {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2); }
+    100% { transform: scale(1); }
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .activity-item {
+    background-color: var(--bs-dark);
+    border-color: var(--bs-primary);
+}
+
+/* App Loading State */
+.app-loading {
+    visibility: hidden;
+}
+
+.app-loading::after {
+    visibility: visible;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.app-loading::before {
+    visibility: visible;
+    content: "";
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--bs-primary);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+    z-index: 10000;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Google Calendar Integration Styles */
+.btn-google {
+    background-color: #4285f4;
+    border-color: #4285f4;
+    color: white;
+}
+
+.btn-google:hover {
+    background-color: #3367d6;
+    border-color: #3367d6;
+    color: white;
+}
+
+.btn-google:focus {
+    background-color: #3367d6;
+    border-color: #3367d6;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
+#calendarIntegrationSection .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+#calendarIntegrationSection .card-header h5 {
+    color: white;
+    margin: 0;
+}
+
+#calendarIntegrationSection .card-body {
+    background-color: #f8f9fa;
+}
+
+#calendarIntegrationSection .border {
+    border-color: #e9ecef !important;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+#calendarIntegrationSection .border:hover {
+    border-color: #4285f4 !important;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.1);
+}
+
+#selected-task-display .fw-bold {
+    color: #4285f4 !important;
+}
+
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Ensure calendar integration is not blurred for premium users */
+.premium-feature {
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+
+.premium-feature * {
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+/* Remove any blur effects for premium features */
+.premium-feature.blur,
+.premium-feature .blur {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* Ensure buttons are clickable for premium users */
+.premium-feature button {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+}
+
+.premium-feature button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+/* Premium upgrade prompt styles */
+#premiumPromptContainer .display-4 {
+    font-size: 3rem;
+    color: #4285f4;
+}
+
+#premiumPromptContainer .border {
+    border-color: #e9ecef !important;
+    background-color: #f8f9fa;
+}
+
+#premiumPromptContainer .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#premiumPromptContainer .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: #212529;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Button states */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn.opacity-50 {
+    opacity: 0.5;
+}
+
+/* Loading states */
+.btn .bi-hourglass-split {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #calendarIntegrationSection .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    #calendarIntegrationSection .text-end {
+        text-align: center !important;
+        margin-top: 1rem;
+    }
+    
+    #calendarIntegrationSection .btn {
+        width: 100%;
+    }
+}
+
+.connection-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    transition: background-color 0.3s ease;
+}
+
+.connection-dot.connected {
+    background-color: #198754;
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(25, 135, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+}
+
+.connection-status-card,
+.sync-manager-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.connection-status-card:hover,
+.sync-manager-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sync-history-item {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+    border-left: 3px solid #28a745;
+    transition: all 0.2s ease;
+}
+
+.sync-history-item:hover {
+    background-color: #e9ecef;
+    transform: translateX(3px);
+}
+
+.synced-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+/* Dark mode adjustments for Google Calendar */
+[data-bs-theme="dark"] .connection-status-card,
+[data-bs-theme="dark"] .sync-manager-card {
+    background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+    border-color: #6c757d;
+}
+
+[data-bs-theme="dark"] .sync-history-item {
+    background-color: #495057;
+    border-left-color: #28a745;
+}
+
+[data-bs-theme="dark"] .sync-history-item:hover {
+    background-color: #6c757d;
+}
+
+/* Task selection styling */
+.task-item {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.task-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-item.selected {
+    border-color: #4285f4 !important;
+    box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25) !important;
+    background-color: #f8f9ff !important;
+    position: relative;
+}
+
+.task-item.selected::after {
+    content: "✓ Selected for Calendar";
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #4285f4;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* Ensure selected tasks are not blurred for premium users */
+.premium-feature .task-item.selected {
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
