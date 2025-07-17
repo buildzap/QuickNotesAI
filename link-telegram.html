@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Telegram Account - QuickNotes AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .link-container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .telegram-icon {
+            font-size: 4rem;
+            color: #0088cc;
+            margin-bottom: 20px;
+        }
+        
+        .step-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #0088cc;
+        }
+        
+        .step-number {
+            background: #0088cc;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .bot-link {
+            background: #0088cc;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .bot-link:hover {
+            background: #006699;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,136,204,0.3);
+        }
+        
+        .token-display {
+            background: #e9ecef;
+            border: 2px dashed #6c757d;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #218838;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .expiry-warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .loading-spinner {
+            display: none;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="link-container">
+        <div class="telegram-icon">
+            <i class="fab fa-telegram"></i>
+        </div>
+        
+        <h1 class="mb-4">Link Your Telegram Account</h1>
+        <p class="text-muted mb-4">Connect your Telegram account to enable voice-to-task functionality</p>
+        
+        <!-- Status Messages -->
+        <div id="statusMessage" class="status-message"></div>
+        
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Verifying your token...</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div id="mainContent">
+            <!-- Step 1: Open Telegram -->
+            <div class="step-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number">1</div>
+                    <h5 class="mb-0">Open Telegram</h5>
+                </div>
+                <p class="mb-3">Open Telegram on your phone or desktop and search for our bot</p>
+                <a href="https://t.me/quicknotes_ai_bot" target="_blank" class="bot-link">
+                    <i class="fab fa-telegram me-2"></i>
+                    Open @quicknotes_ai_bot
+                </a>
+            </div>
+            
+            <!-- Step 2: Send Link Command -->
+            <div class="step-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number">2</div>
+                    <h5 class="mb-0">Send Link Command</h5>
+                </div>
+                <p class="mb-3">Copy the token below and send it to the bot with the /link command</p>
+                <div class="token-display">
+                    <span id="linkToken">Loading token...</span>
+                    <button class="copy-btn" onclick="copyToken()">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <p class="text-muted small">Example: <code>/link YOUR_TOKEN_HERE</code></p>
+            </div>
+            
+            <!-- Step 3: Verify Connection -->
+            <div class="step-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number">3</div>
+                    <h5 class="mb-0">Verify Connection</h5>
+                </div>
+                <p class="mb-3">After sending the command, click the button below to verify your account is linked</p>
+                <button class="btn btn-success btn-lg" onclick="verifyConnection()">
+                    <i class="fas fa-check-circle me-2"></i>
+                    Verify Connection
+                </button>
+            </div>
+            
+            <!-- Expiry Warning -->
+            <div class="expiry-warning">
+                <i class="fas fa-clock me-2"></i>
+                <strong>Important:</strong> This linking token expires in 30 minutes. If it expires, you'll need to generate a new one.
+            </div>
+        </div>
+        
+        <!-- Back Button -->
+        <a href="task.html" class="back-btn">
+            <i class="fas fa-arrow-left me-2"></i>
+            Back to Tasks
+        </a>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let linkToken = null;
+        let tokenExpiry = null;
+        
+        // Get token from URL parameters
+        function getTokenFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('token');
+        }
+        
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // Show/hide loading spinner
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (show) {
+                spinner.style.display = 'block';
+                mainContent.style.display = 'none';
+            } else {
+                spinner.style.display = 'none';
+                mainContent.style.display = 'block';
+            }
+        }
+        
+        // Copy token to clipboard
+        function copyToken() {
+            if (linkToken) {
+                navigator.clipboard.writeText(linkToken).then(() => {
+                    showStatus('Token copied to clipboard!', 'success');
+                }).catch(() => {
+                    showStatus('Failed to copy token. Please copy it manually.', 'error');
+                });
+            }
+        }
+        
+        // Verify connection
+        async function verifyConnection() {
+            try {
+                showLoading(true);
+                
+                // Wait for Firebase to initialize
+                if (window.firebaseInitialized) {
+                    await window.firebaseInitialized;
+                }
+                
+                // Check if user is authenticated
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showStatus('Please log in to verify your connection.', 'error');
+                    showLoading(false);
+                    return;
+                }
+                
+                // Check if Firebase Functions is available
+                if (!window.firebaseFunctions) {
+                    showStatus('Firebase Functions is not available. Please try again later.', 'error');
+                    showLoading(false);
+                    return;
+                }
+                
+                // Call Firebase function to check status
+                const checkStatus = window.firebaseFunctions.httpsCallable('checkTelegramStatus');
+                const result = await checkStatus();
+                
+                if (result.data && result.data.success && result.data.status.linked) {
+                    showStatus('✅ Account successfully linked! You can now send voice messages to the bot.', 'success');
+                    
+                    // Redirect to task page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'task.html';
+                    }, 3000);
+                } else {
+                    showStatus('❌ Account not linked yet. Please make sure you sent the /link command to the bot with the correct token.', 'warning');
+                }
+                
+            } catch (error) {
+                console.error('Error verifying connection:', error);
+                showStatus('Error verifying connection. Please try again.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Check token expiry
+        function checkTokenExpiry() {
+            if (tokenExpiry && new Date() > tokenExpiry) {
+                showStatus('❌ This linking token has expired. Please generate a new one from the task page.', 'error');
+                document.getElementById('mainContent').style.display = 'none';
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Telegram linking page loaded');
+            
+            // Get token from URL
+            linkToken = getTokenFromURL();
+            
+            if (!linkToken) {
+                showStatus('❌ No linking token found in URL. Please generate a new one from the task page.', 'error');
+                document.getElementById('mainContent').style.display = 'none';
+                return;
+            }
+            
+            // Display token
+            document.getElementById('linkToken').textContent = linkToken;
+            
+            // Set expiry time (30 minutes from now)
+            tokenExpiry = new Date(Date.now() + 30 * 60 * 1000);
+            
+            // Check expiry every minute
+            setInterval(checkTokenExpiry, 60000);
+            
+            // Initial expiry check
+            checkTokenExpiry();
+            
+            showStatus('🔗 Linking token loaded successfully! Follow the steps above to link your account.', 'success');
+        });
+    </script>
+</body>
+</html> 

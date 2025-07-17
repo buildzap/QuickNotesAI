@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Fallback Font Awesome CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <!-- Utility Scripts (if needed) -->
+    <script src="js/utils.js"></script>
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script>
+    // Patch for jsPDF global (for dashboard-pdf.js compatibility)
+    if (window.jspdf && window.jspdf.jsPDF) {
+        window.jsPDF = window.jspdf.jsPDF;
+    }
+    </script>
+    <script src="js/dashboard-pdf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/dashboard-excel.js"></script>
+    <!-- Add LottieFiles player script in the <head> if not present -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    
+    <!-- Font Awesome Fallback Script -->
+    <script>
+        // Check if Font Awesome is loaded
+        function checkFontAwesome() {
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-check';
+            testIcon.style.position = 'absolute';
+            testIcon.style.left = '-9999px';
+            document.body.appendChild(testIcon);
+            
+            const computedStyle = window.getComputedStyle(testIcon, ':before');
+            const content = computedStyle.getPropertyValue('content');
+            
+            document.body.removeChild(testIcon);
+            
+            if (!content || content === 'none' || content === 'normal') {
+                console.warn('Font Awesome not loaded properly, attempting fallback...');
+                // Try to load Font Awesome from a different CDN
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+                document.head.appendChild(link);
+            }
+        }
+        
+        // Check after page loads
+        window.addEventListener('load', checkFontAwesome);
+    </script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Analytics Dashboard Cards */
+        .analytics-card {
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .analytics-card .card {
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .analytics-card:hover .card {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .analytics-icon {
+            position: relative;
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-card:hover .icon-circle {
+            transform: scale(1.1);
+        }
+
+        /* Progress bar animations */
+        .progress-bar {
+            transition: width 0.8s ease-in-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .analytics-card .card-body {
+                padding: 1rem !important;
+            }
+            
+            .analytics-card h3 {
+                font-size: 1.8rem !important;
+            }
+            
+            .icon-circle {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .icon-circle i {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        /* Export Buttons Styling */
+        #exportButtons .btn-group {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #exportButtons .btn {
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #exportButtons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #exportButtons .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Dashboard Header Styling */
+        .dashboard-header {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .dashboard-title {
+            position: relative;
+        }
+
+        .dashboard-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float-gentle 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .floating-bg-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            background: var(--gradient-secondary);
+            animation-delay: 2s;
+        }
+
+        .floating-bg-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            background: var(--gradient-accent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Premium Banner Styles - New Compact Design */
+        .premium-banner {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+            border-bottom: 2px solid #ffd700;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 20px;
+            overflow: hidden;
+        }
+
+        /* Force banner visibility when premium user */
+        .premium-user .premium-banner {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Animated background pattern */
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: premium-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes premium-glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.15rem 0;
+            position: relative;
+            z-index: 1;
+            gap: 0.4rem;
+        }
+
+        .premium-banner-icon {
+            font-size: 0.6rem;
+            color: #ffd700;
+            animation: crown-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes crown-pulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+            }
+            50% { 
+                transform: scale(1.03) rotate(1deg); 
+                filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8));
+            }
+        }
+
+        .premium-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .premium-banner-title {
+            color: #1e40af;
+            font-weight: 600;
+            font-size: 0.65rem;
+            margin: 0;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.2px;
+        }
+
+        .premium-banner-badge {
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-banner-badge .badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1e40af;
+            font-size: 0.5rem;
+            padding: 0.15rem 0.3rem;
+            font-weight: 700;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            animation: badge-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes badge-shine {
+            0%, 100% { 
+                box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Dark theme adjustments */
+        [data-bs-theme="dark"] .premium-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+            border-bottom: 2px solid #ffd700;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-title {
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-icon {
+            color: #ffd700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .premium-banner-content {
+                padding: 0.1rem 0;
+                gap: 0.3rem;
+            }
+
+            .premium-banner-text {
+                flex-direction: column;
+                gap: 0.15rem;
+                text-align: center;
+            }
+
+            .premium-banner-title {
+                font-size: 0.6rem;
+            }
+
+            .premium-banner-badge .badge {
+                font-size: 0.45rem;
+                padding: 0.1rem 0.25rem;
+            }
+        }
+
+        /* Hover effects */
+        .premium-banner:hover {
+            box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .premium-banner:hover .premium-banner-icon {
+            animation: crown-pulse 1s ease-in-out infinite;
+        }
+
+        /* Adjust main content padding when premium banner is visible */
+        .premium-user .main-content {
+            padding-top: 120px !important;
+        }
+
+        /* Remove space between banner and dashboard header */
+        .premium-user .dashboard-header {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /* Force remove all spacing between banner and dashboard */
+        .premium-user .main-content .row:first-child {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .premium-user .main-content .col-12:first-child {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /* Negative margin to pull dashboard up */
+        .premium-user .main-content {
+            margin-top: -20px !important;
+        }
+
+        /* Ensure dashboard title has no top margin */
+        .premium-user .dashboard-title {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /* Remove any spacing from the first row and its children */
+        .premium-user .main-content > .row:first-child,
+        .premium-user .main-content > .row:first-child > * {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /* Target the specific dashboard header container */
+        .premium-user .main-content .dashboard-header,
+        .premium-user .main-content .dashboard-header * {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        /* Force the banner to stick to the navbar */
+        .premium-user .premium-banner {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* Font Awesome Icon Fallbacks */
+        .fas, .far, .fab, .fa {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Pro', 'Font Awesome 6 Brands', 'FontAwesome' !important;
+            font-weight: 900;
+        }
+        
+        .far {
+            font-weight: 400;
+        }
+        
+        .fab {
+            font-weight: 400;
+        }
+        
+        /* Ensure icons are visible */
+        .btn i, .card-title i, .navbar-brand i {
+            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+        }
+        
+        /* Icon fallback styles */
+        .fas::before, .far::before, .fab::before {
+            display: inline-block !important;
+        }
+        
+        /* Specific icon fixes */
+        .fa-chart-line::before { content: "📈"; }
+        .fa-lightbulb::before { content: "💡"; }
+        .fa-download::before { content: "⬇️"; }
+        .fa-crown::before { content: "👑"; }
+        .fa-clock::before { content: "🕐"; }
+        .fa-chart-area::before { content: "📊"; }
+        .fa-keyboard::before { content: "⌨️"; }
+        .fa-brain::before { content: "🧠"; }
+        .fa-calendar-day::before { content: "📅"; }
+        .fa-calendar-week::before { content: "📆"; }
+        .fa-magic::before { content: "✨"; }
+        .fa-history::before { content: "🕰️"; }
+        .fa-tasks::before { content: "📋"; }
+        .fa-chart-bar::before { content: "📊"; }
+        .fa-exclamation-triangle::before { content: "⚠️"; }
+        .fa-lock::before { content: "🔒"; }
+        .fa-tags::before { content: "🏷️"; }
+        .fa-chart-pie::before { content: "🥧"; }
+        .fa-fire::before { content: "🔥"; }
+        .fa-microphone::before { content: "🎤"; }
+        .fa-search::before { content: "🔍"; }
+        .fa-percentage::before { content: "💯"; }
+        .fa-calendar-alt::before { content: "📅"; }
+        .fa-microphone-alt::before { content: "🎤"; }
+        .fa-heart::before { content: "❤️"; }
+        .fa-sticky-note::before { content: "📝"; }
+        .fa-moon::before { content: "🌙"; }
+        
+        [data-bs-theme="dark"] {
+            --background-main: #181a20;
+            --background-card: #23272f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #b0b3b8;
+            --border-color: #31343b;
+            --shadow: 0 2px 16px 0 rgba(99,102,241,0.12);
+            --shadow-hover: 0 8px 32px 0 rgba(99,102,241,0.25);
+            --gradient-card: linear-gradient(135deg, #23272f 0%, #1e2a2f 100%);
+        }
+        
+
+        
+        /* Body and Typography - Matching Task Page */
+        html, body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+            background-color: var(--background-main);
+        }
+        
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+        }
+        
+        body, .card, .card-title, .card-body, .footer, .nav-link, h1, h2, h3, h4, h5, h6, p, span, label, input, select, button {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-primary) !important;
+        }
+        [data-bs-theme="dark"] body, [data-bs-theme="dark"] .card, [data-bs-theme="dark"] .card-title, [data-bs-theme="dark"] .card-body, [data-bs-theme="dark"] .footer, [data-bs-theme="dark"] .nav-link, [data-bs-theme="dark"] h1, [data-bs-theme="dark"] h2, [data-bs-theme="dark"] h3, [data-bs-theme="dark"] h4, [data-bs-theme="dark"] h5, [data-bs-theme="dark"] h6, [data-bs-theme="dark"] p, [data-bs-theme="dark"] span, [data-bs-theme="dark"] label, [data-bs-theme="dark"] input, [data-bs-theme="dark"] select, [data-bs-theme="dark"] button {
+            color: var(--text-primary) !important;
+        }
+        
+        .card {
+            background: var(--background-card);
+        }
+        
+        .footer, .footer span, .footer a {
+            color: var(--text-secondary) !important;
+        }
+        .card-title {
+            font-weight: 600;
+        }
+        .btn, .btn-outline-primary {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+        }
+        .dashboard-title {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+                 .dashboard-title::after {
+             content: '';
+             position: absolute;
+             bottom: -4px;
+             left: 0;
+             width: 100%;
+             height: 2px;
+             background: var(--gradient-primary);
+             border-radius: 1px;
+         }
+         
+         /* Dashboard specific font size adjustments */
+         .upgrade-prompt h6 {
+             font-size: 0.85rem !important;
+         }
+         
+         .upgrade-prompt p {
+             font-size: 0.8rem !important;
+         }
+         
+         .card-title {
+             font-size: 0.95rem !important;
+         }
+         
+         .alert-heading {
+             font-size: 0.9rem !important;
+         }
+         
+         .alert small {
+             font-size: 0.8rem !important;
+         }
+         
+
+         
+         .premium-banner {
+             margin-bottom: 0 !important;
+         }
+         
+         .dashboard-header {
+             padding-top: 0.5rem !important;
+             padding-bottom: 0.5rem !important;
+             background: var(--background-main);
+             border-bottom: 1px solid var(--border-color);
+         }
+         
+         /* Additional font size consistency */
+         .card-body h6 {
+             font-size: 0.85rem !important;
+         }
+         
+         .card-body p {
+             font-size: 0.85rem !important;
+         }
+         
+         .btn-sm {
+             font-size: 0.85rem !important;
+         }
+         
+         .badge {
+             font-size: 0.75rem !important;
+         }
+         
+         .navbar-text {
+             font-size: 0.85rem !important;
+         }
+         
+         /* Smart Digest 3D Animation - Horizontal Layout */
+         .smart-digest-3d-animation {
+             width: 420px;
+             height: 280px;
+             position: relative;
+             perspective: 1500px;
+             overflow: hidden;
+         }
+         
+         .digest-animation-container {
+             width: 100%;
+             height: 100%;
+             position: relative;
+             transform-style: preserve-3d;
+             animation: digest-container-float 10s ease-in-out infinite;
+         }
+         
+         /* Central Digest Hub */
+         .digest-hub {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             z-index: 15;
+         }
+         
+         .hub-core {
+             width: 80px;
+             height: 80px;
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+             border-radius: 50%;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             box-shadow: 0 0 50px rgba(102, 126, 234, 0.6);
+             animation: hub-pulse 5s ease-in-out infinite;
+             position: relative;
+         }
+         
+         .hub-core i {
+             font-size: 2rem;
+             color: white;
+             animation: hub-rotate 8s linear infinite;
+             text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+         }
+         
+         .hub-pulse {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             width: 140px;
+             height: 140px;
+             background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, rgba(240, 147, 251, 0.2) 50%, transparent 70%);
+             border-radius: 50%;
+             animation: hub-glow-pulse 4s ease-in-out infinite;
+         }
+         
+         /* Left Side - Data Collection */
+         .data-collection-left {
+             position: absolute;
+             left: 15px;
+             top: 50%;
+             transform: translateY(-50%);
+             width: 100px;
+             height: 180px;
+         }
+         
+         .data-point {
+             position: absolute;
+             width: 45px;
+             height: 45px;
+             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+             border-radius: 12px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             box-shadow: 0 4px 25px rgba(79, 172, 254, 0.4);
+             animation: data-point-pulse 4s ease-in-out infinite;
+         }
+         
+         .data-point i {
+             font-size: 1.1rem;
+             color: white;
+         }
+         
+         .data-point-1 { top: 0; animation-delay: 0s; }
+         .data-point-2 { top: 65px; animation-delay: 1.5s; }
+         .data-point-3 { top: 130px; animation-delay: 3s; }
+         
+         .data-stream {
+             position: absolute;
+             right: -8px;
+             width: 25px;
+             height: 3px;
+             background: linear-gradient(90deg, #4facfe, #667eea);
+             border-radius: 2px;
+             animation: data-stream-animate 3s ease-in-out infinite;
+         }
+         
+         .data-stream-1 { top: 22px; animation-delay: 0s; }
+         .data-stream-2 { top: 87px; animation-delay: 1.5s; }
+         
+         /* Right Side - AI Processing */
+         .ai-processing-right {
+             position: absolute;
+             right: 15px;
+             top: 50%;
+             transform: translateY(-50%);
+             width: 100px;
+             height: 180px;
+         }
+         
+         .ai-node {
+             position: absolute;
+             width: 45px;
+             height: 45px;
+             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+             border-radius: 12px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             box-shadow: 0 4px 25px rgba(250, 112, 154, 0.4);
+             animation: ai-node-pulse 4s ease-in-out infinite;
+         }
+         
+         .ai-node i {
+             font-size: 1.1rem;
+             color: white;
+         }
+         
+         .ai-node-1 { top: 0; animation-delay: 0s; }
+         .ai-node-2 { top: 65px; animation-delay: 1.5s; }
+         .ai-node-3 { top: 130px; animation-delay: 3s; }
+         
+         .ai-connection {
+             position: absolute;
+             left: -8px;
+             width: 25px;
+             height: 3px;
+             background: linear-gradient(90deg, #fa709a, #667eea);
+             border-radius: 2px;
+             animation: ai-connection-animate 3s ease-in-out infinite;
+         }
+         
+         .ai-connection-1 { top: 22px; animation-delay: 0s; }
+         .ai-connection-2 { top: 87px; animation-delay: 1.5s; }
+         
+         /* Floating Digest Elements */
+         .digest-elements {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             pointer-events: none;
+         }
+         
+         .digest-element {
+             position: absolute;
+             font-size: 1.2rem;
+             animation: digest-element-float 8s ease-in-out infinite;
+             opacity: 0.8;
+             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+         }
+         
+         .element-1 { top: 12%; left: 28%; animation-delay: 0s; }
+         .element-2 { top: 22%; right: 32%; animation-delay: 1s; }
+         .element-3 { bottom: 18%; left: 38%; animation-delay: 2s; }
+         .element-4 { bottom: 28%; right: 28%; animation-delay: 3s; }
+         .element-5 { top: 45%; left: 18%; animation-delay: 4s; }
+         .element-6 { top: 35%; right: 18%; animation-delay: 5s; }
+         .element-7 { bottom: 45%; left: 25%; animation-delay: 6s; }
+         .element-8 { bottom: 55%; right: 22%; animation-delay: 7s; }
+         
+         /* Background Network */
+         .network-background {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             opacity: 0.08;
+         }
+         
+         .network-line {
+             position: absolute;
+             background: linear-gradient(90deg, transparent, #667eea, transparent);
+             animation: network-pulse 6s ease-in-out infinite;
+         }
+         
+         .network-1 { top: 20%; left: 0; width: 100%; height: 2px; animation-delay: 0s; }
+         .network-2 { top: 40%; left: 0; width: 100%; height: 2px; animation-delay: 1.5s; }
+         .network-3 { top: 60%; left: 0; width: 100%; height: 2px; animation-delay: 3s; }
+         .network-4 { top: 80%; left: 0; width: 100%; height: 2px; animation-delay: 4.5s; }
+         
+         .network-node {
+             position: absolute;
+             width: 10px;
+             height: 10px;
+             background: radial-gradient(circle, rgba(102, 126, 234, 0.8), transparent);
+             border-radius: 50%;
+             animation: network-node-pulse 5s ease-in-out infinite;
+         }
+         
+         .network-node-1 { top: 30%; left: 30%; animation-delay: 0s; }
+         .network-node-2 { top: 50%; right: 35%; animation-delay: 2.5s; }
+         .network-node-3 { top: 70%; left: 65%; animation-delay: 5s; }
+         
+         /* Smart Digest Animation Keyframes */
+         @keyframes digest-container-float {
+             0%, 100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+             25% { transform: translateY(-6px) rotateX(2deg) rotateY(1deg); }
+             50% { transform: translateY(-12px) rotateX(0deg) rotateY(0deg); }
+             75% { transform: translateY(-6px) rotateX(-2deg) rotateY(-1deg); }
+         }
+         
+         @keyframes hub-pulse {
+             0%, 100% { transform: scale(1) rotateY(0deg); }
+             50% { transform: scale(1.12) rotateY(180deg); }
+         }
+         
+         @keyframes hub-rotate {
+             0% { transform: rotate(0deg); }
+             100% { transform: rotate(360deg); }
+         }
+         
+         @keyframes hub-glow-pulse {
+             0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+             50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); }
+         }
+         
+         @keyframes data-point-pulse {
+             0%, 100% { transform: scale(1) translateY(0px) rotateY(0deg); }
+             50% { transform: scale(1.08) translateY(-4px) rotateY(180deg); }
+         }
+         
+         @keyframes data-stream-animate {
+             0%, 100% { opacity: 0.4; transform: scaleX(0.6); }
+             50% { opacity: 1; transform: scaleX(1.3); }
+         }
+         
+         @keyframes ai-node-pulse {
+             0%, 100% { transform: scale(1) translateY(0px) rotateY(0deg); }
+             50% { transform: scale(1.08) translateY(-4px) rotateY(-180deg); }
+         }
+         
+         @keyframes ai-connection-animate {
+             0%, 100% { opacity: 0.4; transform: scaleX(0.6); }
+             50% { opacity: 1; transform: scaleX(1.3); }
+         }
+         
+         @keyframes digest-element-float {
+             0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.8; }
+             50% { transform: translateY(-18px) rotate(180deg) scale(1.15); opacity: 1; }
+         }
+         
+         @keyframes network-pulse {
+             0%, 100% { opacity: 0.08; }
+             50% { opacity: 0.2; }
+         }
+         
+         @keyframes network-node-pulse {
+             0%, 100% { opacity: 0.8; transform: scale(1); }
+             50% { opacity: 1; transform: scale(1.6); }
+         }
+         
+         /* Dark theme adjustments */
+         [data-bs-theme="dark"] .hub-core {
+             box-shadow: 0 0 60px rgba(102, 126, 234, 0.8);
+         }
+         
+         [data-bs-theme="dark"] .data-point {
+             box-shadow: 0 4px 30px rgba(79, 172, 254, 0.6);
+         }
+         
+         [data-bs-theme="dark"] .ai-node {
+             box-shadow: 0 4px 30px rgba(250, 112, 154, 0.6);
+         }
+         
+         [data-bs-theme="dark"] .hub-pulse {
+             background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, rgba(240, 147, 251, 0.3) 50%, transparent 70%);
+         }
+         
+         /* Enhanced Chart Analytics Styles */
+         .performance-indicator {
+             transition: all 0.3s ease;
+             border: 1px solid transparent;
+         }
+         
+         .performance-indicator:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+             border-color: rgba(0, 0, 0, 0.1);
+         }
+         
+         .indicator-value {
+             font-size: 1.2rem;
+             line-height: 1;
+         }
+         
+         .indicator-label {
+             font-size: 0.75rem;
+             margin-top: 0.25rem;
+         }
+         
+         .chart-tooltip {
+             position: absolute;
+             background: rgba(255, 255, 255, 0.95);
+             backdrop-filter: blur(10px);
+             border: 1px solid rgba(0, 0, 0, 0.1);
+             border-radius: 8px;
+             padding: 12px;
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+             z-index: 1000;
+             max-width: 280px;
+             pointer-events: none;
+             transition: all 0.2s ease;
+         }
+         
+         .tooltip-header {
+             font-weight: 600;
+             color: #4F46E5;
+             font-size: 0.9rem;
+             margin-bottom: 8px;
+             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+             padding-bottom: 6px;
+         }
+         
+         .tooltip-content {
+             font-size: 0.85rem;
+             color: #374151;
+             margin-bottom: 8px;
+         }
+         
+         .tooltip-insights {
+             font-size: 0.8rem;
+             color: #6B7280;
+             font-style: italic;
+         }
+         
+         .chart-controls .btn {
+             transition: all 0.2s ease;
+         }
+         
+         .chart-controls .btn:hover {
+             transform: translateY(-1px);
+             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+         }
+         
+         /* Dark theme adjustments for chart analytics */
+         [data-bs-theme="dark"] .chart-tooltip {
+             background: rgba(31, 41, 55, 0.95);
+             border-color: rgba(255, 255, 255, 0.1);
+             color: #F9FAFB;
+         }
+         
+         [data-bs-theme="dark"] .tooltip-header {
+             color: #818CF8;
+             border-bottom-color: rgba(255, 255, 255, 0.1);
+         }
+         
+         [data-bs-theme="dark"] .tooltip-content {
+             color: #D1D5DB;
+         }
+         
+         [data-bs-theme="dark"] .tooltip-insights {
+             color: #9CA3AF;
+         }
+         
+         [data-bs-theme="dark"] .performance-indicator {
+             background: rgba(255, 255, 255, 0.05) !important;
+             border-color: rgba(255, 255, 255, 0.1);
+         }
+         
+         [data-bs-theme="dark"] .performance-indicator:hover {
+             background: rgba(255, 255, 255, 0.08) !important;
+             border-color: rgba(255, 255, 255, 0.2);
+         }
+
+        /* Telegram Integration Styles */
+        .telegram-pattern {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pattern-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #0088cc, transparent);
+            height: 1px;
+            opacity: 0.3;
+            animation: pattern-flow 8s linear infinite;
+        }
+
+        .pattern-line.pattern-1 {
+            top: 20%;
+            left: -100%;
+            width: 200%;
+            animation-delay: 0s;
+        }
+
+        .pattern-line.pattern-2 {
+            top: 50%;
+            left: -100%;
+            width: 200%;
+            animation-delay: 2s;
+        }
+
+        .pattern-line.pattern-3 {
+            top: 80%;
+            left: -100%;
+            width: 200%;
+            animation-delay: 4s;
+        }
+
+        @keyframes pattern-flow {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .pattern-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #0088cc;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: dot-pulse 3s ease-in-out infinite;
+        }
+
+        .pattern-dot.pattern-dot-1 {
+            top: 30%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .pattern-dot.pattern-dot-2 {
+            top: 60%;
+            left: 70%;
+            animation-delay: 1s;
+        }
+
+        .pattern-dot.pattern-dot-3 {
+            top: 80%;
+            left: 40%;
+            animation-delay: 2s;
+        }
+
+        @keyframes dot-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+        }
+
+        .telegram-phone-animation {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .phone-frame {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(135deg, #0088cc, #00a8ff);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+            animation: phone-float 3s ease-in-out infinite;
+        }
+
+        @keyframes phone-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .telegram-chat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+        }
+
+        .chat-bubble {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: white;
+            animation: bubble-float 2s ease-in-out infinite;
+        }
+
+        .chat-bubble-1 {
+            background: #0088cc;
+            animation-delay: 0s;
+        }
+
+        .chat-bubble-2 {
+            background: #00a8ff;
+            animation-delay: 0.5s;
+        }
+
+        .chat-bubble-3 {
+            background: #6366f1;
+            animation-delay: 1s;
+        }
+
+        @keyframes bubble-float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-3px) scale(1.1); }
+        }
+
+        .connection-line {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #0088cc, #6366f1);
+            border-radius: 1px;
+            animation: connection-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes connection-pulse {
+            0%, 100% { opacity: 0.6; transform: scaleX(1); }
+            50% { opacity: 1; transform: scaleX(1.2); }
+        }
+
+        .quicknotes-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            animation: logo-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes logo-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .feature-item {
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+
+        .telegram-actions .btn {
+            transition: all 0.3s ease;
+        }
+
+        .telegram-actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Share Summary Section Styles */
+        .share-pattern {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .share-pattern .pattern-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            height: 1px;
+            opacity: 0.3;
+            animation: patternFloat 8s ease-in-out infinite;
+        }
+
+        .share-pattern .pattern-line.pattern-1 {
+            top: 20%;
+            left: 10%;
+            width: 80%;
+            animation-delay: 0s;
+        }
+
+        .share-pattern .pattern-line.pattern-2 {
+            top: 60%;
+            left: 5%;
+            width: 90%;
+            animation-delay: 2s;
+        }
+
+        .share-pattern .pattern-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: patternPulse 4s ease-in-out infinite;
+        }
+
+        .share-pattern .pattern-dot.pattern-dot-1 {
+            top: 30%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .share-pattern .pattern-dot.pattern-dot-2 {
+            top: 70%;
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        .share-pattern .pattern-dot.pattern-dot-3 {
+            top: 50%;
+            left: 60%;
+            animation-delay: 2s;
+        }
+
+        .share-icons-animation {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .share-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            animation: shareIconFloat 6s ease-in-out infinite;
+        }
+
+        .share-icon-slack {
+            background: linear-gradient(135deg, #4A154B, #611f69);
+            top: 10px;
+            left: 10px;
+            animation-delay: 0s;
+        }
+
+        .share-icon-email {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            top: 10px;
+            right: 10px;
+            animation-delay: 1s;
+        }
+
+        .share-icon-digest {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 2s;
+        }
+
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            height: 2px;
+            opacity: 0.6;
+            animation: connectionFlow 4s ease-in-out infinite;
+        }
+
+        .connection-line.connection-1 {
+            top: 30px;
+            left: 50px;
+            width: 20px;
+            transform: rotate(45deg);
+            animation-delay: 0s;
+        }
+
+        .connection-line.connection-2 {
+            top: 30px;
+            right: 50px;
+            width: 20px;
+            transform: rotate(-45deg);
+            animation-delay: 1s;
+        }
+
+        .connection-line.connection-3 {
+            bottom: 50px;
+            left: 50%;
+            width: 40px;
+            transform: translateX(-50%);
+            animation-delay: 2s;
+        }
+
+        @keyframes shareIconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes connectionFlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .quick-actions .btn {
+            transition: all 0.3s ease;
+        }
+
+        .quick-actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Font Awesome Icon Fallbacks */
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOut" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Premium Banner (Only for Premium Users) -->
+    <div id="premiumBanner" class="premium-banner d-none" style="display: none;">
+        <div class="container">
+            <div class="premium-banner-content">
+                <div class="premium-banner-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="premium-banner-text">
+                    <h5 class="premium-banner-title">Premium User – Enjoy all advanced features</h5>
+                </div>
+                <div class="premium-banner-badge">
+                    <span class="badge">
+                        <i class="fas fa-star me-1"></i>Premium
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid main-content" style="padding-top: 80px; padding-bottom: 2rem;">
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="dashboard-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <h2 class="dashboard-title" style="font-size: 1.3rem; margin: 0; font-weight: 700; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                                    <i class="fas fa-chart-bar me-2"></i>Analytics Dashboard
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end" id="exportButtons">
+                            <div class="btn-group" role="group">
+                                <button id="exportCsvBtn" class="btn btn-outline-primary btn-sm d-none" style="font-size: 0.85rem; border-radius: 8px 0 0 8px; border-width: 2px;">
+                                    <i class="fas fa-file-csv me-1"></i>Export to CSV
+                                </button>
+                                <button id="exportPdfBtn" class="btn btn-outline-danger btn-sm d-none" style="font-size: 0.85rem; border-radius: 0 8px 8px 0; border-width: 2px;">
+                                    <i class="fas fa-file-pdf me-1"></i>Export to PDF
+                                </button>
+                            </div>
+                            <button id="upgradePremiumBtn" class="btn btn-warning btn-sm ms-2 d-none" style="font-size: 0.85rem; border-radius: 8px; border-width: 2px;">
+                                <i class="fas fa-star me-1"></i>Upgrade to Premium
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Dashboard Stats -->
+        <div class="row mb-4" style="margin-top: 1.5rem;">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="analytics-card analytics-card-primary">
+                    <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        <i class="fas fa-tasks me-1"></i>Total Tasks
+                                    </h6>
+                                    <h3 id="totalTasks" class="text-primary mb-0" style="font-size: 2.2rem; font-weight: 800; font-family: 'Inter', sans-serif;">0</h3>
+                                    <div class="progress mt-2" style="height: 4px; background: rgba(99, 102, 241, 0.2);">
+                                        <div class="progress-bar bg-primary" style="width: 100%; border-radius: 2px;"></div>
+                                    </div>
+                                </div>
+                                <div class="analytics-icon">
+                                    <div class="icon-circle bg-primary bg-opacity-10">
+                                        <i class="fas fa-tasks text-primary" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="analytics-card analytics-card-success">
+                    <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1)); border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        <i class="fas fa-check-circle me-1"></i>Completed
+                                    </h6>
+                                    <h3 id="completedTasks" class="text-success mb-0" style="font-size: 2.2rem; font-weight: 800; font-family: 'Inter', sans-serif;">0</h3>
+                                    <div class="progress mt-2" style="height: 4px; background: rgba(16, 185, 129, 0.2);">
+                                        <div class="progress-bar bg-success" id="completionProgress" style="width: 0%; border-radius: 2px; transition: width 0.6s ease;"></div>
+                                    </div>
+                                </div>
+                                <div class="analytics-icon">
+                                    <div class="icon-circle bg-success bg-opacity-10">
+                                        <i class="fas fa-check-circle text-success" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="analytics-card analytics-card-info">
+                    <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(14, 165, 233, 0.1)); border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        <i class="fas fa-microphone-alt me-1"></i>Voice Notes
+                                    </h6>
+                                    <h3 id="voiceNotes" class="text-info mb-0" style="font-size: 2.2rem; font-weight: 800; font-family: 'Inter', sans-serif;">0</h3>
+                                    <div class="progress mt-2" style="height: 4px; background: rgba(6, 182, 212, 0.2);">
+                                        <div class="progress-bar bg-info" id="voiceProgress" style="width: 0%; border-radius: 2px; transition: width 0.6s ease;"></div>
+                                    </div>
+                                </div>
+                                <div class="analytics-icon">
+                                    <div class="icon-circle bg-info bg-opacity-10">
+                                        <i class="fas fa-microphone-alt text-info" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="analytics-card analytics-card-warning">
+                    <div class="card border-0 shadow-lg h-100" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1)); border-radius: 16px;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-2" style="font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        <i class="fas fa-percentage me-1"></i>Completion Rate
+                                    </h6>
+                                    <h3 id="completionRate" class="text-warning mb-0" style="font-size: 2.2rem; font-weight: 800; font-family: 'Inter', sans-serif;">0%</h3>
+                                    <div class="progress mt-2" style="height: 4px; background: rgba(245, 158, 11, 0.2);">
+                                        <div class="progress-bar bg-warning" id="rateProgress" style="width: 0%; border-radius: 2px; transition: width 0.6s ease;"></div>
+                                    </div>
+                                </div>
+                                <div class="analytics-icon">
+                                    <div class="icon-circle bg-warning bg-opacity-10">
+                                        <i class="fas fa-percentage text-warning" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Charts Row -->
+        <div class="row">
+            <!-- Task Completion Trend -->
+            <div class="col-md-8 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-primary mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-chart-line me-2"></i>Task Completion Trend
+                            </h6>
+                            <div class="chart-controls">
+                                <button id="trendInsightsBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;">
+                                    <i class="fas fa-lightbulb me-1"></i>Insights
+                                </button>
+                                <button id="trendExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                    <i class="fas fa-download me-1"></i>Export
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <div class="performance-indicator bg-primary bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-primary fw-bold" id="avgCompletionRate">0%</div>
+                                    <div class="indicator-label text-muted small">Avg Completion</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="bestDay">-</div>
+                                    <div class="indicator-label text-muted small">Best Day</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="trendDirection">↗</div>
+                                    <div class="indicator-label text-muted small">Trend</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="productivityScore">0</div>
+                                    <div class="indicator-label text-muted small">Score</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="completionTrendChart" style="max-height:260px; width:100%;"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="chartTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Trend Analysis Panel -->
+                        <div id="trendAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-chart-area me-1"></i>Trend Analysis
+                                        </h6>
+                                        <div id="trendAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Recommendations
+                                        </h6>
+                                        <div id="trendRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Type Distribution -->
+            <div class="col-md-4 mb-4">
+                <div class="card border-2 border-success border-opacity-25 h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center" style="min-height:340px;">
+                                                 <h6 class="card-title text-success" style="font-size: 0.95rem;">
+                             <i class="fas fa-keyboard me-2"></i>Input Methods
+                         </h6>
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center w-100 flex-column">
+                            <canvas id="inputMethodChart" style="max-height:220px; width:100%;"></canvas>
+                            <div id="inputMethodRatio" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Daily Digest (Premium Feature) -->
+        <div class="row mb-4" id="smartDigestSection">
+            <div class="col-12">
+                <div class="card border-2 border-primary border-opacity-25 shadow-lg position-relative overflow-hidden">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3" style="z-index:2;">
+                        <i class="fas fa-star me-1"></i>Premium
+                    </span>
+                    
+                    <!-- Smart Summary Animated Background -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index:1; opacity:0.08;">
+                        <div class="smart-summary-bg">
+                            <div class="data-point data-point-1"></div>
+                            <div class="data-point data-point-2"></div>
+                            <div class="data-point data-point-3"></div>
+                            <div class="data-point data-point-4"></div>
+                            <div class="data-point data-point-5"></div>
+                            <div class="connection-line line-1"></div>
+                            <div class="connection-line line-2"></div>
+                            <div class="connection-line line-3"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 position-relative" style="z-index:2;">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                                                 <h5 class="card-title mb-3" style="font-size: 1rem;">
+                                     <i class="fas fa-brain text-primary me-2"></i>
+                                     Smart Daily Digest
+                                 </h5>
+                                 <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                                     Get AI-powered insights about your productivity patterns and accomplishments.
+                                 </p>
+                                
+                                <!-- Digest Type Toggle -->
+                                <div class="digest-controls mb-4">
+                                    <div class="btn-group mb-3 gap-2" role="group" aria-label="Digest type">
+                                        <input type="radio" class="btn-check" name="digestType" id="dailyDigest" value="daily" checked>
+                                        <label class="btn btn-outline-primary" for="dailyDigest">
+                                            <i class="fas fa-calendar-day me-2"></i>Daily
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="digestType" id="weeklyDigest" value="weekly">
+                                        <label class="btn btn-outline-primary ms-2" for="weeklyDigest">
+                                            <i class="fas fa-calendar-week me-2"></i>Weekly
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="action-buttons">
+                                                                                 <button id="generateDigestBtn" class="btn btn-primary btn-sm me-3" style="font-size: 0.85rem;">
+                                             <i class="fas fa-magic me-2"></i>
+                                             Generate Smart Digest
+                                         </button>
+                                         
+                                         <button id="viewHistoryBtn" class="btn btn-outline-secondary btn-sm" style="font-size: 0.85rem;">
+                                             <i class="fas fa-history me-2"></i>
+                                             View History
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="digest-summary-container d-flex align-items-center justify-content-center h-100">
+                                    <div class="smart-digest-3d-animation">
+                                        <div class="digest-animation-container">
+                                            <!-- Central Digest Hub -->
+                                            <div class="digest-hub">
+                                                <div class="hub-core">
+                                                    <i class="fas fa-magic"></i>
+                                                </div>
+                                                <div class="hub-pulse"></div>
+                                            </div>
+                                            
+                                            <!-- Left Side - Data Collection -->
+                                            <div class="data-collection-left">
+                                                <div class="data-point data-point-1">
+                                                    <i class="fas fa-tasks"></i>
+                                                </div>
+                                                <div class="data-point data-point-2">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                                <div class="data-point data-point-3">
+                                                    <i class="fas fa-chart-bar"></i>
+                                                </div>
+                                                <div class="data-stream data-stream-1"></div>
+                                                <div class="data-stream data-stream-2"></div>
+                                            </div>
+                                            
+                                            <!-- Right Side - AI Processing -->
+                                            <div class="ai-processing-right">
+                                                <div class="ai-node ai-node-1">
+                                                    <i class="fas fa-brain"></i>
+                                                </div>
+                                                <div class="ai-node ai-node-2">
+                                                    <i class="fas fa-lightbulb"></i>
+                                                </div>
+                                                <div class="ai-node ai-node-3">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </div>
+                                                <div class="ai-connection ai-connection-1"></div>
+                                                <div class="ai-connection ai-connection-2"></div>
+                                            </div>
+                                            
+                                            <!-- Floating Digest Elements -->
+                                            <div class="digest-elements">
+                                                <div class="digest-element element-1">📊</div>
+                                                <div class="digest-element element-2">📈</div>
+                                                <div class="digest-element element-3">🎯</div>
+                                                <div class="digest-element element-4">⚡</div>
+                                                <div class="digest-element element-5">🏆</div>
+                                                <div class="digest-element element-6">💡</div>
+                                                <div class="digest-element element-7">📋</div>
+                                                <div class="digest-element element-8">⏰</div>
+                                            </div>
+                                            
+                                            <!-- Background Network -->
+                                            <div class="network-background">
+                                                <div class="network-line network-1"></div>
+                                                <div class="network-line network-2"></div>
+                                                <div class="network-line network-3"></div>
+                                                <div class="network-line network-4"></div>
+                                                <div class="network-node network-node-1"></div>
+                                                <div class="network-node network-node-2"></div>
+                                                <div class="network-node network-node-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div id="digestLoading" class="text-center py-4 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating digest...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Analyzing your productivity patterns...</p>
+                        </div>
+                        
+                        <!-- Digest Content -->
+                        <div id="digestContent" class="mt-4 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-lightbulb text-info me-2 mt-1"></i>
+                                    <div>
+                                                                                 <h6 class="alert-heading mb-2" style="font-size: 0.9rem;">Your AI Productivity Summary</h6>
+                                        <div id="digestText" class="mb-2"></div>
+                                                                                 <small class="text-muted" style="font-size: 0.8rem;">
+                                             <i class="fas fa-clock me-1"></i>
+                                             Generated on <span id="digestGeneratedAt"></span>
+                                         </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Task Summary -->
+                            <div id="taskSummary" class="mt-3 d-none">
+                                <h6 class="mb-2" style="font-size: 0.9rem;">Tasks Analyzed:</h6>
+                                <div id="taskList" class="row"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="digestError" class="alert alert-danger border-2 border-danger border-opacity-25 mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+                        
+                        <!-- Upgrade Prompt for Free Users -->
+                        <div id="upgradePrompt" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <div>
+                                                                                 <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Premium Feature</h6>
+                                         <p class="mb-2" style="font-size: 0.85rem;">Unlock AI-powered productivity insights with our Smart Daily Digest feature.</p>
+                                        <a href="premium.html" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Upgrade to Premium
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Weekly Summary (Premium Feature) -->
+        <div class="row mb-4" id="shareSummarySection">
+            <div class="col-12">
+                <div class="card border-2 border-primary border-opacity-25 shadow-lg position-relative overflow-hidden">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3" style="z-index:2;">
+                        <i class="fas fa-star me-1"></i>Premium
+                    </span>
+                    
+                    <!-- Share Summary Background Pattern -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index:1; opacity:0.05;">
+                        <div class="share-pattern">
+                            <div class="pattern-line pattern-1"></div>
+                            <div class="pattern-line pattern-2"></div>
+                            <div class="pattern-dot pattern-dot-1"></div>
+                            <div class="pattern-dot pattern-dot-2"></div>
+                            <div class="pattern-dot pattern-dot-3"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 position-relative" style="z-index:2;">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="card-title mb-3" style="font-size: 1rem;">
+                                    <i class="fas fa-share-alt text-primary me-2"></i>
+                                    📤 Share Weekly Summary
+                                </h5>
+                                <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                                    Share your Smart Daily/Weekly Digest with your team via Slack or Email. 
+                                    Perfect for remote teams and productivity reporting!
+                                </p>
+                                
+                                <!-- Summary Type Selection -->
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 500;">
+                                        <i class="fas fa-list me-1"></i>Choose Summary Type:
+                                    </label>
+                                    <select id="summaryTypeSelect" class="form-select form-select-sm" style="font-size: 0.85rem;">
+                                        <option value="daily">Daily Digest</option>
+                                        <option value="weekly">Weekly Recap</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Slack Integration -->
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 500;">
+                                        <i class="fab fa-slack me-1"></i>Slack Webhook URL:
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="url" id="slackWebhookUrl" class="form-control" 
+                                               placeholder="https://hooks.slack.com/services/..." 
+                                               style="font-size: 0.85rem;">
+                                        <button id="sendToSlackBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.85rem;">
+                                            <i class="fab fa-slack me-1"></i>Send to Slack
+                                        </button>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Get your webhook URL from Slack App settings
+                                    </small>
+                                </div>
+                                
+                                <!-- Email Integration -->
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 500;">
+                                        <i class="fas fa-envelope me-1"></i>Email Address:
+                                    </label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="email" id="emailAddress" class="form-control" 
+                                               placeholder="recipient@example.com" 
+                                               style="font-size: 0.85rem;">
+                                        <button id="sendViaEmailBtn" class="btn btn-outline-success btn-sm" style="font-size: 0.85rem;">
+                                            <i class="fas fa-paper-plane me-1"></i>Send via Email
+                                        </button>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Summary will be sent as a formatted email
+                                    </small>
+                                </div>
+                                
+                                <!-- Quick Actions -->
+                                <div class="quick-actions">
+                                    <button id="generateAndShareBtn" class="btn btn-primary btn-sm me-2" style="font-size: 0.85rem;">
+                                        <i class="fas fa-magic me-1"></i>Generate & Share
+                                    </button>
+                                    <button id="shareLastDigestBtn" class="btn btn-outline-secondary btn-sm" style="font-size: 0.85rem;">
+                                        <i class="fas fa-history me-1"></i>Share Last Digest
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="share-animation-container d-flex align-items-center justify-content-center h-100">
+                                    <div class="share-icons-animation">
+                                        <div class="share-icon share-icon-slack">
+                                            <i class="fab fa-slack"></i>
+                                        </div>
+                                        <div class="share-icon share-icon-email">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="share-icon share-icon-digest">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="connection-line connection-1"></div>
+                                        <div class="connection-line connection-2"></div>
+                                        <div class="connection-line connection-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div id="shareLoading" class="text-center py-3 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Sharing summary...</span>
+                            </div>
+                            <p class="mt-2 text-muted" style="font-size: 0.85rem;">Sharing your summary...</p>
+                        </div>
+                        
+                        <!-- Success State -->
+                        <div id="shareSuccess" class="alert alert-success border-2 border-success border-opacity-25 mt-3 d-none">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <div>
+                                    <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Summary Shared Successfully!</h6>
+                                    <div id="shareSuccessMessage" style="font-size: 0.85rem;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="shareError" class="alert alert-danger border-2 border-danger border-opacity-25 mt-3 d-none">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                <div>
+                                    <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Sharing Failed</h6>
+                                    <div id="shareErrorMessage" style="font-size: 0.85rem;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upgrade Prompt for Free Users -->
+                        <div id="shareUpgradePrompt" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Premium Feature</h6>
+                                        <p class="mb-2" style="font-size: 0.85rem;">Summary sharing is available for premium users only.</p>
+                                        <a href="premium.html" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Upgrade to Premium
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telegram Integration (Premium Feature) -->
+        <div class="row mb-4" id="telegramIntegrationSection">
+            <div class="col-12">
+                <div class="card border-2 border-primary border-opacity-25 shadow-lg position-relative overflow-hidden">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3" style="z-index:2;">
+                        <i class="fas fa-star me-1"></i>Premium
+                    </span>
+                    
+                    <!-- Telegram Background Pattern -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index:1; opacity:0.05;">
+                        <div class="telegram-pattern">
+                            <div class="pattern-line pattern-1"></div>
+                            <div class="pattern-line pattern-2"></div>
+                            <div class="pattern-line pattern-3"></div>
+                            <div class="pattern-dot pattern-dot-1"></div>
+                            <div class="pattern-dot pattern-dot-2"></div>
+                            <div class="pattern-dot pattern-dot-3"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 position-relative" style="z-index:2;">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="card-title mb-3" style="font-size: 1rem;">
+                                    <i class="fab fa-telegram text-primary me-2"></i>
+                                    Telegram Voice-to-Task Integration
+                                </h5>
+                                <p class="text-muted mb-3" style="font-size: 0.85rem;">
+                                    Connect your Telegram account and create tasks instantly by sending voice messages. 
+                                    Perfect for capturing ideas on the go!
+                                </p>
+                                
+                                <!-- Features List -->
+                                <div class="features-list mb-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="feature-item d-flex align-items-center mb-2">
+                                                <i class="fas fa-microphone-alt text-success me-2"></i>
+                                                <span style="font-size: 0.85rem;">Voice message transcription</span>
+                                            </div>
+                                            <div class="feature-item d-flex align-items-center mb-2">
+                                                <i class="fas fa-bolt text-warning me-2"></i>
+                                                <span style="font-size: 0.85rem;">Instant task creation</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="feature-item d-flex align-items-center mb-2">
+                                                <i class="fas fa-shield-alt text-info me-2"></i>
+                                                <span style="font-size: 0.85rem;">Secure account linking</span>
+                                            </div>
+                                            <div class="feature-item d-flex align-items-center mb-2">
+                                                <i class="fas fa-sync-alt text-primary me-2"></i>
+                                                <span style="font-size: 0.85rem;">Real-time sync</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="telegram-actions">
+                                    <button id="linkTelegramBtn" class="btn btn-primary btn-sm me-3" style="font-size: 0.85rem;">
+                                        <i class="fas fa-link me-2"></i>
+                                        Link Telegram Account
+                                    </button>
+                                    
+                                    <button id="telegramStatusBtn" class="btn btn-outline-secondary btn-sm me-3" style="font-size: 0.85rem;">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Check Status
+                                    </button>
+                                    
+                                    <button id="telegramHelpBtn" class="btn btn-outline-info btn-sm" style="font-size: 0.85rem;">
+                                        <i class="fas fa-question-circle me-2"></i>
+                                        How to Use
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="telegram-animation-container d-flex align-items-center justify-content-center h-100">
+                                    <div class="telegram-phone-animation">
+                                        <div class="phone-frame">
+                                            <div class="phone-screen">
+                                                <div class="telegram-chat">
+                                                    <div class="chat-bubble chat-bubble-1">
+                                                        <i class="fas fa-microphone"></i>
+                                                    </div>
+                                                    <div class="chat-bubble chat-bubble-2">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                    <div class="chat-bubble chat-bubble-3">
+                                                        <i class="fas fa-tasks"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="connection-line"></div>
+                                        <div class="quicknotes-logo">
+                                            <i class="fas fa-check2-square"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Messages -->
+                        <div id="telegramStatus" class="mt-3 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-info-circle text-info me-2"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Telegram Status</h6>
+                                        <div id="telegramStatusText" style="font-size: 0.85rem;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="telegramError" class="alert alert-danger border-2 border-danger border-opacity-25 mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="telegramErrorMessage"></span>
+                        </div>
+                        
+                        <!-- Upgrade Prompt for Free Users -->
+                        <div id="telegramUpgradePrompt" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Premium Feature</h6>
+                                        <p class="mb-2" style="font-size: 0.85rem;">Telegram integration is available for premium users only.</p>
+                                        <a href="premium.html" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Upgrade to Premium
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Features (Pro Charts) -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-info mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-clock me-2"></i>Most Productive Hours
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="productiveHoursInsightsBtn" class="btn btn-outline-info btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="productiveHoursExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="peakHour">-</div>
+                                    <div class="indicator-label text-muted small">Peak Hour</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="totalTasksCreated">0</div>
+                                    <div class="indicator-label text-muted small">Total Tasks</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="productivityPattern">-</div>
+                                    <div class="indicator-label text-muted small">Pattern</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="productiveHoursChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="productiveHoursTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="productiveHoursAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-chart-area me-1"></i>Productivity Analysis
+                                        </h6>
+                                        <div id="productiveHoursAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Optimization Tips
+                                        </h6>
+                                        <div id="productiveHoursRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-warning mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-tags me-2"></i>Task Categories
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="taskCategoriesInsightsBtn" class="btn btn-outline-warning btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="taskCategoriesExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="topCategory">-</div>
+                                    <div class="indicator-label text-muted small">Top Category</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="categoryDiversity">0</div>
+                                    <div class="indicator-label text-muted small">Categories</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="categoryBalance">-</div>
+                                    <div class="indicator-label text-muted small">Balance</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="taskCategoriesChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="taskCategoriesTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="taskCategoriesAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-chart-pie me-1"></i>Category Analysis
+                                        </h6>
+                                        <div id="taskCategoriesAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Balance Tips
+                                        </h6>
+                                        <div id="taskCategoriesRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Pro Analytics Row -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-primary mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-calendar-day me-2"></i>Daily Task Completion Trend
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="dailyCompletionInsightsBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="dailyCompletionExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-primary bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-primary fw-bold" id="dailyAvgCompletion">0%</div>
+                                    <div class="indicator-label text-muted small">Avg Completion</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="bestCompletionDay">-</div>
+                                    <div class="indicator-label text-muted small">Best Day</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="completionTrend">↗</div>
+                                    <div class="indicator-label text-muted small">Trend</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proDailyCompletionChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="dailyCompletionTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="dailyCompletionAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-primary border-2 border-primary border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-chart-line me-1"></i>Completion Analysis
+                                        </h6>
+                                        <div id="dailyCompletionAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Improvement Tips
+                                        </h6>
+                                        <div id="dailyCompletionRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-success mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-fire me-2"></i>Weekly Productivity Heatmap
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="weeklyHeatmapInsightsBtn" class="btn btn-outline-success btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="weeklyHeatmapExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="heatmapIntensity">-</div>
+                                    <div class="indicator-label text-muted small">Intensity</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="productiveDays">0</div>
+                                    <div class="indicator-label text-muted small">Active Days</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="consistencyScore">0</div>
+                                    <div class="indicator-label text-muted small">Consistency</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proWeeklyHeatmapChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="weeklyHeatmapTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="weeklyHeatmapAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-success border-2 border-success border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-fire me-1"></i>Heatmap Analysis
+                                        </h6>
+                                        <div id="weeklyHeatmapAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Consistency Tips
+                                        </h6>
+                                        <div id="weeklyHeatmapRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-info mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-microphone me-2"></i>Voice vs Manual Entry (Extended)
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="voiceManualInsightsBtn" class="btn btn-outline-info btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="voiceManualExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="voiceUsage">0%</div>
+                                    <div class="indicator-label text-muted small">Voice Usage</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="manualUsage">0%</div>
+                                    <div class="indicator-label text-muted small">Manual Usage</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="inputEfficiency">-</div>
+                                    <div class="indicator-label text-muted small">Efficiency</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proVoiceManualChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="voiceManualTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="voiceManualAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-microphone me-1"></i>Input Analysis
+                                        </h6>
+                                        <div id="voiceManualAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Optimization Tips
+                                        </h6>
+                                        <div id="voiceManualRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-warning mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-chart-pie me-2"></i>Task Type Breakdown
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="taskTypeInsightsBtn" class="btn btn-outline-warning btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="taskTypeExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="primaryTaskType">-</div>
+                                    <div class="indicator-label text-muted small">Primary Type</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="taskTypeCount">0</div>
+                                    <div class="indicator-label text-muted small">Types Used</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="typeDiversity">-</div>
+                                    <div class="indicator-label text-muted small">Diversity</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proTaskTypeChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="taskTypeTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="taskTypeAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-chart-pie me-1"></i>Type Analysis
+                                        </h6>
+                                        <div id="taskTypeAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Diversification Tips
+                                        </h6>
+                                        <div id="taskTypeRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-primary mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-search me-2"></i>Most Common Keywords
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="keywordsInsightsBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="keywordsExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-primary bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-primary fw-bold" id="topKeyword">-</div>
+                                    <div class="indicator-label text-muted small">Top Keyword</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="keywordCount">0</div>
+                                    <div class="indicator-label text-muted small">Keywords</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="keywordFocus">-</div>
+                                    <div class="indicator-label text-muted small">Focus Area</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proKeywordsChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="keywordsTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="keywordsAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-primary border-2 border-primary border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-search me-1"></i>Keyword Analysis
+                                        </h6>
+                                        <div id="keywordsAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Focus Tips
+                                        </h6>
+                                        <div id="keywordsRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-success mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-clock me-2"></i>Time of Day Task Creation
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="timeOfDayInsightsBtn" class="btn btn-outline-success btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="timeOfDayExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="peakCreationTime">-</div>
+                                    <div class="indicator-label text-muted small">Peak Time</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="totalTasksCreated">0</div>
+                                    <div class="indicator-label text-muted small">Total Tasks</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="creationPattern">-</div>
+                                    <div class="indicator-label text-muted small">Pattern</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proTimeOfDayChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="timeOfDayTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="timeOfDayAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-success border-2 border-success border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-clock me-1"></i>Time Analysis
+                                        </h6>
+                                        <div id="timeOfDayAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Scheduling Tips
+                                        </h6>
+                                        <div id="timeOfDayRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-info mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-percentage me-2"></i>Task Completion Rate
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="completionRateInsightsBtn" class="btn btn-outline-info btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="completionRateExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="overallCompletionRate">0%</div>
+                                    <div class="indicator-label text-muted small">Overall Rate</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="completionTrend">↗</div>
+                                    <div class="indicator-label text-muted small">Trend</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="completionScore">0</div>
+                                    <div class="indicator-label text-muted small">Score</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proCompletionRateChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="completionRateTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="completionRateAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-percentage me-1"></i>Rate Analysis
+                                        </h6>
+                                        <div id="completionRateAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Improvement Tips
+                                        </h6>
+                                        <div id="completionRateRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-warning mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-calendar-alt me-2"></i>Monthly Progress Summary
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="monthlyProgressInsightsBtn" class="btn btn-outline-warning btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="monthlyProgressExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="monthlyGrowth">0%</div>
+                                    <div class="indicator-label text-muted small">Growth</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="bestMonth">-</div>
+                                    <div class="indicator-label text-muted small">Best Month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="progressConsistency">-</div>
+                                    <div class="indicator-label text-muted small">Consistency</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proMonthlyProgressChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="monthlyProgressTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="monthlyProgressAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-calendar-alt me-1"></i>Progress Analysis
+                                        </h6>
+                                        <div id="monthlyProgressAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Growth Tips
+                                        </h6>
+                                        <div id="monthlyProgressRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-primary mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-microphone-alt me-2"></i>Note Duration Stats (Voice Notes)
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="noteDurationInsightsBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="noteDurationExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-primary bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-primary fw-bold" id="avgNoteDuration">0s</div>
+                                    <div class="indicator-label text-muted small">Avg Duration</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="totalVoiceTime">0s</div>
+                                    <div class="indicator-label text-muted small">Total Time</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="voiceEfficiency">-</div>
+                                    <div class="indicator-label text-muted small">Efficiency</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proNoteDurationChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="noteDurationTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="noteDurationAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-primary border-2 border-primary border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-microphone-alt me-1"></i>Duration Analysis
+                                        </h6>
+                                        <div id="noteDurationAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Voice Tips
+                                        </h6>
+                                        <div id="noteDurationRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:400px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title text-success mb-0" style="font-size: 0.95rem;">
+                                <i class="fas fa-heart me-2"></i>Sentiment Over Time
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <div class="chart-controls me-3">
+                                    <button id="sentimentInsightsBtn" class="btn btn-outline-success btn-sm" style="font-size: 0.8rem;">
+                                        <i class="fas fa-lightbulb me-1"></i>Insights
+                                    </button>
+                                    <button id="sentimentExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                        <i class="fas fa-download me-1"></i>Export
+                                    </button>
+                                </div>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Indicators -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-success fw-bold" id="avgSentiment">-</div>
+                                    <div class="indicator-label text-muted small">Avg Sentiment</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-warning fw-bold" id="sentimentTrend">↗</div>
+                                    <div class="indicator-label text-muted small">Trend</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                    <div class="indicator-value text-info fw-bold" id="moodStability">-</div>
+                                    <div class="indicator-label text-muted small">Stability</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                            <canvas id="proSentimentChart"></canvas>
+                            
+                            <!-- Interactive Tooltip -->
+                            <div id="sentimentTooltip" class="chart-tooltip d-none">
+                                <div class="tooltip-header"></div>
+                                <div class="tooltip-content"></div>
+                                <div class="tooltip-insights"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Panel -->
+                        <div id="sentimentAnalysisPanel" class="mt-3 d-none">
+                            <div class="alert alert-success border-2 border-success border-opacity-25">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-heart me-1"></i>Sentiment Analysis
+                                        </h6>
+                                        <div id="sentimentAnalysis" class="small text-muted"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Wellness Tips
+                                        </h6>
+                                        <div id="sentimentRecommendations" class="small text-muted"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>QuickNotesAI
+                    </h5>
+                    <p class="text-light opacity-75">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="legal.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Legal</a></li>
+                        <li class="mb-2"><a href="privacy-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Terms of Service</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Newsletter</h6>
+                    <p class="text-light opacity-75">Stay updated with our latest features and productivity tips.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-light opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">&copy; 2024 QuickNotesAI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Utility Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <!-- Dashboard Logic -->
+    <script src="js/dashboard.js"></script>
+    <script>
+// Sign out functionality for dashboard
+if (window.firebase && window.firebase.auth) {
+    document.addEventListener('DOMContentLoaded', function() {
+        var signOutBtn = document.getElementById('signOut');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', function() {
+                window.firebase.auth().signOut().then(function() {
+                    window.location.href = 'login.html';
+                });
+            });
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme manager if available
+    if (window.themeManager) {
+        window.themeManager.updateThemeIcon();
+        
+        // Ensure theme toggle button works
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                window.themeManager.toggleTheme();
+            });
+        }
+    } else {
+        // Fallback to utils theme
+        window.utils && window.utils.theme && window.utils.theme.initialize();
+        
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        function updateIcon() {
+            const theme = document.documentElement.getAttribute('data-bs-theme');
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+            }
+        }
+        
+        updateIcon();
+        themeToggle && themeToggle.addEventListener('change', updateIcon);
+        window.addEventListener('themeChanged', updateIcon);
+
+        // Theme toggle click handler for dashboard page
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                if (window.utils && window.utils.theme && window.utils.theme.toggle) {
+                    window.utils.theme.toggle();
+                }
+            });
+        }
+    }
+
+    // Force brand link to always go to index.html (defensive against cache/JS overrides)
+    var brandLink = document.getElementById('brandHomeLink');
+    if (brandLink) {
+        brandLink.setAttribute('href', 'index.html');
+        brandLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    }
+});
+    </script>
+</body>
+</html>

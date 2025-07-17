@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Team Navigation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem auto;
+            max-width: 900px;
+            padding: 2rem;
+        }
+        .test-section {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-section.success {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .test-section.warning {
+            border-color: #ffc107;
+            background-color: #fffbf0;
+        }
+        .test-section.danger {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.success { background-color: #28a745; }
+        .status-indicator.warning { background-color: #ffc107; }
+        .status-indicator.danger { background-color: #dc3545; }
+        .btn-test {
+            margin: 0.5rem;
+        }
+        .nav-test {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .nav-item {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .nav-item.active {
+            background: #007bff;
+            color: white;
+        }
+        .nav-item.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-container">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-users-cog text-primary me-2"></i>
+                Team Navigation Test
+            </h1>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                This test verifies that the 'Team' and 'Team-Dashboard' navigation links are properly visible and functional.
+            </div>
+
+            <div class="test-section" id="navigationTest">
+                <h4>
+                    <span class="status-indicator warning" id="navigationIndicator"></span>
+                    Navigation Links Test
+                </h4>
+                <p>Testing team navigation links visibility and functionality...</p>
+                
+                <div class="nav-test">
+                    <h6>Current Navigation State:</h6>
+                    <div id="navState">
+                        <div class="nav-item" id="testTeamNav">Team</div>
+                        <div class="nav-item" id="testTeamDashboardNav">Team-Dashboard</div>
+                    </div>
+                </div>
+                
+                <div id="navigationDetails"></div>
+            </div>
+
+            <div class="test-section" id="pageNavigationTest">
+                <h4>
+                    <span class="status-indicator warning" id="pageNavigationIndicator"></span>
+                    Page Navigation Test
+                </h4>
+                <p>Testing navigation to team-related pages...</p>
+                
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-primary btn-test" onclick="testTeamPage()">
+                        <i class="fas fa-users me-2"></i>Test Team Page
+                    </button>
+                    <button class="btn btn-success btn-test" onclick="testTeamDashboardPage()">
+                        <i class="fas fa-chart-line me-2"></i>Test Team Dashboard
+                    </button>
+                    <button class="btn btn-info btn-test" onclick="testTaskPage()">
+                        <i class="fas fa-tasks me-2"></i>Test Task Page
+                    </button>
+                    <button class="btn btn-warning btn-test" onclick="testDashboardPage()">
+                        <i class="fas fa-tachometer-alt me-2"></i>Test Dashboard
+                    </button>
+                </div>
+                
+                <div id="pageNavigationDetails"></div>
+            </div>
+
+            <div class="test-section" id="manualTest">
+                <h4>
+                    <i class="fas fa-tools text-primary me-2"></i>
+                    Manual Navigation Control
+                </h4>
+                <p>Manual controls for testing navigation visibility...</p>
+                
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-success btn-test" onclick="showTeamNav()">
+                        <i class="fas fa-eye me-2"></i>Show Team Nav
+                    </button>
+                    <button class="btn btn-danger btn-test" onclick="hideTeamNav()">
+                        <i class="fas fa-eye-slash me-2"></i>Hide Team Nav
+                    </button>
+                    <button class="btn btn-info btn-test" onclick="checkPremiumStatus()">
+                        <i class="fas fa-crown me-2"></i>Check Premium Status
+                    </button>
+                </div>
+                
+                <div id="manualTestDetails"></div>
+            </div>
+
+            <div class="test-section" id="resultsTest">
+                <h4>
+                    <i class="fas fa-clipboard-check text-primary me-2"></i>
+                    Test Results
+                </h4>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test results storage
+        let testResults = {
+            navigationVisible: false,
+            pageNavigationWorking: false,
+            manualControlsWorking: false
+        };
+
+        // Update status indicator
+        function updateStatusIndicator(elementId, status) {
+            const indicator = document.getElementById(elementId);
+            const section = indicator.closest('.test-section');
+            
+            indicator.className = `status-indicator ${status}`;
+            section.className = `test-section ${status}`;
+        }
+
+        // Test navigation visibility
+        function testNavigationVisibility() {
+            console.log('[Test] Testing navigation visibility...');
+            
+            // Check if team navigation items exist in the current page
+            const teamNavItem = document.getElementById('testTeamNav');
+            const teamDashboardNavItem = document.getElementById('testTeamDashboardNav');
+            
+            const isVisible = teamNavItem && teamDashboardNavItem && 
+                            teamNavItem.style.display !== 'none' && 
+                            teamDashboardNavItem.style.display !== 'none';
+            
+            testResults.navigationVisible = isVisible;
+            
+            const details = document.getElementById('navigationDetails');
+            details.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Team Nav Item:</strong> ${teamNavItem ? '✅ Found' : '❌ Not Found'}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Team Dashboard Nav Item:</strong> ${teamDashboardNavItem ? '✅ Found' : '❌ Not Found'}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <strong>Team Nav Visible:</strong> ${teamNavItem && teamNavItem.style.display !== 'none' ? '✅ Yes' : '❌ No'}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Team Dashboard Nav Visible:</strong> ${teamDashboardNavItem && teamDashboardNavItem.style.display !== 'none' ? '✅ Yes' : '❌ No'}
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <strong>Overall Status:</strong> ${isVisible ? '✅ Navigation is visible' : '❌ Navigation is hidden'}
+                </div>
+            `;
+            
+            updateStatusIndicator('navigationIndicator', isVisible ? 'success' : 'danger');
+            
+            return isVisible;
+        }
+
+        // Test page navigation
+        function testPageNavigation() {
+            console.log('[Test] Testing page navigation...');
+            
+            const pages = [
+                { name: 'Team Page', url: 'team.html' },
+                { name: 'Team Dashboard', url: 'team-dashboard.html' },
+                { name: 'Task Page', url: 'task.html' },
+                { name: 'Dashboard', url: 'dashboard.html' }
+            ];
+            
+            let workingPages = 0;
+            const totalPages = pages.length;
+            
+            Promise.all(pages.map(page => 
+                fetch(page.url, { method: 'HEAD' })
+                    .then(response => ({ name: page.name, working: response.ok }))
+                    .catch(() => ({ name: page.name, working: false }))
+            )).then(results => {
+                workingPages = results.filter(r => r.working).length;
+                testResults.pageNavigationWorking = workingPages === totalPages;
+                
+                const details = document.getElementById('pageNavigationDetails');
+                details.innerHTML = `
+                    <div class="row">
+                        ${results.map(result => `
+                            <div class="col-md-6 mb-2">
+                                <strong>${result.name}:</strong> ${result.working ? '✅ Available' : '❌ Not Found'}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-2">
+                        <strong>Overall Status:</strong> ${workingPages}/${totalPages} pages available
+                    </div>
+                `;
+                
+                updateStatusIndicator('pageNavigationIndicator', testResults.pageNavigationWorking ? 'success' : 'warning');
+            });
+        }
+
+        // Test manual controls
+        function testManualControls() {
+            console.log('[Test] Testing manual controls...');
+            
+            const controls = {
+                showTeamNav: typeof window.showTeamNav === 'function',
+                hideTeamNav: typeof window.hideTeamNav === 'function',
+                checkPremiumStatus: typeof window.checkPremiumStatus === 'function'
+            };
+            
+            const allWorking = Object.values(controls).every(Boolean);
+            testResults.manualControlsWorking = allWorking;
+            
+            const details = document.getElementById('manualTestDetails');
+            details.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>showTeamNav():</strong> ${controls.showTeamNav ? '✅ Available' : '❌ Not Available'}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>hideTeamNav():</strong> ${controls.hideTeamNav ? '✅ Available' : '❌ Not Available'}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>checkPremiumStatus():</strong> ${controls.checkPremiumStatus ? '✅ Available' : '❌ Not Available'}
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <strong>Overall Status:</strong> ${allWorking ? '✅ All controls available' : '⚠️ Some controls missing'}
+                </div>
+            `;
+            
+            updateStatusIndicator('manualTest', allWorking ? 'success' : 'warning');
+        }
+
+        // Manual control functions
+        function showTeamNav() {
+            if (typeof window.showTeamNav === 'function') {
+                window.showTeamNav();
+                document.getElementById('testTeamNav').classList.remove('hidden');
+                document.getElementById('testTeamDashboardNav').classList.remove('hidden');
+                showToast('Team navigation shown', 'success');
+            } else {
+                showToast('showTeamNav function not available', 'danger');
+            }
+        }
+
+        function hideTeamNav() {
+            if (typeof window.hideTeamNav === 'function') {
+                window.hideTeamNav();
+                document.getElementById('testTeamNav').classList.add('hidden');
+                document.getElementById('testTeamDashboardNav').classList.add('hidden');
+                showToast('Team navigation hidden', 'warning');
+            } else {
+                showToast('hideTeamNav function not available', 'danger');
+            }
+        }
+
+        function checkPremiumStatus() {
+            if (typeof window.checkPremiumStatus === 'function') {
+                const isPremium = window.checkPremiumStatus();
+                showToast(`Premium status: ${isPremium ? 'Premium' : 'Free'}`, isPremium ? 'success' : 'info');
+            } else {
+                showToast('checkPremiumStatus function not available', 'danger');
+            }
+        }
+
+        // Page navigation functions
+        function testTeamPage() {
+            window.open('team.html', '_blank');
+        }
+
+        function testTeamDashboardPage() {
+            window.open('team-dashboard.html', '_blank');
+        }
+
+        function testTaskPage() {
+            window.open('task.html', '_blank');
+        }
+
+        function testDashboardPage() {
+            window.open('dashboard.html', '_blank');
+        }
+
+        // Utility function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        // Run all tests
+        function runAllTests() {
+            console.log('[Test] Running all tests...');
+            
+            // Clear previous results
+            document.getElementById('testResults').innerHTML = '';
+            
+            // Run tests
+            testNavigationVisibility();
+            testPageNavigation();
+            testManualControls();
+            
+            // Show summary after a delay
+            setTimeout(() => {
+                showTestResults();
+            }, 2000);
+        }
+
+        // Show test results
+        function showTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            
+            const allPassed = Object.values(testResults).every(Boolean);
+            
+            resultsDiv.innerHTML = `
+                <div class="alert ${allPassed ? 'alert-success' : 'alert-warning'}">
+                    <h5><i class="fas ${allPassed ? 'fa-check-circle' : 'fa-exclamation-triangle'} me-2"></i>
+                        Test Summary
+                    </h5>
+                    <ul class="list-unstyled mb-0">
+                        <li>Navigation Visible: ${testResults.navigationVisible ? '✅ Pass' : '❌ Fail'}</li>
+                        <li>Page Navigation Working: ${testResults.pageNavigationWorking ? '✅ Pass' : '⚠️ Partial'}</li>
+                        <li>Manual Controls Working: ${testResults.manualControlsWorking ? '✅ Pass' : '❌ Fail'}</li>
+                    </ul>
+                    ${allPassed ? 
+                        '<p class="mb-0 mt-2"><strong>✅ All tests passed! Team navigation is working correctly.</strong></p>' :
+                        '<p class="mb-0 mt-2"><strong>⚠️ Some tests failed. Please check the individual test results above.</strong></p>'
+                    }
+                </div>
+            `;
+        }
+
+        // Initialize tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Test] Test page loaded, initializing...');
+            
+            // Run initial tests
+            setTimeout(() => {
+                testNavigationVisibility();
+                testPageNavigation();
+                testManualControls();
+                runAllTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Integration Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+        }
+        .test-button {
+            margin: 10px 5px;
+        }
+        .status-indicator {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status-success { background-color: #d4edda; color: #155724; }
+        .status-error { background-color: #f8d7da; color: #721c24; }
+        .status-warning { background-color: #fff3cd; color: #856404; }
+        .status-info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="text-center mb-4">
+            <i class="fab fa-telegram text-primary"></i>
+            Telegram Integration Test
+        </h1>
+        
+        <div class="test-section">
+            <h3>Firebase Status</h3>
+            <div id="firebaseStatus" class="status-indicator status-info">
+                Checking Firebase status...
+            </div>
+            <button class="btn btn-primary test-button" onclick="checkFirebaseStatus()">
+                <i class="fas fa-sync-alt"></i> Check Firebase
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Telegram Functions</h3>
+            <div id="telegramStatus" class="status-indicator status-info">
+                Ready to test Telegram functions...
+            </div>
+            <button class="btn btn-success test-button" onclick="testLinkTelegram()">
+                <i class="fas fa-link"></i> Test Link Account
+            </button>
+            <button class="btn btn-info test-button" onclick="testCheckStatus()">
+                <i class="fas fa-sync-alt"></i> Test Check Status
+            </button>
+            <button class="btn btn-warning test-button" onclick="testHelp()">
+                <i class="fas fa-question-circle"></i> Test Help
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Modal Test</h3>
+            <button class="btn btn-secondary test-button" onclick="testModal()">
+                <i class="fas fa-window-maximize"></i> Test Modal
+            </button>
+            <button class="btn btn-danger test-button" onclick="testErrorModal()">
+                <i class="fas fa-exclamation-triangle"></i> Test Error Modal
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>Console Logs</h3>
+            <div id="consoleLogs" style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto;">
+                <div>Console logs will appear here...</div>
+            </div>
+            <button class="btn btn-outline-secondary test-button" onclick="clearLogs()">
+                <i class="fas fa-trash"></i> Clear Logs
+            </button>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="task.html" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Task Page
+            </a>
+        </div>
+    </div>
+
+    <!-- Telegram Status Modal -->
+    <div class="modal fade" id="telegramStatusModal" tabindex="-1" aria-labelledby="telegramStatusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="telegramStatusModalLabel">
+                        <i class="fab fa-telegram me-2"></i>Telegram Status
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="telegramStatusModalBody">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeTelegramModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/task.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Override console.log to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addLog(message, type = 'log') {
+            const logsDiv = document.getElementById('consoleLogs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.style.color = type === 'error' ? '#dc3545' : type === 'warn' ? '#ffc107' : '#000';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warn');
+        };
+        
+        function clearLogs() {
+            document.getElementById('consoleLogs').innerHTML = '<div>Console logs cleared...</div>';
+        }
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status-indicator status-${type}`;
+        }
+        
+        async function checkFirebaseStatus() {
+            try {
+                updateStatus('firebaseStatus', 'Checking Firebase...', 'info');
+                
+                // Wait for Firebase to initialize
+                if (window.firebaseInitialized) {
+                    await window.firebaseInitialized;
+                }
+                
+                const checks = {
+                    firebase: !!window.firebase,
+                    auth: !!window.firebaseAuth,
+                    firestore: !!window.firebaseDb,
+                    functions: !!window.firebaseFunctions
+                };
+                
+                console.log('Firebase status checks:', checks);
+                
+                if (checks.firebase && checks.auth && checks.firestore && checks.functions) {
+                    updateStatus('firebaseStatus', '✅ Firebase fully initialized and ready!', 'success');
+                } else {
+                    updateStatus('firebaseStatus', `⚠️ Firebase partially initialized: ${JSON.stringify(checks)}`, 'warning');
+                }
+                
+            } catch (error) {
+                console.error('Firebase status check error:', error);
+                updateStatus('firebaseStatus', `❌ Firebase error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLinkTelegram() {
+            try {
+                updateStatus('telegramStatus', 'Testing Link Account function...', 'info');
+                
+                if (typeof handleLinkTelegram === 'function') {
+                    await handleLinkTelegram();
+                    updateStatus('telegramStatus', '✅ Link Account function executed successfully!', 'success');
+                } else {
+                    updateStatus('telegramStatus', '❌ handleLinkTelegram function not found!', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Link Telegram test error:', error);
+                updateStatus('telegramStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCheckStatus() {
+            try {
+                updateStatus('telegramStatus', 'Testing Check Status function...', 'info');
+                
+                if (typeof handleCheckTelegramStatus === 'function') {
+                    await handleCheckTelegramStatus();
+                    updateStatus('telegramStatus', '✅ Check Status function executed successfully!', 'success');
+                } else {
+                    updateStatus('telegramStatus', '❌ handleCheckTelegramStatus function not found!', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Check Status test error:', error);
+                updateStatus('telegramStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testHelp() {
+            try {
+                updateStatus('telegramStatus', 'Testing Help function...', 'info');
+                
+                if (typeof handleTelegramHelp === 'function') {
+                    handleTelegramHelp();
+                    updateStatus('telegramStatus', '✅ Help function executed successfully!', 'success');
+                } else {
+                    updateStatus('telegramStatus', '❌ handleTelegramHelp function not found!', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Help test error:', error);
+                updateStatus('telegramStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testModal() {
+            try {
+                updateStatus('telegramStatus', 'Testing modal display...', 'info');
+                
+                if (typeof showTelegramStatus === 'function') {
+                    showTelegramStatus('info', '🔗 **Test Modal**\n\nThis is a test message to verify the modal is working properly.\n\n✅ Modal should be visible and closeable.');
+                    updateStatus('telegramStatus', '✅ Modal test executed successfully!', 'success');
+                } else {
+                    updateStatus('telegramStatus', '❌ showTelegramStatus function not found!', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Modal test error:', error);
+                updateStatus('telegramStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testErrorModal() {
+            try {
+                updateStatus('telegramStatus', 'Testing error modal...', 'info');
+                
+                if (typeof showTelegramError === 'function') {
+                    showTelegramError('This is a test error message to verify error modal functionality.');
+                    updateStatus('telegramStatus', '✅ Error modal test executed successfully!', 'success');
+                } else {
+                    updateStatus('telegramStatus', '❌ showTelegramError function not found!', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error modal test error:', error);
+                updateStatus('telegramStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Function to close Telegram modal
+        window.closeTelegramModal = function() {
+            console.log('[Test] closeTelegramModal called');
+            const modal = document.getElementById('telegramStatusModal');
+            if (modal) {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+                // Clean up any remaining backdrop
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+                // Re-enable body scrolling
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }
+        };
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Telegram Integration Test Page loaded');
+            checkFirebaseStatus();
+        });
+    </script>
+</body>
+</html> 

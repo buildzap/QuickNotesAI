@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Digest Test - QuickNotesAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-check2-square me-2 text-primary"></i>
+                <span class="fw-bold">QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-2">
+                        <button id="signOut" class="btn btn-light me-2">Sign Out</button>
+                        <span id="userName" class="badge bg-primary text-white px-3 py-2" style="font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;"></span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="theme-toggle-btn ms-2" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 flex-grow-1">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="mb-3">Smart Digest Test Page</h2>
+                <p class="text-muted">Test the Smart Daily Digest functionality</p>
+            </div>
+        </div>
+
+        <!-- User Role Display -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">User Information</h5>
+                        <p><strong>User Role:</strong> <span id="userRoleDisplay">Loading...</span></p>
+                        <p><strong>User ID:</strong> <span id="userIdDisplay">Loading...</span></p>
+                        <p><strong>Firebase Functions:</strong> <span id="functionsStatus">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Digest Test Section -->
+        <div class="row mb-4" id="smartDigestSection">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm position-relative">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3" style="z-index:2;">
+                        <i class="fas fa-crown me-1"></i>Premium
+                    </span>
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="card-title mb-3">
+                                    <i class="fas fa-brain text-primary me-2"></i>
+                                    Smart Daily Digest Test
+                                </h4>
+                                <p class="text-muted mb-3">
+                                    Test the AI-powered productivity insights feature.
+                                </p>
+                                
+                                <!-- Digest Type Toggle -->
+                                <div class="btn-group mb-3" role="group" aria-label="Digest type">
+                                    <input type="radio" class="btn-check" name="digestType" id="dailyDigest" value="daily" checked>
+                                    <label class="btn btn-outline-primary" for="dailyDigest">
+                                        <i class="fas fa-calendar-day me-1"></i>Daily
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="digestType" id="weeklyDigest" value="weekly">
+                                    <label class="btn btn-outline-primary" for="weeklyDigest">
+                                        <i class="fas fa-calendar-week me-1"></i>Weekly
+                                    </label>
+                                </div>
+                                
+                                <!-- Test Buttons -->
+                                <button id="generateDigestBtn" class="btn btn-primary me-2">
+                                    <i class="fas fa-magic me-1"></i>
+                                    Generate Smart Digest
+                                </button>
+                                
+                                <button id="viewHistoryBtn" class="btn btn-outline-secondary me-2">
+                                    <i class="fas fa-history me-1"></i>
+                                    View History
+                                </button>
+
+                                <button id="testAuthBtn" class="btn btn-outline-info">
+                                    <i class="fas fa-key me-1"></i>
+                                    Test Auth
+                                </button>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="digest-icon-container">
+                                    <i class="fas fa-robot fa-3x text-primary opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div id="digestLoading" class="text-center py-4 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating digest...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Analyzing your productivity patterns...</p>
+                        </div>
+                        
+                        <!-- Digest Content -->
+                        <div id="digestContent" class="mt-4 d-none">
+                            <div class="alert alert-info border-0">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-lightbulb text-info me-2 mt-1"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-2">Your AI Productivity Summary</h6>
+                                        <div id="digestText" class="mb-2"></div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>
+                                            Generated on <span id="digestGeneratedAt"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Task Summary -->
+                            <div id="taskSummary" class="mt-3 d-none">
+                                <h6 class="mb-2">Tasks Analyzed:</h6>
+                                <div id="taskList" class="row"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="digestError" class="alert alert-danger mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+                        
+                        <!-- Upgrade Prompt for Free Users -->
+                        <div id="upgradePrompt" class="mt-3 d-none">
+                            <div class="alert alert-warning border-0">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1">Premium Feature</h6>
+                                        <p class="mb-2">Unlock AI-powered productivity insights with our Smart Daily Digest feature.</p>
+                                        <a href="premium.html" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Upgrade to Premium
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Test Results</h5>
+                        <div id="testResults">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>QuickNotesAI
+                    </h5>
+                    <p class="text-light opacity-75">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="legal.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Legal</a></li>
+                        <li class="mb-2"><a href="privacy-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Terms of Service</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Newsletter</h6>
+                    <p class="text-light opacity-75">Stay updated with our latest features and productivity tips.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-light opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">&copy; 2024 QuickNotesAI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Test page specific functionality
+        let currentUser = null;
+        let userRole = 'free';
+        let smartDigestFunctions = null;
+        let currentDigestType = 'daily';
+
+        // Initialize test page
+        async function initializeTestPage() {
+            try {
+                await window.firebaseInitialized;
+                const auth = window.firebaseAuth;
+                const db = window.firebaseDb;
+
+                if (!auth || !db) {
+                    throw new Error('Firebase not initialized');
+                }
+
+                // Check authentication
+                auth.onAuthStateChanged(async (user) => {
+                    currentUser = user;
+                    
+                    if (user) {
+                        // Update user display
+                        const userNameElement = document.getElementById('userName');
+                        if (userNameElement) {
+                            const name = user.email.split('@')[0];
+                            const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+                            userNameElement.textContent = `👋 Welcome, ${displayName}`;
+                        }
+
+                        document.getElementById('userIdDisplay').textContent = user.uid;
+
+                        // Get user role
+                        try {
+                            const userDoc = await db.collection('users').doc(user.uid).get();
+                            userRole = userDoc.data()?.role || 'free';
+                            document.getElementById('userRoleDisplay').textContent = userRole;
+                        } catch (err) {
+                            console.warn('Error getting user role:', err);
+                            userRole = 'free';
+                            document.getElementById('userRoleDisplay').textContent = 'free (error)';
+                        }
+
+                        // Check Firebase Functions
+                        if (window.firebaseFunctions) {
+                            smartDigestFunctions = window.firebaseFunctions;
+                            document.getElementById('functionsStatus').textContent = 'Available';
+                        } else {
+                            document.getElementById('functionsStatus').textContent = 'Not Available';
+                        }
+
+                        updateDigestUI();
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                });
+
+                // Set up event listeners
+                setupEventListeners();
+
+            } catch (error) {
+                console.error('Test page initialization error:', error);
+                document.getElementById('testResults').innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Initialization Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function setupEventListeners() {
+            const generateBtn = document.getElementById('generateDigestBtn');
+            const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+            const testAuthBtn = document.getElementById('testAuthBtn');
+            const dailyDigestRadio = document.getElementById('dailyDigest');
+            const weeklyDigestRadio = document.getElementById('weeklyDigest');
+
+            if (generateBtn) {
+                generateBtn.addEventListener('click', generateSmartDigest);
+            }
+
+            if (viewHistoryBtn) {
+                viewHistoryBtn.addEventListener('click', viewDigestHistory);
+            }
+
+            if (testAuthBtn) {
+                testAuthBtn.addEventListener('click', testAuthentication);
+            }
+
+            if (dailyDigestRadio) {
+                dailyDigestRadio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        currentDigestType = 'daily';
+                        updateDigestUI();
+                    }
+                });
+            }
+
+            if (weeklyDigestRadio) {
+                weeklyDigestRadio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        currentDigestType = 'weekly';
+                        updateDigestUI();
+                    }
+                });
+            }
+        }
+
+        function updateDigestUI() {
+            const smartDigestSection = document.getElementById('smartDigestSection');
+            const upgradePrompt = document.getElementById('upgradePrompt');
+            const generateBtn = document.getElementById('generateDigestBtn');
+            const viewHistoryBtn = document.getElementById('viewHistoryBtn');
+
+            if (!smartDigestSection) return;
+
+            if (userRole === 'premium') {
+                if (upgradePrompt) upgradePrompt.classList.add('d-none');
+                if (generateBtn) generateBtn.disabled = false;
+                if (viewHistoryBtn) viewHistoryBtn.disabled = false;
+                
+                smartDigestSection.classList.add('premium-active');
+                smartDigestSection.classList.remove('premium-locked');
+            } else {
+                if (upgradePrompt) upgradePrompt.classList.remove('d-none');
+                if (generateBtn) generateBtn.disabled = true;
+                if (viewHistoryBtn) viewHistoryBtn.disabled = true;
+                
+                smartDigestSection.classList.add('premium-locked');
+                smartDigestSection.classList.remove('premium-active');
+            }
+        }
+
+        async function generateSmartDigest() {
+            if (!currentUser || userRole !== 'premium') {
+                showTestResult('Premium feature only. Please upgrade to access Smart Digest.', 'warning');
+                return;
+            }
+
+            if (!smartDigestFunctions) {
+                showTestResult('Smart Digest service not available. Please try again later.', 'error');
+                return;
+            }
+
+            showDigestLoading(true);
+            hideDigestContent();
+            hideDigestError();
+
+            try {
+                const getSmartDigest = smartDigestFunctions.httpsCallable('getSmartDigest');
+                const result = await getSmartDigest({ digestType: currentDigestType });
+                
+                if (result.data.success) {
+                    displayDigestContent(result.data);
+                    showTestResult(`Smart ${currentDigestType.charAt(0).toUpperCase() + currentDigestType.slice(1)} Digest generated successfully!`, 'success');
+                } else {
+                    throw new Error('Failed to generate digest');
+                }
+            } catch (error) {
+                console.error('Smart Digest Error:', error);
+                let errorMessage = 'Failed to generate Smart Digest. Please try again.';
+                
+                if (error.code === 'permission-denied') {
+                    errorMessage = 'Premium feature only. Please upgrade to access Smart Digest.';
+                } else if (error.code === 'unauthenticated') {
+                    errorMessage = 'Please sign in to use Smart Digest.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showDigestError(errorMessage);
+                showTestResult(`Error: ${errorMessage}`, 'error');
+            } finally {
+                showDigestLoading(false);
+            }
+        }
+
+        function displayDigestContent(data) {
+            const digestText = document.getElementById('digestText');
+            const digestGeneratedAt = document.getElementById('digestGeneratedAt');
+            const taskSummary = document.getElementById('taskSummary');
+            const taskList = document.getElementById('taskList');
+
+            if (digestText) {
+                digestText.innerHTML = data.digest.replace(/\n/g, '<br>');
+            }
+
+            if (digestGeneratedAt) {
+                const generatedDate = new Date(data.generatedAt);
+                digestGeneratedAt.textContent = generatedDate.toLocaleString();
+            }
+
+            if (data.taskCount > 0 && data.tasks && taskSummary && taskList) {
+                taskSummary.classList.remove('d-none');
+                taskList.innerHTML = '';
+
+                data.tasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'col-md-6';
+                    taskItem.innerHTML = `
+                        <div class="task-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <strong>${task.title}</strong>
+                                </div>
+                                ${task.priority ? `<span class="task-priority ${task.priority.toLowerCase()} ms-2">${task.priority}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    taskList.appendChild(taskItem);
+                });
+            } else if (taskSummary) {
+                taskSummary.classList.add('d-none');
+            }
+
+            showDigestContent();
+        }
+
+        async function viewDigestHistory() {
+            if (!currentUser || userRole !== 'premium') {
+                showTestResult('Premium feature only. Please upgrade to access digest history.', 'warning');
+                return;
+            }
+
+            if (!smartDigestFunctions) {
+                showTestResult('Smart Digest service not available. Please try again later.', 'error');
+                return;
+            }
+
+            try {
+                const getDigestHistory = smartDigestFunctions.httpsCallable('getDigestHistory');
+                const result = await getDigestHistory({ limit: 10 });
+                
+                if (result.data.success) {
+                    showTestResult(`Found ${result.data.digests.length} digest records in history.`, 'success');
+                    displayDigestHistory(result.data.digests);
+                } else {
+                    throw new Error('Failed to fetch digest history');
+                }
+            } catch (error) {
+                console.error('Digest History Error:', error);
+                showTestResult('Failed to load digest history. Please try again.', 'error');
+            }
+        }
+
+        function displayDigestHistory(digests) {
+            let modal = document.getElementById('digestHistoryModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.className = 'modal fade';
+                modal.id = 'digestHistoryModal';
+                modal.innerHTML = `
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-history me-2"></i>
+                                    Smart Digest History
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="digestHistoryList"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+
+            const historyList = document.getElementById('digestHistoryList');
+            if (digests.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No digest history found.</p>
+                    </div>
+                `;
+            } else {
+                historyList.innerHTML = digests.map(digest => `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="card-title">
+                                    <i class="fas fa-${digest.digestType === 'daily' ? 'calendar-day' : 'calendar-week'} me-2"></i>
+                                    ${digest.digestType.charAt(0).toUpperCase() + digest.digestType.slice(1)} Digest
+                                </h6>
+                                <small class="text-muted">
+                                    ${new Date(digest.generatedAt).toLocaleDateString()}
+                                </small>
+                            </div>
+                            <p class="card-text">${digest.digest}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-tasks me-1"></i>
+                                ${digest.taskCount} tasks analyzed
+                            </small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+        }
+
+        async function testAuthentication() {
+            try {
+                if (!currentUser) {
+                    showTestResult('No user authenticated', 'error');
+                    return;
+                }
+
+                const idToken = await currentUser.getIdToken();
+                showTestResult(`Authentication successful. Token length: ${idToken.length} characters`, 'success');
+            } catch (error) {
+                showTestResult(`Authentication test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function showTestResult(message, type = 'info') {
+            const testResults = document.getElementById('testResults');
+            const alertClass = type === 'error' ? 'danger' : type;
+            const timestamp = new Date().toLocaleTimeString();
+            
+            testResults.innerHTML = `
+                <div class="alert alert-${alertClass}">
+                    <strong>[${timestamp}]</strong> ${message}
+                </div>
+            ` + testResults.innerHTML;
+        }
+
+        // UI Helper Functions
+        function showDigestLoading(show) {
+            const loading = document.getElementById('digestLoading');
+            if (loading) {
+                loading.classList.toggle('d-none', !show);
+            }
+        }
+
+        function showDigestContent() {
+            const content = document.getElementById('digestContent');
+            if (content) {
+                content.classList.remove('d-none');
+            }
+        }
+
+        function hideDigestContent() {
+            const content = document.getElementById('digestContent');
+            if (content) {
+                content.classList.add('d-none');
+            }
+        }
+
+        function showDigestError(message) {
+            const error = document.getElementById('digestError');
+            const errorMessage = document.getElementById('errorMessage');
+            if (error && errorMessage) {
+                errorMessage.textContent = message;
+                error.classList.remove('d-none');
+            }
+        }
+
+        function hideDigestError() {
+            const error = document.getElementById('digestError');
+            if (error) {
+                error.classList.add('d-none');
+            }
+        }
+
+        // Sign Out
+        const signOutBtn = document.getElementById('signOut');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try {
+                    await window.firebaseAuth.signOut();
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Error signing out:', error);
+                }
+            });
+        }
+
+        // Initialize test page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme manager if available
+            if (window.themeManager) {
+                window.themeManager.updateThemeIcon();
+                
+                // Ensure theme toggle button works
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', function() {
+                        window.themeManager.toggleTheme();
+                    });
+                }
+            } else {
+                // Fallback theme toggle
+                const themeToggle = document.getElementById('themeToggle');
+                const themeIcon = document.getElementById('themeIcon');
+                
+                function updateThemeIcon() {
+                    const theme = document.documentElement.getAttribute('data-bs-theme');
+                    if (theme === 'dark') {
+                        themeIcon.classList.remove('bi-moon-fill');
+                        themeIcon.classList.add('bi-sun-fill');
+                    } else {
+                        themeIcon.classList.remove('bi-sun-fill');
+                        themeIcon.classList.add('bi-moon-fill');
+                    }
+                }
+                
+                function toggleTheme() {
+                    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcon();
+                }
+                
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', toggleTheme);
+                }
+                
+                updateThemeIcon();
+            }
+            
+            initializeTestPage();
+        });
+    </script>
+</body>
+</html> 

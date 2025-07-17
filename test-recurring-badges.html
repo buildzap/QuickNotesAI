@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Recurring Task Badges</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #64748b;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+
+        body {
+            background: var(--background-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .task-tile {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .task-tile-recurring {
+            position: absolute;
+            top: 0.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+            z-index: 2;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
+        .task-tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-tile-priority {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .task-tile-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .task-tile-description {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .task-tile-dates {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .task-date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-date-label {
+            font-weight: 500;
+        }
+
+        .task-date-value {
+            color: #6b7280;
+        }
+
+        .task-tile-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .task-tile-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .status-in-progress {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .test-controls {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            padding: 0.5rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center my-4">Test Recurring Task Badges</h1>
+                
+                <div class="test-controls">
+                    <h5>Test Controls</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary me-2" onclick="testStringFormat()">
+                                Test String Format (recurring: 'daily')
+                            </button>
+                            <button class="btn btn-success me-2" onclick="testBooleanFormat()">
+                                Test Boolean Format (recurring: true)
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-warning me-2" onclick="testObjectFormat()">
+                                Test Object Format (recurring: {recurring: true, recurrence: {type: 'weekly'}})
+                            </button>
+                            <button class="btn btn-info" onclick="testAllFormats()">
+                                Test All Formats
+                            </button>
+                        </div>
+                    </div>
+                    <div class="debug-info" id="debugInfo">
+                        Click a test button to see debug information...
+                    </div>
+                </div>
+
+                <div class="task-grid" id="taskGrid">
+                    <!-- Task tiles will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample tasks with different recurring data structures
+        const testTasks = {
+            stringFormat: [
+                {
+                    id: '1',
+                    title: 'Daily Standup',
+                    description: 'Daily team standup meeting',
+                    status: 'pending',
+                    priority: 'high',
+                    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'manual',
+                    recurring: 'daily'
+                },
+                {
+                    id: '2',
+                    title: 'Weekly Review',
+                    description: 'Weekly project review meeting',
+                    status: 'in-progress',
+                    priority: 'medium',
+                    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'voice',
+                    recurring: 'weekly'
+                },
+                {
+                    id: '3',
+                    title: 'Monthly Report',
+                    description: 'Monthly performance report',
+                    status: 'pending',
+                    priority: 'low',
+                    dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'manual',
+                    recurring: 'monthly'
+                },
+                {
+                    id: '4',
+                    title: 'Yearly Planning',
+                    description: 'Annual strategic planning session',
+                    status: 'pending',
+                    priority: 'high',
+                    dueDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'template',
+                    recurring: 'yearly'
+                }
+            ],
+            booleanFormat: [
+                {
+                    id: '5',
+                    title: 'Recurring Task (Boolean)',
+                    description: 'Task with recurring: true',
+                    status: 'pending',
+                    priority: 'medium',
+                    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'manual',
+                    recurring: true
+                }
+            ],
+            objectFormat: [
+                {
+                    id: '6',
+                    title: 'Custom Recurring Task',
+                    description: 'Task with custom interval',
+                    status: 'in-progress',
+                    priority: 'high',
+                    dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'voice',
+                    recurring: {
+                        recurring: true,
+                        recurrence: {
+                            type: 'custom',
+                            interval: 14,
+                            time: '10:00'
+                        }
+                    }
+                },
+                {
+                    id: '7',
+                    title: 'Weekly Team Meeting',
+                    description: 'Weekly team sync meeting',
+                    status: 'pending',
+                    priority: 'medium',
+                    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    inputMethod: 'manual',
+                    recurring: {
+                        recurring: true,
+                        recurrence: {
+                            type: 'weekly',
+                            time: '14:00'
+                        }
+                    }
+                }
+            ]
+        };
+
+        function createTaskTile(task) {
+            console.log('Creating task tile for:', task.title, 'Status:', task.status, 'Priority:', task.priority);
+            
+            // Check if task is recurring - handle different data types
+            let isRecurring = false;
+            let recurringType = '';
+            
+            if (task.recurring) {
+                if (typeof task.recurring === 'string' && task.recurring !== 'none') {
+                    isRecurring = true;
+                    recurringType = task.recurring;
+                } else if (typeof task.recurring === 'boolean' && task.recurring === true) {
+                    isRecurring = true;
+                    recurringType = 'recurring';
+                } else if (typeof task.recurring === 'object' && task.recurring.recurring === true) {
+                    isRecurring = true;
+                    recurringType = task.recurring.recurrence?.type || 'recurring';
+                }
+            }
+            
+            // Function to format recurring frequency text
+            const formatRecurringText = (type) => {
+                switch (type) {
+                    case 'daily':
+                        return '🔄 Daily';
+                    case 'weekly':
+                        return '🔄 Weekly';
+                    case 'monthly':
+                        return '🔄 Monthly';
+                    case 'yearly':
+                        return '🔄 Yearly';
+                    case 'custom':
+                        // For custom, we need to get the interval from the task data
+                        if (task.recurring && typeof task.recurring === 'object' && task.recurring.recurrence) {
+                            const interval = task.recurring.recurrence.interval || 7;
+                            return `🔄 Every ${interval} Days`;
+                        }
+                        return '🔄 Every X Days';
+                    case 'recurring':
+                        return '🔄 Recurring';
+                    default:
+                        return `🔄 ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                }
+            };
+            
+            const recurringBadge = isRecurring ? 
+                `<div class="task-tile-recurring">
+                    <i class="bi bi-arrow-repeat"></i>
+                    <span>${formatRecurringText(recurringType)}</span>
+                </div>` : '';
+            
+            // Debug logging for recurring tasks
+            if (isRecurring) {
+                console.log('[Task Tile] Recurring task detected:', {
+                    title: task.title,
+                    recurring: task.recurring,
+                    recurringType: recurringType,
+                    isRecurring: isRecurring
+                });
+            }
+
+            // Format dates
+            const createdDate = formatDate(task.createdAt);
+            const dueDate = formatDate(task.dueDate);
+
+            const isCompleted = task.status === 'completed';
+            const isPending = task.status === 'pending';
+            const isInProgress = task.status === 'in-progress';
+            
+            let statusClass = '';
+            if (isCompleted) statusClass = 'completed';
+            else if (isPending) statusClass = 'pending';
+            else if (isInProgress) statusClass = 'in-progress';
+            
+            const taskHTML = `
+                <div class="task-tile ${statusClass}" data-task-id="${task.id}">
+                    ${recurringBadge}
+                    <div class="task-tile-header">
+                        <div class="task-tile-priority priority-${task.priority}">${task.priority}</div>
+                    </div>
+                    <div class="task-tile-title-section">
+                        <h6 class="task-tile-title ${isCompleted ? 'completed' : ''}">${task.title}</h6>
+                    </div>
+                    <div class="task-tile-description ${isCompleted ? 'completed' : ''}">${task.description}</div>
+                    <div class="task-tile-dates">
+                        <div class="task-date-item">
+                            <i class="bi bi-calendar-event text-warning"></i>
+                            <span class="task-date-label">Due:</span>
+                            <span class="task-date-value">${dueDate}</span>
+                        </div>
+                        <div class="task-date-item">
+                            <i class="bi bi-calendar-plus text-primary"></i>
+                            <span class="task-date-label">Created:</span>
+                            <span class="task-date-value">${createdDate}</span>
+                        </div>
+                    </div>
+                    <div class="task-tile-meta">
+                        <span class="task-tile-status status-${task.status}">${task.status}</span>
+                    </div>
+                </div>
+            `;
+            
+            return taskHTML;
+        }
+
+        function formatDate(date) {
+            if (!date) return 'Not set';
+            const d = new Date(date);
+            return d.toLocaleDateString();
+        }
+
+        function renderTaskGrid(tasks) {
+            const taskGrid = document.getElementById('taskGrid');
+            if (!taskGrid) return;
+
+            const taskHTML = tasks.map(task => createTaskTile(task)).join('');
+            taskGrid.innerHTML = taskHTML;
+        }
+
+        function updateDebugInfo(message) {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML = message;
+        }
+
+        function testStringFormat() {
+            console.log('Testing string format recurring tasks...');
+            updateDebugInfo('Testing string format: recurring: "daily", "weekly", "monthly", "yearly"');
+            renderTaskGrid(testTasks.stringFormat);
+        }
+
+        function testBooleanFormat() {
+            console.log('Testing boolean format recurring tasks...');
+            updateDebugInfo('Testing boolean format: recurring: true');
+            renderTaskGrid(testTasks.booleanFormat);
+        }
+
+        function testObjectFormat() {
+            console.log('Testing object format recurring tasks...');
+            updateDebugInfo('Testing object format: recurring: {recurring: true, recurrence: {type: "custom", interval: 14}}');
+            renderTaskGrid(testTasks.objectFormat);
+        }
+
+        function testAllFormats() {
+            console.log('Testing all recurring task formats...');
+            updateDebugInfo('Testing all formats: string, boolean, and object formats');
+            const allTasks = [
+                ...testTasks.stringFormat,
+                ...testTasks.booleanFormat,
+                ...testTasks.objectFormat
+            ];
+            renderTaskGrid(allTasks);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded, ready to test recurring badges...');
+            updateDebugInfo('Page loaded. Click a test button to see recurring badges in action.');
+        });
+    </script>
+</body>
+</html> 

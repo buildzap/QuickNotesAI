@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Collaboration - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <!-- Fallback Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Additional Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Font Awesome Load Check Script -->
+    <script>
+        // Check if Font Awesome loaded properly
+        function checkFontAwesome() {
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-star';
+            testIcon.style.position = 'absolute';
+            testIcon.style.left = '-9999px';
+            testIcon.style.visibility = 'hidden';
+            document.body.appendChild(testIcon);
+            
+            const computedStyle = window.getComputedStyle(testIcon, '::before');
+            const content = computedStyle.content;
+            
+            document.body.removeChild(testIcon);
+            
+            // If content is empty or just quotes, Font Awesome didn't load
+            return content && content !== '""' && content !== "''";
+        }
+        
+        // Retry loading Font Awesome if it fails
+        function retryFontAwesome() {
+            if (!checkFontAwesome()) {
+                console.log('Font Awesome not loaded, retrying...');
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+                document.head.appendChild(link);
+                
+                setTimeout(() => {
+                    if (!checkFontAwesome()) {
+                        console.log('Font Awesome still not loaded, using fallback icons');
+                        applyIconFallbacks();
+                    }
+                }, 2000);
+            }
+        }
+        
+        // Apply emoji fallbacks for icons
+        function applyIconFallbacks() {
+            const iconMappings = {
+                'fa-users': '👥',
+                'fa-plus-circle': '➕',
+                'fa-tasks': '📋',
+                'fa-chart-line': '📈',
+                'fa-user-plus': '👤+',
+                'fa-key': '🔑',
+                'fa-sync-alt': '🔄',
+                'fa-trash-alt': '🗑️',
+                'fa-user-ninja': '🥷',
+                'fa-broom': '🧹',
+                'fa-tools': '🔧',
+                'fa-crown': '👑',
+                'fa-check-double': '✅',
+                'fa-sign-out-alt': '🚪',
+                'fa-moon': '🌙',
+                'fa-envelope': '✉️',
+                'fa-tag': '🏷️',
+                'fa-star': '⭐'
+            };
+            
+            document.querySelectorAll('.fas, .fab, .far').forEach(icon => {
+                const className = icon.className;
+                for (const [faClass, emoji] of Object.entries(iconMappings)) {
+                    if (className.includes(faClass)) {
+                        icon.textContent = emoji;
+                        icon.style.fontFamily = 'inherit';
+                        icon.style.fontSize = '1em';
+                        break;
+                    }
+                }
+            });
+        }
+        
+        // Check Font Awesome on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(retryFontAwesome, 1000);
+        });
+    </script>
+    
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Font Awesome Icon Fixes */
+        .fas, .fab, .far {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .feature-icon .fas,
+        .feature-icon .fab,
+        .feature-icon .far {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .team-hero .fas,
+        .team-hero .fab,
+        .team-hero .far {
+            font-size: inherit;
+        }
+
+        .team-card .fas,
+        .team-card .fab,
+        .team-card .far {
+            font-size: inherit;
+        }
+
+        /* Ensure icons in buttons are properly sized */
+        .btn .fas,
+        .btn .fab,
+        .btn .far {
+            font-size: 0.9em;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float-gentle 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .floating-bg-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            background: var(--gradient-secondary);
+            animation-delay: 2s;
+        }
+
+        .floating-bg-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            background: var(--gradient-accent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+
+        .navbar-toggler {
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Premium Banner Styles */
+        .premium-banner {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            border-bottom: 2px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 32px;
+            overflow: hidden;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .premium-user .premium-banner {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        body:not(.premium-user) .premium-banner {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            position: absolute !important;
+            top: -100px !important;
+            left: -100px !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: premium-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes premium-glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem 0;
+            position: relative;
+            z-index: 1;
+            gap: 0.75rem;
+        }
+
+        .premium-banner-icon {
+            font-size: 0.85rem;
+            color: #ffd700;
+            animation: crown-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes crown-pulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+            }
+            50% { 
+                transform: scale(1.1) rotate(2deg); 
+                filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+            }
+        }
+
+        .premium-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .premium-banner-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin: 0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .premium-banner-badge {
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-banner-badge .badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a2e;
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+        }
+
+        /* Enhanced Team Type Dropdown Styling */
+        #teamType {
+            font-size: 0.9rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        #teamType:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        #teamType optgroup {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            background: var(--background-main);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #teamType option {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--background-card);
+            padding: 0.5rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        #teamType option:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #teamType option:checked {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Dark theme adjustments for dropdown */
+        [data-bs-theme="dark"] #teamType {
+            background: var(--background-card);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        [data-bs-theme="dark"] #teamType optgroup {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        [data-bs-theme="dark"] #teamType option {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="dark"] #teamType option:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .premium-banner-badge .badge {
+            letter-spacing: 0.5px;
+            animation: badge-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes badge-shine {
+            0%, 100% { 
+                box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Compact Team Page Styles */
+        .main-content {
+            padding-top: 80px;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Compact Team Hero Section */
+        .team-hero {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .team-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-hero p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Compact Feature Cards */
+        .feature-card {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h5 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Compact Team Cards */
+        .team-card {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .team-info h5 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .team-info p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            font-size: 0.85rem;
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Compact Form Styles */
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+            background: var(--background-card);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            background: var(--background-card);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-text {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Compact Button Styles */
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--gradient-accent);
+            border: none;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+            color: white;
+        }
+
+        /* Compact Alert Styles */
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        /* Compact Member List */
+        .member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.4rem;
+            background: var(--background-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .member-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .member-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .member-email {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Compact My Teams Section */
+        .my-teams-compact {
+            margin-top: 1rem;
+        }
+
+        .compact-list {
+            /* Removed max-height and overflow-y to eliminate scrollbar */
+            /* max-height: 400px; */
+            /* overflow-y: auto; */
+        }
+
+        /* Compact Team Item */
+        .team-item-compact {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .team-item-compact:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .team-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-item-info h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+        }
+
+        .team-item-info p {
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .team-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-members-list {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            background: var(--background-main);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-members-list small {
+            line-height: 1.4;
+            display: block;
+            font-weight: 500;
+        }
+
+        .team-members-list i {
+            color: var(--primary-color);
+        }
+
+        /* Enhanced team item styling */
+        .team-item-compact {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .team-item-compact:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .team-item-info h6 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            font-size: 1rem;
+        }
+
+        .team-item-info h6 i {
+            color: var(--primary-color);
+        }
+
+        .team-item-actions {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        /* Enhanced Badge Styles */
+        .badge {
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 0.35rem 0.6rem;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+        }
+
+        .badge-secondary {
+            background: linear-gradient(135deg, var(--text-secondary) 0%, #64748b 100%);
+            color: white;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #00d4aa 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 184, 148, 0.3);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .team-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .team-hero p {
+                font-size: 0.9rem;
+            }
+            
+            .feature-card {
+                margin-bottom: 1rem;
+            }
+            
+            .team-actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .team-item-actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+        }
+
+        /* Invitation Code Styles */
+        .team-invitation-code {
+            background: var(--background-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        /* Team Item Invitation Code Styles */
+        .team-item-compact .team-invitation-code {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .team-item-compact .team-invitation-code small {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .team-item-compact .invitation-code-display {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            font-size: 0.8rem;
+        }
+
+        .team-item-compact .team-invitation-code .btn {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .invitation-code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .invitation-code-header h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .invitation-code-display {
+            background: var(--background-card);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 2px dashed var(--border-color);
+        }
+
+        .code-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .invitation-code {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: var(--background-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            letter-spacing: 2px;
+            user-select: all;
+        }
+
+        .code-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Copy button hover effect */
+        .btn-outline-secondary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Responsive adjustments for invitation code */
+        @media (max-width: 768px) {
+            .invitation-code-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .invitation-code {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Task Form Compact Styles */
+        .task-form-compact {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .form-section {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-section.primary-info {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(139, 92, 246, 0.02) 100%);
+        }
+
+        .form-section.task-details {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.02) 0%, rgba(0, 184, 148, 0.01) 100%);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.main-title {
+            grid-column: 1 / -1;
+        }
+
+        .form-group.description-group {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-control {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--background-card);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Responsive adjustments for form */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+
+    <!-- Premium Banner -->
+    <div class="premium-banner" id="premiumBanner">
+        <div class="premium-banner-content">
+            <i class="fas fa-crown premium-banner-icon"></i>
+            <div class="premium-banner-text">
+                <h6 class="premium-banner-title">Premium User</h6>
+                <div class="premium-banner-badge">
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="fas fa-check-double me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem" style="display: block;"><a class="nav-link active" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem" style="display: block;"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Team Hero Section -->
+        <section class="team-hero">
+            <div class="container">
+                <div class="team-hero-content text-center">
+                    <h1>Team Collaboration</h1>
+                    <p>Create teams, assign tasks, and track progress together with your colleagues</p>
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="feature-card text-center">
+                                <div class="feature-icon mx-auto">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h5>Create Teams</h5>
+                                <p class="text-muted">Build your dream team</p>
+                                <button class="btn btn-primary mt-3" onclick="scrollToCreateTeam()">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Team
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card text-center">
+                                <div class="feature-icon mx-auto">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <h5>Assign Tasks</h5>
+                                <p class="text-muted">Delegate efficiently</p>
+                                <button class="btn btn-success mt-3" onclick="goToTaskAssignment()">
+                                    <i class="fas fa-tasks me-2"></i>Assign Tasks
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card text-center">
+                                <div class="feature-icon mx-auto">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h5>Track Progress</h5>
+                                <p class="text-muted">Monitor team performance</p>
+                                <button class="btn btn-info mt-3" onclick="goToProgressTracking()">
+                                    <i class="fas fa-chart-line me-2"></i>Track Progress
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Alerts Section -->
+            <div id="alertsContainer"></div>
+
+            <!-- Team Management Section -->
+            <div class="row">
+                <!-- Create Team Section (Admin Only) -->
+                <div class="col-lg-6 mb-4" id="createTeamSection" style="display: none;">
+                    <div class="task-form-compact mb-2" style="height: auto; min-height: 35vh; overflow-y: visible;">
+                        <div class="form-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h5 class="form-title" style="font-size: 1.1rem;">
+                                        <i class="fas fa-plus-circle me-2"></i>Create New Team
+                                    </h5>
+                                    <div class="form-subtitle">Start a new team collaboration</div>
+                                </div>
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-crown me-1"></i>Admin Only
+                                </span>
+                            </div>
+                        </div>
+                        <form id="createTeamForm">
+                            <!-- Primary Team Info -->
+                            <div class="form-section primary-info">
+                                <div class="form-row">
+                                    <div class="form-group main-title">
+                                        <label for="teamName" class="form-label">
+                                            <i class="fas fa-users me-1"></i>Team Name
+                                        </label>
+                                        <input type="text" class="form-control" id="teamName" placeholder="Enter team name" required>
+                                    </div>
+                                    <div class="form-group priority-group">
+                                        <label for="teamType" class="form-label">
+                                            <i class="fas fa-tag me-1"></i>Team Type
+                                        </label>
+                                        <select class="form-control" id="teamType" required>
+                                            <option value="">Select team type</option>
+                                            
+                                            <!-- Business & Professional -->
+                                            <optgroup label="🏢 Business & Professional">
+                                                <option value="project">Project Team</option>
+                                                <option value="department">Department</option>
+                                                <option value="cross-functional">Cross-functional</option>
+                                                <option value="ad-hoc">Ad-hoc</option>
+                                                <option value="startup">Startup Team</option>
+                                                <option value="consulting">Consulting Team</option>
+                                                <option value="research">Research Team</option>
+                                                <option value="marketing">Marketing Team</option>
+                                                <option value="sales">Sales Team</option>
+                                                <option value="hr">HR Team</option>
+                                                <option value="finance">Finance Team</option>
+                                                <option value="operations">Operations Team</option>
+                                            </optgroup>
+                                            
+                                            <!-- Domain & Technical -->
+                                            <optgroup label="🌐 Domain & Technical">
+                                                <option value="web-development">Web Development</option>
+                                                <option value="mobile-development">Mobile Development</option>
+                                                <option value="ai-ml">AI & Machine Learning</option>
+                                                <option value="data-science">Data Science</option>
+                                                <option value="cybersecurity">Cybersecurity</option>
+                                                <option value="cloud-computing">Cloud Computing</option>
+                                                <option value="devops">DevOps</option>
+                                                <option value="ui-ux">UI/UX Design</option>
+                                                <option value="blockchain">Blockchain</option>
+                                                <option value="iot">Internet of Things</option>
+                                                <option value="robotics">Robotics</option>
+                                                <option value="biotech">Biotechnology</option>
+                                                <option value="fintech">FinTech</option>
+                                                <option value="healthtech">HealthTech</option>
+                                                <option value="edtech">EdTech</option>
+                                            </optgroup>
+                                            
+                                            <!-- Games & Entertainment -->
+                                            <optgroup label="🎮 Games & Entertainment">
+                                                <option value="game-development">Game Development</option>
+                                                <option value="esports">Esports Team</option>
+                                                <option value="gaming-community">Gaming Community</option>
+                                                <option value="board-games">Board Games</option>
+                                                <option value="card-games">Card Games</option>
+                                                <option value="puzzle-solving">Puzzle Solving</option>
+                                                <option value="roleplay">Roleplay & RPG</option>
+                                                <option value="streaming">Content Streaming</option>
+                                                <option value="podcast">Podcast Team</option>
+                                                <option value="youtube">YouTube Channel</option>
+                                                <option value="twitch">Twitch Streamers</option>
+                                                <option value="music-band">Music Band</option>
+                                                <option value="dance-group">Dance Group</option>
+                                                <option value="theater">Theater Group</option>
+                                                <option value="film-production">Film Production</option>
+                                            </optgroup>
+                                            
+                                            <!-- Fun & Social -->
+                                            <optgroup label="🎉 Fun & Social">
+                                                <option value="book-club">Book Club</option>
+                                                <option value="cooking-club">Cooking Club</option>
+                                                <option value="travel-group">Travel Group</option>
+                                                <option value="fitness-group">Fitness Group</option>
+                                                <option value="yoga-class">Yoga Class</option>
+                                                <option value="running-club">Running Club</option>
+                                                <option value="cycling-group">Cycling Group</option>
+                                                <option value="hiking-club">Hiking Club</option>
+                                                <option value="photography">Photography Club</option>
+                                                <option value="art-group">Art Group</option>
+                                                <option value="crafting">Crafting Circle</option>
+                                                <option value="gardening">Gardening Club</option>
+                                                <option value="pet-lovers">Pet Lovers</option>
+                                                <option value="language-exchange">Language Exchange</option>
+                                                <option value="study-group">Study Group</option>
+                                                <option value="volunteer">Volunteer Group</option>
+                                                <option value="charity">Charity Team</option>
+                                                <option value="environmental">Environmental Group</option>
+                                                <option value="community-service">Community Service</option>
+                                            </optgroup>
+                                            
+                                            <!-- Education & Learning -->
+                                            <optgroup label="📚 Education & Learning">
+                                                <option value="study-buddy">Study Buddy Group</option>
+                                                <option value="online-course">Online Course Team</option>
+                                                <option value="workshop">Workshop Group</option>
+                                                <option value="mentorship">Mentorship Program</option>
+                                                <option value="coding-bootcamp">Coding Bootcamp</option>
+                                                <option value="language-learning">Language Learning</option>
+                                                <option value="skill-sharing">Skill Sharing</option>
+                                                <option value="academic-research">Academic Research</option>
+                                                <option value="thesis-group">Thesis Group</option>
+                                                <option value="dissertation">Dissertation Team</option>
+                                            </optgroup>
+                                            
+                                            <!-- Creative & Design -->
+                                            <optgroup label="🎨 Creative & Design">
+                                                <option value="design-studio">Design Studio</option>
+                                                <option value="creative-agency">Creative Agency</option>
+                                                <option value="content-creation">Content Creation</option>
+                                                <option value="social-media">Social Media Team</option>
+                                                <option value="branding">Branding Team</option>
+                                                <option value="graphic-design">Graphic Design</option>
+                                                <option value="illustration">Illustration Team</option>
+                                                <option value="animation">Animation Team</option>
+                                                <option value="3d-modeling">3D Modeling</option>
+                                                <option value="architecture">Architecture Team</option>
+                                                <option value="interior-design">Interior Design</option>
+                                                <option value="fashion-design">Fashion Design</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Team Details -->
+                            <div class="form-section task-details">
+                                <div class="form-group description-group">
+                                    <label for="teamDescription" class="form-label">
+                                        <i class="bi bi-text-paragraph me-1"></i>Description
+                                    </label>
+                                    <textarea class="form-control" id="teamDescription" rows="2" placeholder="Describe your team's purpose" style="min-height: 60px; resize: vertical; font-size: 0.9rem; line-height: 1.4;"></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-plus-circle me-2"></i>Create Team
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Join Team Section -->
+                <div class="col-lg-6 mb-4">
+                    <div class="task-form-compact mb-2" style="height: auto; min-height: 40vh; overflow-y: visible;">
+                        <div class="form-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h5 class="form-title" style="font-size: 1.1rem;">
+                                        <i class="fas fa-user-plus me-2"></i>Join Existing Team
+                                    </h5>
+                                    <div class="form-subtitle">Join a team with an invitation code</div>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="joinTeamForm">
+                            <div class="form-section primary-info">
+                                <div class="form-group main-title">
+                                    <label for="inviteCode" class="form-label">
+                                        <i class="fas fa-key me-1"></i>Invitation Code
+                                    </label>
+                                    <input type="text" class="form-control" id="inviteCode" placeholder="Enter invitation code" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-user-plus me-2"></i>Join Team
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Teams Section -->
+            <div class="team-card my-teams-compact">
+                <div class="team-header">
+                    <div class="team-info">
+                        <h5 style="font-size:1rem;"><i class="fas fa-users me-2"></i>My Teams</h5>
+                        <p style="font-size:0.75rem;">Teams you're a member of</p>
+                    </div>
+                    <div class="team-actions">
+                        <button class="btn btn-outline-primary btn-sm" onclick="refreshTeams()" title="Refresh teams list">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+                <div id="teamsContainer" class="compact-list">
+                    <div class="text-center py-4">
+                        <i class="fas fa-users text-muted" style="font-size: 2rem;"></i>
+                        <p class="text-muted mt-2" style="font-size:0.8rem;">No teams found. Create or join a team to get started.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Invitations Section -->
+            <div class="team-card" id="invitationsSection" style="display: none;">
+                <div class="team-header">
+                    <div class="team-info">
+                        <h5><i class="fas fa-envelope me-2"></i>Team Invitations</h5>
+                        <p>Pending team invitations</p>
+                    </div>
+                </div>
+                <div id="invitationsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 fw-bold">
+                        <i class="fas fa-check-double me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="dashboard.html" class="footer-link">Dashboard</a></li>
+                        <li class="mb-2"><a href="task.html" class="footer-link">Tasks</a></li>
+                        <li class="mb-2" id="footerTeamLink" style="display: none;"><a href="team.html" class="footer-link">Team</a></li>
+                        <li class="mb-2" id="footerTeamDashboardLink" style="display: none;"><a href="team-dashboard.html" class="footer-link">Team Dashboard</a></li>
+                        <li class="mb-2"><a href="premium.html" class="footer-link">Premium</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-secondary opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-primary btn-sm" id="footerThemeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/nav-utils.js"></script>
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    
+    <!-- Utility Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <!-- Team Scripts -->
+    <script src="js/team.js"></script>
+
+    <!-- Font Awesome Load Check and Icon Fix -->
+    <script>
+        // Font Awesome Load Check and Icon Fix
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check Font Awesome loading status
+            function checkFontAwesome() {
+                const testIcon = document.createElement('i');
+                testIcon.className = 'fas fa-star';
+                testIcon.style.position = 'absolute';
+                testIcon.style.left = '-9999px';
+                testIcon.style.visibility = 'hidden';
+                document.body.appendChild(testIcon);
+                
+                const computedStyle = window.getComputedStyle(testIcon, '::before');
+                const content = computedStyle.content;
+                
+                document.body.removeChild(testIcon);
+                
+                return content !== 'none' && content !== 'normal';
+            }
+            
+            // Wait for Font Awesome to load
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            function waitForFontAwesome() {
+                attempts++;
+                
+                if (checkFontAwesome()) {
+                    console.log('Font Awesome loaded successfully');
+                    fixTeamSectionIcons();
+                } else if (attempts < maxAttempts) {
+                    console.log(`Font Awesome not loaded yet, attempt ${attempts}/${maxAttempts}`);
+                    setTimeout(waitForFontAwesome, 500);
+                } else {
+                    console.warn('Font Awesome failed to load after multiple attempts. Using fallback.');
+                    forceIconFallback();
+                }
+            }
+            
+            function forceIconFallback() {
+                // Add fallback styles
+                const fallbackStyle = document.createElement('style');
+                fallbackStyle.textContent = `
+                    .fas, .fab, .far {
+                        font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+                        font-weight: 900 !important;
+                        display: inline-block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+                    
+                    .fas::before, .fab::before, .far::before {
+                        content: attr(data-icon) !important;
+                    }
+                `;
+                document.head.appendChild(fallbackStyle);
+                
+                // Add data attributes for fallback icons
+                const icons = document.querySelectorAll('.fas, .fab, .far');
+                icons.forEach(icon => {
+                    const className = icon.className;
+                    if (className.includes('fa-users')) icon.setAttribute('data-icon', '👥');
+                    else if (className.includes('fa-plus-circle')) icon.setAttribute('data-icon', '➕');
+                    else if (className.includes('fa-tasks')) icon.setAttribute('data-icon', '📋');
+                    else if (className.includes('fa-chart-line')) icon.setAttribute('data-icon', '📈');
+                    else if (className.includes('fa-user-plus')) icon.setAttribute('data-icon', '👤+');
+                    else if (className.includes('fa-key')) icon.setAttribute('data-icon', '🔑');
+                    else if (className.includes('fa-sync-alt')) icon.setAttribute('data-icon', '🔄');
+                    else if (className.includes('fa-trash-alt')) icon.setAttribute('data-icon', '🗑️');
+                    else if (className.includes('fa-user-ninja')) icon.setAttribute('data-icon', '🥷');
+                    else if (className.includes('fa-broom')) icon.setAttribute('data-icon', '🧹');
+                    else if (className.includes('fa-tools')) icon.setAttribute('data-icon', '🔧');
+                    else if (className.includes('fa-envelope')) icon.setAttribute('data-icon', '✉️');
+                    else if (className.includes('fa-check-double')) icon.setAttribute('data-icon', '✅');
+                    else if (className.includes('fa-crown')) icon.setAttribute('data-icon', '👑');
+                    else if (className.includes('fa-moon')) icon.setAttribute('data-icon', '🌙');
+                    else if (className.includes('fa-sign-out-alt')) icon.setAttribute('data-icon', '🚪');
+                    else if (className.includes('fa-twitter')) icon.setAttribute('data-icon', '🐦');
+                    else if (className.includes('fa-linkedin')) icon.setAttribute('data-icon', '💼');
+                    else if (className.includes('fa-github')) icon.setAttribute('data-icon', '🐙');
+                    else if (className.includes('fa-youtube')) icon.setAttribute('data-icon', '📺');
+                    else icon.setAttribute('data-icon', '•');
+                });
+            }
+            
+            // Start checking for Font Awesome
+            setTimeout(waitForFontAwesome, 500);
+        });
+
+        // Function to fix team section icons specifically
+        function fixTeamSectionIcons() {
+            const teamIcons = document.querySelectorAll('.team-hero .fas, .team-hero .fa, .team-card .fas, .team-card .fa, .feature-card .fas, .feature-card .fa');
+            teamIcons.forEach(icon => {
+                // Force display and visibility
+                icon.style.display = 'inline-block';
+                icon.style.visibility = 'visible';
+                icon.style.opacity = '1';
+                icon.style.fontFamily = '"Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif';
+                icon.style.fontWeight = '900';
+                
+                // Remove any existing text content to prevent duplicates
+                icon.textContent = '';
+            });
+        }
+
+        // Additional icon fix for dynamically loaded content
+        function fixDynamicIcons() {
+            const allIcons = document.querySelectorAll('.fas, .fab, .far');
+            allIcons.forEach(icon => {
+                icon.style.display = 'inline-block';
+                icon.style.visibility = 'visible';
+                icon.style.opacity = '1';
+                icon.style.fontFamily = '"Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif';
+                icon.style.fontWeight = '900';
+                icon.textContent = '';
+            });
+        }
+
+        // Call icon fix after any dynamic content is loaded
+        window.addEventListener('load', function() {
+            setTimeout(fixDynamicIcons, 500);
+        });
+
+        // Override any existing icon functions to include icon fixing
+        if (typeof refreshTeams === 'function') {
+            const originalRefreshTeams = refreshTeams;
+            refreshTeams = function() {
+                const result = originalRefreshTeams.apply(this, arguments);
+                setTimeout(fixDynamicIcons, 100);
+                return result;
+            };
+        }
+
+        if (typeof createSampleTeams === 'function') {
+            const originalCreateSampleTeams = createSampleTeams;
+            createSampleTeams = function() {
+                const result = originalCreateSampleTeams.apply(this, arguments);
+                setTimeout(fixDynamicIcons, 100);
+                return result;
+            };
+        }
+
+        // Enhanced Team Type Dropdown Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const teamTypeSelect = document.getElementById('teamType');
+            
+            if (teamTypeSelect) {
+                // Add change event listener for team type selection
+                teamTypeSelect.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    const selectedOption = this.options[this.selectedIndex];
+                    
+                    // Add visual feedback for selection
+                    if (selectedValue) {
+                        this.style.borderColor = 'var(--primary-color)';
+                        this.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+                        
+                        // Show a brief success message
+                        showTeamTypeSelectionFeedback(selectedOption.text);
+                    } else {
+                        this.style.borderColor = 'var(--border-color)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+
+                // Add hover effects for options
+                teamTypeSelect.addEventListener('mouseenter', function() {
+                    if (!this.value) {
+                        this.style.borderColor = 'var(--primary-color)';
+                        this.style.boxShadow = '0 0 0 2px rgba(99, 102, 241, 0.05)';
+                    }
+                });
+
+                teamTypeSelect.addEventListener('mouseleave', function() {
+                    if (!this.value) {
+                        this.style.borderColor = 'var(--border-color)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            }
+        });
+
+        // Function to show team type selection feedback
+        function showTeamTypeSelectionFeedback(teamTypeName) {
+            // Create a temporary success indicator
+            const feedback = document.createElement('div');
+            feedback.className = 'team-type-feedback';
+            feedback.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                <span>Selected: ${teamTypeName}</span>
+            `;
+            feedback.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+                color: white;
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+                z-index: 9999;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            document.body.appendChild(feedback);
+            
+            // Animate in
+            setTimeout(() => {
+                feedback.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                feedback.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (feedback.parentNode) {
+                        feedback.parentNode.removeChild(feedback);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Add keyboard navigation for team type dropdown
+        document.addEventListener('keydown', function(e) {
+            const teamTypeSelect = document.getElementById('teamType');
+            
+            if (teamTypeSelect && document.activeElement === teamTypeSelect) {
+                if (e.key === 'Enter' && teamTypeSelect.value) {
+                    // Trigger form submission or next step
+                    const createTeamForm = document.getElementById('createTeamForm');
+                    if (createTeamForm) {
+                        createTeamForm.focus();
+                    }
+                }
+            }
+        });
+    </script>
+    <!-- Task Data Loader -->
+    <script src="js/task-data-loader.js"></script>
+    <!-- Task Integration -->
+    <script src="js/task-integration.js"></script>
+    
+    <!-- Navigation Initialization -->
+    <script>
+        // Initialize navigation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Team] Page loaded, initializing navigation...');
+            
+            // Check if nav-utils functions are available
+            if (typeof checkAuthAndUpdateNav === 'function') {
+                console.log('[Team] Initializing auth and navigation...');
+                checkAuthAndUpdateNav();
+            } else {
+                console.log('[Team] Nav utils not loaded, checking auth manually...');
+                // Fallback: check auth manually
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().onAuthStateChanged(async (user) => {
+                        if (user) {
+                            console.log('[Team] User authenticated:', user.email);
+                            // Show team navigation for authenticated users on team page
+                            if (typeof showTeamNavigation === 'function') {
+                                showTeamNavigation();
+                            }
+                        } else {
+                            console.log('[Team] No user authenticated');
+                            // Redirect to login if not authenticated
+                            window.location.href = 'login.html';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test My Teams Scroll Fix</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem auto;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        .test-section {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-section.success {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .test-section.warning {
+            border-color: #ffc107;
+            background-color: #fffbf0;
+        }
+        .test-section.danger {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.success { background-color: #28a745; }
+        .status-indicator.warning { background-color: #ffc107; }
+        .status-indicator.danger { background-color: #dc3545; }
+        .btn-test {
+            margin: 0.5rem;
+        }
+        .scroll-test {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-container">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-users text-primary me-2"></i>
+                My Teams Scroll Fix Test
+            </h1>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                This test verifies that the 'My Teams' section scrollbar has been removed and content fits properly on the page.
+            </div>
+
+            <div class="test-section" id="scrollTest">
+                <h4>
+                    <span class="status-indicator warning" id="scrollIndicator"></span>
+                    Scrollbar Removal Test
+                </h4>
+                <p>Testing if the 'My Teams' section scrollbar has been removed...</p>
+                
+                <div class="scroll-test">
+                    <h6>CSS Changes Applied:</h6>
+                    <ul>
+                        <li><strong>compact-list class:</strong> max-height and overflow-y properties removed</li>
+                        <li><strong>teamsContainer:</strong> No height restrictions applied</li>
+                        <li><strong>my-teams-compact:</strong> Only margin-top applied, no height limits</li>
+                    </ul>
+                </div>
+                
+                <div id="scrollDetails"></div>
+            </div>
+
+            <div class="test-section" id="pageTest">
+                <h4>
+                    <span class="status-indicator warning" id="pageIndicator"></span>
+                    Page Navigation Test
+                </h4>
+                <p>Testing navigation to the team page to verify the fix...</p>
+                
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-primary btn-test" onclick="testTeamPage()">
+                        <i class="fas fa-users me-2"></i>Test Team Page
+                    </button>
+                    <button class="btn btn-success btn-test" onclick="checkTeamPage()">
+                        <i class="fas fa-search me-2"></i>Check Team Page
+                    </button>
+                </div>
+                
+                <div id="pageDetails"></div>
+            </div>
+
+            <div class="test-section" id="cssTest">
+                <h4>
+                    <i class="fas fa-palette text-primary me-2"></i>
+                    CSS Verification
+                </h4>
+                <p>Verifying the CSS changes are properly applied...</p>
+                
+                <div class="scroll-test">
+                    <h6>Expected CSS State:</h6>
+                    <pre><code>.compact-list {
+    /* Removed max-height and overflow-y to eliminate scrollbar */
+    /* max-height: 400px; */
+    /* overflow-y: auto; */
+}</code></pre>
+                </div>
+                
+                <div id="cssDetails"></div>
+            </div>
+
+            <div class="test-section" id="resultsTest">
+                <h4>
+                    <i class="fas fa-clipboard-check text-primary me-2"></i>
+                    Test Results
+                </h4>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test results storage
+        let testResults = {
+            scrollbarRemoved: false,
+            pageAccessible: false,
+            cssApplied: false
+        };
+
+        // Update status indicator
+        function updateStatusIndicator(elementId, status) {
+            const indicator = document.getElementById(elementId);
+            const section = indicator.closest('.test-section');
+            
+            indicator.className = `status-indicator ${status}`;
+            section.className = `test-section ${status}`;
+        }
+
+        // Test scrollbar removal
+        function testScrollbarRemoval() {
+            console.log('[Test] Testing scrollbar removal...');
+            
+            // Check if the team page is accessible
+            fetch('team.html', { method: 'HEAD' })
+                .then(response => {
+                    const isAccessible = response.ok;
+                    testResults.pageAccessible = isAccessible;
+                    
+                    if (isAccessible) {
+                        // Create a hidden iframe to check the CSS
+                        const iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.src = 'team.html';
+                        
+                        iframe.onload = function() {
+                            try {
+                                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                                const teamsContainer = iframeDoc.getElementById('teamsContainer');
+                                
+                                if (teamsContainer) {
+                                    const computedStyle = window.getComputedStyle(teamsContainer);
+                                    const maxHeight = computedStyle.maxHeight;
+                                    const overflowY = computedStyle.overflowY;
+                                    
+                                    // Check if scrollbar properties are removed
+                                    const scrollbarRemoved = (maxHeight === 'none' || maxHeight === '') && 
+                                                           (overflowY === 'visible' || overflowY === '');
+                                    
+                                    testResults.scrollbarRemoved = scrollbarRemoved;
+                                    
+                                    const details = document.getElementById('scrollDetails');
+                                    details.innerHTML = `
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>teamsContainer Found:</strong> ✅ Yes
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>Scrollbar Removed:</strong> ${scrollbarRemoved ? '✅ Yes' : '❌ No'}
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <strong>max-height:</strong> ${maxHeight}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>overflow-y:</strong> ${overflowY}
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <strong>Status:</strong> ${scrollbarRemoved ? 
+                                                '✅ Scrollbar successfully removed' : 
+                                                '❌ Scrollbar still present'
+                                            }
+                                        </div>
+                                    `;
+                                    
+                                    updateStatusIndicator('scrollIndicator', scrollbarRemoved ? 'success' : 'danger');
+                                } else {
+                                    testResults.scrollbarRemoved = false;
+                                    updateStatusIndicator('scrollIndicator', 'danger');
+                                }
+                                
+                                // Clean up iframe
+                                document.body.removeChild(iframe);
+                                
+                            } catch (error) {
+                                console.error('[Test] Error checking scrollbar:', error);
+                                testResults.scrollbarRemoved = false;
+                                updateStatusIndicator('scrollIndicator', 'danger');
+                            }
+                        };
+                        
+                        document.body.appendChild(iframe);
+                    } else {
+                        testResults.scrollbarRemoved = false;
+                        updateStatusIndicator('scrollIndicator', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('[Test] Error accessing team page:', error);
+                    testResults.pageAccessible = false;
+                    testResults.scrollbarRemoved = false;
+                    updateStatusIndicator('scrollIndicator', 'danger');
+                });
+        }
+
+        // Test page accessibility
+        function testPageAccessibility() {
+            console.log('[Test] Testing page accessibility...');
+            
+            const pages = [
+                { name: 'Team Page', url: 'team.html' },
+                { name: 'Team Dashboard', url: 'team-dashboard.html' }
+            ];
+            
+            Promise.all(pages.map(page => 
+                fetch(page.url, { method: 'HEAD' })
+                    .then(response => ({ name: page.name, accessible: response.ok }))
+                    .catch(() => ({ name: page.name, accessible: false }))
+            )).then(results => {
+                const allAccessible = results.every(r => r.accessible);
+                testResults.pageAccessible = allAccessible;
+                
+                const details = document.getElementById('pageDetails');
+                details.innerHTML = `
+                    <div class="row">
+                        ${results.map(result => `
+                            <div class="col-md-6 mb-2">
+                                <strong>${result.name}:</strong> ${result.accessible ? '✅ Accessible' : '❌ Not Accessible'}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-2">
+                        <strong>Overall Status:</strong> ${allAccessible ? '✅ All pages accessible' : '⚠️ Some pages not accessible'}
+                    </div>
+                `;
+                
+                updateStatusIndicator('pageIndicator', allAccessible ? 'success' : 'warning');
+            });
+        }
+
+        // Test CSS application
+        function testCSSApplication() {
+            console.log('[Test] Testing CSS application...');
+            
+            // Check if the CSS changes are properly applied
+            fetch('team.html')
+                .then(response => response.text())
+                .then(html => {
+                    const cssApplied = html.includes('/* Removed max-height and overflow-y to eliminate scrollbar */') &&
+                                     html.includes('/* max-height: 400px; */') &&
+                                     html.includes('/* overflow-y: auto; */');
+                    
+                    testResults.cssApplied = cssApplied;
+                    
+                    const details = document.getElementById('cssDetails');
+                    details.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>CSS Comments Added:</strong> ${cssApplied ? '✅ Yes' : '❌ No'}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Properties Commented:</strong> ${cssApplied ? '✅ Yes' : '❌ No'}
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <strong>Status:</strong> ${cssApplied ? 
+                                '✅ CSS changes properly applied' : 
+                                '❌ CSS changes not found'
+                            }
+                        </div>
+                    `;
+                    
+                    updateStatusIndicator('cssTest', cssApplied ? 'success' : 'danger');
+                })
+                .catch(error => {
+                    console.error('[Test] Error checking CSS:', error);
+                    testResults.cssApplied = false;
+                    updateStatusIndicator('cssTest', 'danger');
+                });
+        }
+
+        // Page navigation functions
+        function testTeamPage() {
+            window.open('team.html', '_blank');
+        }
+
+        function checkTeamPage() {
+            window.open('team.html', '_blank');
+        }
+
+        // Run all tests
+        function runAllTests() {
+            console.log('[Test] Running all tests...');
+            
+            // Clear previous results
+            document.getElementById('testResults').innerHTML = '';
+            
+            // Run tests
+            testScrollbarRemoval();
+            testPageAccessibility();
+            testCSSApplication();
+            
+            // Show summary after a delay
+            setTimeout(() => {
+                showTestResults();
+            }, 3000);
+        }
+
+        // Show test results
+        function showTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            
+            const allPassed = Object.values(testResults).every(Boolean);
+            
+            resultsDiv.innerHTML = `
+                <div class="alert ${allPassed ? 'alert-success' : 'alert-warning'}">
+                    <h5><i class="fas ${allPassed ? 'fa-check-circle' : 'fa-exclamation-triangle'} me-2"></i>
+                        Test Summary
+                    </h5>
+                    <ul class="list-unstyled mb-0">
+                        <li>Scrollbar Removed: ${testResults.scrollbarRemoved ? '✅ Pass' : '❌ Fail'}</li>
+                        <li>Page Accessible: ${testResults.pageAccessible ? '✅ Pass' : '❌ Fail'}</li>
+                        <li>CSS Applied: ${testResults.cssApplied ? '✅ Pass' : '❌ Fail'}</li>
+                    </ul>
+                    ${allPassed ? 
+                        '<p class="mb-0 mt-2"><strong>✅ All tests passed! The scrollbar has been successfully removed from the My Teams section.</strong></p>' :
+                        '<p class="mb-0 mt-2"><strong>⚠️ Some tests failed. Please check the individual test results above.</strong></p>'
+                    }
+                </div>
+            `;
+        }
+
+        // Initialize tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Test] Test page loaded, initializing...');
+            
+            // Run initial tests
+            setTimeout(() => {
+                testScrollbarRemoval();
+                testPageAccessibility();
+                testCSSApplication();
+                runAllTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

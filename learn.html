@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microlearning Reminders - QuickNotesAI</title>
+    
+    <!-- Preload Font Awesome for faster loading -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Font Awesome - Latest Version -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Font Awesome Fallback -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" crossorigin="anonymous">
+    
+    <!-- Additional Font Awesome CDN for redundancy -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        /* Font Awesome Icon Fixes */
+        .fas, .far, .fab, .fa {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Pro', 'Font Awesome 6 Brands', 'FontAwesome' !important;
+            font-weight: 900;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        /* Ensure Font Awesome icons are visible even if font doesn't load */
+        .fas::before, .far::before, .fab::before, .fa::before {
+            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        .far {
+            font-weight: 400;
+        }
+
+        .fab {
+            font-weight: 400;
+        }
+
+        /* Icon styling for Bootstrap Icons and Font Awesome */
+        .bi, .fas, .far, .fab, .fa {
+            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+            margin-right: 0.5rem;
+            font-size: inherit;
+        }
+
+        /* Specific icon sizing */
+        .navbar-brand i {
+            font-size: 1.2em;
+        }
+
+        .nav-link i {
+            font-size: 0.9em;
+        }
+
+        .btn i {
+            font-size: 0.9em;
+        }
+
+        .welcome-header i {
+            font-size: 1.1em;
+        }
+
+        .field-option i {
+            font-size: 1.3em;
+            color: var(--primary-color);
+        }
+
+        .lesson-card i {
+            font-size: 1em;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float-gentle 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .floating-bg-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            background: var(--gradient-secondary);
+            animation-delay: 2s;
+        }
+
+        .floating-bg-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            background: var(--gradient-accent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navbar link styling to match task page */
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            color: var(--text-primary) !important;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+
+        /* Ensure navbar icons are visible */
+        .navbar-nav .nav-link i {
+            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+            margin-right: 0.5rem;
+            font-size: 0.9em;
+            color: inherit;
+        }
+
+        .navbar-nav .nav-link:hover i {
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link.active i {
+            color: var(--primary-color) !important;
+        }
+
+        /* User section styling */
+        .navbar-text {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+        }
+
+        /* Theme toggle button styling */
+        #themeToggle {
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* Premium Banner Styles - New Compact Design */
+        .premium-banner {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            border-bottom: 2px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 32px;
+            overflow: hidden;
+            /* Hide by default */
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        /* Force banner visibility when premium user */
+        .premium-user .premium-banner {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Ensure banner is hidden for non-premium users */
+        body:not(.premium-user) .premium-banner {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            position: absolute !important;
+            top: -100px !important;
+            left: -100px !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* Animated background pattern */
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: premium-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes premium-glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem 0;
+            position: relative;
+            z-index: 1;
+            gap: 0.75rem;
+        }
+
+        .premium-banner-icon {
+            font-size: 0.85rem;
+            color: #ffd700;
+            animation: crown-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes crown-pulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+            }
+            50% { 
+                transform: scale(1.1) rotate(2deg); 
+                filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+            }
+        }
+
+        .premium-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .premium-banner-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin: 0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .premium-banner-badge {
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-banner-badge .badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a2e;
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: badge-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes badge-shine {
+            0%, 100% { 
+                box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Dark theme adjustments */
+        [data-bs-theme="dark"] .premium-banner {
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #0e7490 100%);
+            border-bottom: 2px solid #ffd700;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-title {
+            color: #f8fafc;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-icon {
+            color: #ffd700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .premium-banner-content {
+                padding: 0.3rem 0;
+                gap: 0.5rem;
+            }
+
+            .premium-banner-text {
+                flex-direction: column;
+                gap: 0.25rem;
+                text-align: center;
+            }
+
+            .premium-banner-title {
+                font-size: 0.75rem;
+            }
+
+            .premium-banner-badge .badge {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
+
+        /* Hover effects */
+        .premium-banner:hover {
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .premium-banner:hover .premium-banner-icon {
+            animation: crown-pulse 1s ease-in-out infinite;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Premium Access Control - Professional Styling */
+        .premium-access-control {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-access-control:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .premium-access-control::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 50%, var(--primary-color) 100%);
+        }
+
+        .premium-icon {
+            font-size: 4rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            animation: crown-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crown-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: brightness(1.2);
+            }
+        }
+
+        .premium-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .premium-description {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .upgrade-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: none;
+            color: #1a1a1a;
+            font-weight: 600;
+            padding: 0.875rem 1.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+            color: #1a1a1a;
+        }
+
+        /* Welcome Header - Professional Styling */
+        .welcome-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .welcome-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .user-field-display {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .user-field-display .btn-outline-light {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .user-field-display .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Field Selection - Professional Styling */
+        .field-selection {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .field-selection:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .field-selection::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .field-option {
+            background: var(--background-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .field-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .field-option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        }
+
+        .field-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .field-option.selected::before {
+            opacity: 1;
+        }
+
+        /* Custom Topic Section */
+        .custom-topic-section {
+            background: var(--background-main);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .custom-topic-section:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        .custom-topic-item {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-topic-item:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .custom-topic-item.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        }
+
+        .custom-topic-item .topic-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .custom-topic-item .remove-topic {
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .custom-topic-item .remove-topic:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Lesson Card - Professional Styling */
+        .lesson-card {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            flex: 1;
+        }
+
+        .lesson-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: var(--background-main);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .lesson-summary {
+            background: var(--background-main);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .lesson-summary h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .lesson-summary ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .lesson-summary li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .lesson-summary li:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-summary li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+        }
+
+        .lesson-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-remind, .btn-link-task, .btn-mark-read {
+            background: var(--background-main);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-remind:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-link-task:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-mark-read:hover {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            transform: translateY(-1px);
+        }
+
+        /* Past Lessons - Professional Styling */
+        .past-lessons {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .past-lessons:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .past-lessons::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .past-lesson-item {
+            background: var(--background-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .past-lesson-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .past-lesson-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .past-lesson-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .past-lesson-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .status-read {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-linked {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+
+        .spinner-border {
+            color: var(--primary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .lesson-actions {
+                flex-direction: column;
+            }
+            
+            .lesson-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: #000000 !important;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer h5, .footer h6 {
+            color: white;
+            font-weight: 600;
+        }
+
+        .footer p, .footer a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-link {
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2"></i>
+                <span>QuickNotes AI</span>
+                <i class="fas fa-check-circle ms-2" style="font-size: 0.8em; color: var(--accent-color);" title="Font Awesome Test"></i>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line me-1"></i>Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html"><i class="fas fa-tasks me-1"></i>Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html"><i class="fas fa-users me-1"></i>Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html"><i class="fas fa-chart-bar me-1"></i>Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="learn.html"><i class="fas fa-graduation-cap me-1"></i>Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html"><i class="fas fa-crown me-1"></i>Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Premium Banner (Only for Premium Users) -->
+    <div id="premiumBanner" class="premium-banner d-none" style="display: none;">
+        <div class="container">
+            <div class="premium-banner-content">
+                <div class="premium-banner-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="premium-banner-text">
+                    <h5 class="premium-banner-title">Premium User – Enjoy all advanced features</h5>
+                </div>
+                <div class="premium-banner-badge">
+                    <span class="badge">
+                        <i class="fas fa-star me-1"></i>Premium
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container-fluid flex-grow-1" style="padding-top: 70px;">
+        <div class="row g-3">
+            <div class="col-12">
+                <!-- Premium Access Control (Hidden by default) -->
+                <div class="container" id="premiumAccessControl" style="display: none;">
+                    <div class="premium-access-control">
+                        <div class="premium-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h2 class="premium-title">Premium Feature</h2>
+                        <p class="premium-description">
+                            Microlearning Reminders are available exclusively for premium users. 
+                            Get personalized daily lessons tailored to your field of interest.
+                        </p>
+                        <button class="upgrade-btn" onclick="window.location.href='premium.html'">
+                            <i class="fas fa-crown me-2"></i>Upgrade to Premium
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Learning Content (Hidden by default) -->
+                <div class="container" id="mainLearningContent" style="display: none;">
+                    <!-- Welcome Header -->
+                    <div class="welcome-header">
+                        <div class="welcome-content text-center">
+                            <h1 class="welcome-title">Welcome back! 👋</h1>
+                            <p class="welcome-subtitle">Here's your microlearning for today</p>
+                            <div class="user-field-display">
+                                <i class="fas fa-graduation-cap me-2"></i>
+                                Learning: <span id="userFieldDisplay">Productivity</span>
+                                <button class="btn btn-sm btn-outline-light ms-3" id="changeTopicBtn" title="Change Learning Topic" style="display: none;">
+                                    <i class="fas fa-edit me-1"></i>Change Topic
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Field Selection (Hidden by default) -->
+                    <div class="field-selection" id="fieldSelection" style="display: none;">
+                        <h3 class="mb-3" id="fieldSelectionTitle">
+                            <i class="fas fa-graduation-cap me-2"></i>Choose Your Learning Field
+                        </h3>
+                        <p class="text-muted mb-4" id="fieldSelectionDescription">Select a field to receive personalized microlearning content daily.</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="productivity">
+                                    <h5><i class="fas fa-rocket me-2"></i>Productivity</h5>
+                                    <p class="mb-0 text-muted">Time management, focus, and efficiency techniques</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="leadership">
+                                    <h5><i class="fas fa-users me-2"></i>Leadership</h5>
+                                    <p class="mb-0 text-muted">Team management, communication, and decision-making</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="marketing">
+                                    <h5><i class="fas fa-bullhorn me-2"></i>Marketing</h5>
+                                    <p class="mb-0 text-muted">Digital marketing, branding, and customer engagement</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="technology">
+                                    <h5><i class="fas fa-laptop-code me-2"></i>Technology</h5>
+                                    <p class="mb-0 text-muted">Programming, AI, and emerging tech trends</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="finance">
+                                    <h5><i class="fas fa-chart-line me-2"></i>Finance</h5>
+                                    <p class="mb-0 text-muted">Personal finance, investing, and financial planning</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="field-option" data-field="health">
+                                    <h5><i class="fas fa-heartbeat me-2"></i>Health & Wellness</h5>
+                                    <p class="mb-0 text-muted">Mental health, fitness, and work-life balance</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Topic Input -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="custom-topic-section">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-lightbulb me-2"></i>Or Choose Your Own Topic
+                                    </h5>
+                                    <p class="text-muted mb-3">Enter any topic you're interested in learning about, and we'll provide you with the latest insights and trends.</p>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="customTopicInput" placeholder="e.g., artificial intelligence, sustainable fashion, quantum computing..." maxlength="50">
+                                        <button class="btn btn-outline-primary" type="button" id="addCustomTopicBtn">
+                                            <i class="fas fa-plus me-1"></i>Add Topic
+                                        </button>
+                                    </div>
+                                    <div class="custom-topics-container mt-3" id="customTopicsContainer">
+                                        <!-- Custom topics will be added here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-primary btn-lg" id="saveFieldBtn">
+                                <i class="fas fa-save me-2"></i>Save Field Selection
+                            </button>
+                            <button class="btn btn-outline-secondary btn-lg" id="cancelFieldBtn" style="display: none;">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Today's Lesson -->
+                    <div class="lesson-card" id="todayLesson" data-aos="fade-up">
+                        <div class="lesson-header">
+                            <h2 class="lesson-title" id="lessonTitle">Loading today's lesson...</h2>
+                            <span class="lesson-date" id="lessonDate"></span>
+                        </div>
+                        <div class="lesson-summary" id="lessonSummary">
+                            <div class="loading-spinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lesson-actions">
+                            <button class="btn-remind" id="remindLaterBtn">
+                                <i class="fas fa-clock me-2"></i>Remind Me Later
+                            </button>
+                            <button class="btn-link-task" id="linkTaskBtn">
+                                <i class="fas fa-link me-2"></i>Link to Task
+                            </button>
+                            <button class="btn-mark-read" id="markReadBtn">
+                                <i class="fas fa-check me-2"></i>Mark as Read
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Past Lessons -->
+                    <div class="past-lessons" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="mb-3">
+                            <i class="fas fa-history me-2"></i>Past Lessons
+                        </h3>
+                        <div id="pastLessonsContainer">
+                            <div class="loading-spinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="container" id="loadingState">
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <span class="ms-3">Loading microlearning content...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5" style="background: #000000 !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-check-double me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="text-light opacity-75 mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
+                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-light opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="footerThemeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Task Link Modal -->
+    <div class="modal fade" id="taskLinkModal" tabindex="-1" aria-labelledby="taskLinkModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content task-link-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskLinkModalLabel">
+                        <i class="fas fa-link me-2"></i>Link Lesson to Task
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Select a task to link this lesson with:</p>
+                    <div id="taskOptionsContainer">
+                        <div class="loading-spinner">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmLinkBtn">
+                        <i class="fas fa-link me-2"></i>Link Lesson
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-functions-compat.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/learn.js"></script>
+    
+    <!-- Font Awesome Check and Fallback -->
+    <script>
+        // Check if Font Awesome is loaded
+        function checkFontAwesome() {
+            const testIcon = document.createElement('i');
+            testIcon.className = 'fas fa-check';
+            testIcon.style.position = 'absolute';
+            testIcon.style.left = '-9999px';
+            document.body.appendChild(testIcon);
+            
+            const computedStyle = window.getComputedStyle(testIcon, ':before');
+            const content = computedStyle.getPropertyValue('content');
+            
+            document.body.removeChild(testIcon);
+            
+            if (content === 'none' || content === '') {
+                console.warn('Font Awesome not loaded, applying fallbacks...');
+                applyIconFallbacks();
+            } else {
+                console.log('Font Awesome loaded successfully');
+            }
+        }
+        
+        // Apply fallback icons using Unicode characters
+        function applyIconFallbacks() {
+            const iconMappings = {
+                'fa-check-double': '✓✓',
+                'fa-chart-line': '📈',
+                'fa-sign-in-alt': '🔑',
+                'fa-tasks': '📋',
+                'fa-graduation-cap': '🎓',
+                'fa-crown': '👑',
+                'fa-sign-out-alt': '🚪',
+                'fa-moon': '🌙',
+                'fa-sun': '☀️',
+                'fa-rocket': '🚀',
+                'fa-users': '👥',
+                'fa-bullhorn': '📢',
+                'fa-laptop-code': '💻',
+                'fa-heartbeat': '❤️',
+                'fa-lightbulb': '💡',
+                'fa-plus': '➕',
+                'fa-edit': '✏️',
+                'fa-save': '💾',
+                'fa-times': '✖️',
+                'fa-history': '📚',
+                'fa-clock': '⏰',
+                'fa-link': '🔗',
+                'fa-check': '✓',
+                'fa-star': '⭐',
+                'fa-twitter': '🐦',
+                'fa-linkedin': '💼',
+                'fa-github': '🐙',
+                'fa-youtube': '📺',
+                'fa-info-circle': 'ℹ️',
+                'fa-exclamation-circle': '⚠️',
+                'fa-book-open': '📖',
+                'fa-brain': '🧠'
+            };
+            
+            // Replace Font Awesome icons with Unicode fallbacks
+            Object.keys(iconMappings).forEach(iconClass => {
+                const elements = document.querySelectorAll(`.${iconClass}`);
+                elements.forEach(element => {
+                    element.textContent = iconMappings[iconClass];
+                    element.className = element.className.replace(/fas?|far?|fab?/g, 'icon-fallback');
+                });
+            });
+        }
+        
+        // Check Font Awesome when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkFontAwesome, 1000); // Check after 1 second to allow loading
+            
+            // Add a test icon to verify Font Awesome is working
+            const testIcon = document.createElement('div');
+            testIcon.innerHTML = '<i class="fas fa-star" style="color: gold; font-size: 2rem;"></i>';
+            testIcon.style.position = 'fixed';
+            testIcon.style.top = '10px';
+            testIcon.style.right = '10px';
+            testIcon.style.zIndex = '9999';
+            testIcon.style.background = 'rgba(0,0,0,0.8)';
+            testIcon.style.color = 'white';
+            testIcon.style.padding = '5px';
+            testIcon.style.borderRadius = '5px';
+            testIcon.title = 'Font Awesome Test Icon';
+            document.body.appendChild(testIcon);
+            
+            // Remove test icon after 5 seconds
+            setTimeout(() => {
+                if (testIcon.parentNode) {
+                    testIcon.parentNode.removeChild(testIcon);
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html> 

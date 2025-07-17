@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Team Assignment Fix</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem auto;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        .test-section {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .test-section.success {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        .test-section.warning {
+            border-color: #ffc107;
+            background-color: #fffbf0;
+        }
+        .test-section.danger {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.success { background-color: #28a745; }
+        .status-indicator.warning { background-color: #ffc107; }
+        .status-indicator.danger { background-color: #dc3545; }
+        .btn-test {
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-container">
+            <h1 class="text-center mb-4">
+                <i class="fas fa-users-cog text-primary me-2"></i>
+                Team Assignment Fix Test
+            </h1>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                This test verifies that the 'Assign to Team' section is properly available for premium users in the task page.
+            </div>
+
+            <div class="test-section" id="premiumStatusTest">
+                <h4>
+                    <span class="status-indicator warning" id="premiumStatusIndicator"></span>
+                    Premium Status Check
+                </h4>
+                <p>Checking if user has premium access...</p>
+                <div id="premiumStatusDetails"></div>
+            </div>
+
+            <div class="test-section" id="teamAssignmentTest">
+                <h4>
+                    <span class="status-indicator warning" id="teamAssignmentIndicator"></span>
+                    Team Assignment Section Test
+                </h4>
+                <p>Checking if team assignment section is visible for premium users...</p>
+                <div id="teamAssignmentDetails"></div>
+            </div>
+
+            <div class="test-section" id="navigationTest">
+                <h4>
+                    <span class="status-indicator warning" id="navigationIndicator"></span>
+                    Navigation Test
+                </h4>
+                <p>Testing navigation to task page...</p>
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-primary btn-test" onclick="testTaskPage()">
+                        <i class="fas fa-tasks me-2"></i>Test Task Page
+                    </button>
+                    <button class="btn btn-success btn-test" onclick="testTeamPage()">
+                        <i class="fas fa-users me-2"></i>Test Team Page
+                    </button>
+                    <button class="btn btn-info btn-test" onclick="runAllTests()">
+                        <i class="fas fa-play me-2"></i>Run All Tests
+                    </button>
+                </div>
+            </div>
+
+            <div class="test-section" id="resultsTest">
+                <h4>
+                    <i class="fas fa-clipboard-check text-primary me-2"></i>
+                    Test Results
+                </h4>
+                <div id="testResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Test results storage
+        let testResults = {
+            premiumStatus: false,
+            teamAssignmentVisible: false,
+            navigationWorking: false
+        };
+
+        // Update status indicator
+        function updateStatusIndicator(elementId, status) {
+            const indicator = document.getElementById(elementId);
+            const section = indicator.closest('.test-section');
+            
+            indicator.className = `status-indicator ${status}`;
+            section.className = `test-section ${status}`;
+        }
+
+        // Test premium status
+        function testPremiumStatus() {
+            console.log('[Test] Checking premium status...');
+            
+            // Check multiple indicators
+            const indicators = {
+                bodyClass: document.body.classList.contains('premium-user'),
+                windowRole: window.userRole === 'premium',
+                windowPremium: window.isPremiumUser === true,
+                premiumBanner: document.getElementById('premiumBanner')?.style.display !== 'none'
+            };
+            
+            const isPremium = Object.values(indicators).some(Boolean);
+            testResults.premiumStatus = isPremium;
+            
+            const details = document.getElementById('premiumStatusDetails');
+            details.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Status:</strong> ${isPremium ? 'Premium' : 'Free'}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Indicators:</strong>
+                        <ul class="list-unstyled mt-1">
+                            <li>Body Class: ${indicators.bodyClass ? '✅' : '❌'}</li>
+                            <li>Window Role: ${indicators.windowRole ? '✅' : '❌'}</li>
+                            <li>Window Premium: ${indicators.windowPremium ? '✅' : '❌'}</li>
+                            <li>Premium Banner: ${indicators.premiumBanner ? '✅' : '❌'}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            updateStatusIndicator('premiumStatusIndicator', isPremium ? 'success' : 'danger');
+            
+            return isPremium;
+        }
+
+        // Test team assignment section
+        function testTeamAssignmentSection() {
+            console.log('[Test] Checking team assignment section...');
+            
+            // Navigate to task page to check the section
+            const taskPageUrl = 'task.html';
+            
+            // Create a hidden iframe to load the task page
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = taskPageUrl;
+            
+            iframe.onload = function() {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const teamSection = iframeDoc.getElementById('teamAssignmentSection');
+                    
+                    const isVisible = teamSection && 
+                                    teamSection.style.display !== 'none' && 
+                                    !teamSection.classList.contains('d-none');
+                    
+                    testResults.teamAssignmentVisible = isVisible;
+                    
+                    const details = document.getElementById('teamAssignmentDetails');
+                    details.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Section Found:</strong> ${teamSection ? '✅' : '❌'}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Visible:</strong> ${isVisible ? '✅' : '❌'}
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <strong>Section Details:</strong>
+                            <ul class="list-unstyled mt-1">
+                                <li>Display: ${teamSection?.style.display || 'N/A'}</li>
+                                <li>Classes: ${teamSection?.className || 'N/A'}</li>
+                                <li>Opacity: ${teamSection?.style.opacity || 'N/A'}</li>
+                            </ul>
+                        </div>
+                    `;
+                    
+                    updateStatusIndicator('teamAssignmentIndicator', isVisible ? 'success' : 'danger');
+                    
+                    // Clean up iframe
+                    document.body.removeChild(iframe);
+                    
+                } catch (error) {
+                    console.error('[Test] Error checking team assignment section:', error);
+                    updateStatusIndicator('teamAssignmentIndicator', 'danger');
+                }
+            };
+            
+            document.body.appendChild(iframe);
+        }
+
+        // Test navigation
+        function testNavigation() {
+            console.log('[Test] Testing navigation...');
+            
+            const taskPageUrl = 'task.html';
+            const teamPageUrl = 'team.html';
+            
+            // Test if pages exist
+            fetch(taskPageUrl, { method: 'HEAD' })
+                .then(response => {
+                    const taskPageExists = response.ok;
+                    
+                    return fetch(teamPageUrl, { method: 'HEAD' })
+                        .then(response => {
+                            const teamPageExists = response.ok;
+                            
+                            testResults.navigationWorking = taskPageExists && teamPageExists;
+                            
+                            const details = document.getElementById('navigationTest').querySelector('p');
+                            details.innerHTML = `
+                                <strong>Navigation Status:</strong>
+                                <ul class="list-unstyled mt-1">
+                                    <li>Task Page: ${taskPageExists ? '✅ Available' : '❌ Not Found'}</li>
+                                    <li>Team Page: ${teamPageExists ? '✅ Available' : '❌ Not Found'}</li>
+                                </ul>
+                            `;
+                            
+                            updateStatusIndicator('navigationIndicator', testResults.navigationWorking ? 'success' : 'danger');
+                        });
+                })
+                .catch(error => {
+                    console.error('[Test] Error testing navigation:', error);
+                    updateStatusIndicator('navigationIndicator', 'danger');
+                });
+        }
+
+        // Test task page
+        function testTaskPage() {
+            window.open('task.html', '_blank');
+        }
+
+        // Test team page
+        function testTeamPage() {
+            window.open('team.html', '_blank');
+        }
+
+        // Run all tests
+        function runAllTests() {
+            console.log('[Test] Running all tests...');
+            
+            // Clear previous results
+            document.getElementById('testResults').innerHTML = '';
+            
+            // Run tests
+            const premiumStatus = testPremiumStatus();
+            testTeamAssignmentSection();
+            testNavigation();
+            
+            // Show summary after a delay
+            setTimeout(() => {
+                showTestResults();
+            }, 2000);
+        }
+
+        // Show test results
+        function showTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            
+            const allPassed = Object.values(testResults).every(Boolean);
+            
+            resultsDiv.innerHTML = `
+                <div class="alert ${allPassed ? 'alert-success' : 'alert-warning'}">
+                    <h5><i class="fas ${allPassed ? 'fa-check-circle' : 'fa-exclamation-triangle'} me-2"></i>
+                        Test Summary
+                    </h5>
+                    <ul class="list-unstyled mb-0">
+                        <li>Premium Status: ${testResults.premiumStatus ? '✅ Pass' : '❌ Fail'}</li>
+                        <li>Team Assignment Visible: ${testResults.teamAssignmentVisible ? '✅ Pass' : '❌ Fail'}</li>
+                        <li>Navigation Working: ${testResults.navigationWorking ? '✅ Pass' : '❌ Fail'}</li>
+                    </ul>
+                    ${allPassed ? 
+                        '<p class="mb-0 mt-2"><strong>✅ All tests passed! The team assignment fix is working correctly.</strong></p>' :
+                        '<p class="mb-0 mt-2"><strong>⚠️ Some tests failed. Please check the individual test results above.</strong></p>'
+                    }
+                </div>
+            `;
+        }
+
+        // Initialize tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Test] Test page loaded, initializing...');
+            
+            // Run initial tests
+            setTimeout(() => {
+                testPremiumStatus();
+                testNavigation();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

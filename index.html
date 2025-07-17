@@ -1,0 +1,3806 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickNotes AI – Effortless, AI-Powered Notes & Tasks</title>
+    <meta name="description" content="QuickNotes AI is your second brain. Capture thoughts instantly, organize tasks, and get AI-powered insights. The most beautiful, modern note-taking and productivity platform.">
+    <meta property="og:title" content="QuickNotes AI – Effortless, AI-Powered Notes & Tasks">
+    <meta property="og:description" content="QuickNotes AI is your second brain. Capture thoughts instantly, organize tasks, and get AI-powered insights. The most beautiful, modern note-taking and productivity platform.">
+    <meta property="og:image" content="/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+            min-height: 100vh;
+        }
+        
+        /* Dark theme body background */
+        [data-bs-theme="dark"] body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        }
+        
+        /* Enhanced background for sections */
+        .bg-light {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        }
+        
+        .py-5 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+        
+        /* Apply consistent background to all sections except hero */
+        section:not(.hero-section) {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+        
+        /* Dark theme sections */
+        [data-bs-theme="dark"] section:not(.hero-section) {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+        
+        /* Enhanced text visibility */
+        .text-muted {
+            color: #374151 !important;
+            font-weight: 500;
+        }
+        
+        .text-white {
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Enhanced text contrast for better visibility */
+        .hero-title {
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            color: #f1f5f9 !important;
+            font-weight: 500;
+        }
+        
+        .display-4, .display-5 {
+            color: #1e293b !important;
+        }
+        
+        .lead {
+            color: #475569 !important;
+            font-weight: 500;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #1e293b !important;
+        }
+        
+        p {
+            color: #475569 !important;
+        }
+        
+        /* Text colors for light sections */
+        .bg-light .display-4,
+        .bg-light .display-5,
+        .bg-light h1,
+        .bg-light h2,
+        .bg-light h3,
+        .bg-light h4,
+        .bg-light h5,
+        .bg-light h6 {
+            color: #1e293b !important;
+        }
+        
+        .bg-light .lead,
+        .bg-light p {
+            color: #475569 !important;
+            font-weight: 500;
+        }
+        
+        .bg-light .text-muted {
+            color: #64748b !important;
+            font-weight: 500;
+        }
+        
+        /* Dark theme text colors for all sections */
+        [data-bs-theme="dark"] .display-4,
+        [data-bs-theme="dark"] .display-5,
+        [data-bs-theme="dark"] h1,
+        [data-bs-theme="dark"] h2,
+        [data-bs-theme="dark"] h3,
+        [data-bs-theme="dark"] h4,
+        [data-bs-theme="dark"] h5,
+        [data-bs-theme="dark"] h6 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .lead,
+        [data-bs-theme="dark"] p {
+            color: #e5e7eb !important;
+        }
+        
+        [data-bs-theme="dark"] .text-muted {
+            color: #d1d5db !important;
+        }
+        
+        /* Text colors for sections with colored backgrounds */
+        .bg-light .display-4,
+        .bg-light .display-5,
+        .bg-light h1,
+        .bg-light h2,
+        .bg-light h3,
+        .bg-light h4,
+        .bg-light h5,
+        .bg-light h6 {
+            color: #1e293b !important;
+        }
+        
+        .bg-light .lead,
+        .bg-light p {
+            color: #475569 !important;
+            font-weight: 500;
+        }
+        
+        .bg-light .text-muted {
+            color: #64748b !important;
+            font-weight: 500;
+        }
+        
+        /* Text colors for regular sections */
+        section:not(.hero-section) .display-4,
+        section:not(.hero-section) .display-5,
+        section:not(.hero-section) h1,
+        section:not(.hero-section) h2,
+        section:not(.hero-section) h3,
+        section:not(.hero-section) h4,
+        section:not(.hero-section) h5,
+        section:not(.hero-section) h6 {
+            color: #1e293b !important;
+        }
+        
+        section:not(.hero-section) .lead,
+        section:not(.hero-section) p {
+            color: #475569 !important;
+        }
+        
+        section:not(.hero-section) .text-muted {
+            color: #64748b !important;
+        }
+        
+        /* Dark theme compatibility */
+        [data-bs-theme="dark"] body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        }
+        
+        [data-bs-theme="dark"] .bg-light {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+        }
+        
+        [data-bs-theme="dark"] .py-5 {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+        
+        [data-bs-theme="dark"] .text-muted {
+            color: #d1d5db !important;
+            font-weight: 500;
+        }
+        
+        [data-bs-theme="dark"] .bg-light {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+        }
+        
+        [data-bs-theme="dark"] .py-5 {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        }
+        
+        [data-bs-theme="dark"] .feature-card {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #f9fafb;
+        }
+        
+        /* Feature cards on colored backgrounds */
+        section:not(.hero-section) .feature-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px -5px rgba(0,0,0,0.2);
+        }
+        
+        section:not(.hero-section) .feature-card h4,
+        section:not(.hero-section) .feature-card h5,
+        section:not(.hero-section) .feature-card h6 {
+            color: #1e293b !important;
+        }
+        
+        section:not(.hero-section) .feature-card p {
+            color: #475569 !important;
+        }
+        
+        section:not(.hero-section) .feature-card .text-muted {
+            color: #64748b !important;
+        }
+        
+        /* Dark theme feature cards on colored backgrounds */
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px -5px rgba(0,0,0,0.3);
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card h4,
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card h5,
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card h6 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card p {
+            color: #d1d5db !important;
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) .feature-card .text-muted {
+            color: #9ca3af !important;
+        }
+        
+        [data-bs-theme="dark"] .feature-card h4,
+        [data-bs-theme="dark"] .feature-card h5,
+        [data-bs-theme="dark"] .feature-card h6 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .feature-card p {
+            color: #d1d5db !important;
+        }
+        
+        [data-bs-theme="dark"] .feature-card .text-muted {
+            color: #9ca3af !important;
+        }
+        
+        [data-bs-theme="dark"] .lead {
+            color: #e5e7eb !important;
+        }
+        
+        [data-bs-theme="dark"] .display-4,
+        [data-bs-theme="dark"] .display-5 {
+            color: #f9fafb !important;
+        }
+        
+        /* Dark theme text colors for light sections */
+        [data-bs-theme="dark"] .bg-light .display-4,
+        [data-bs-theme="dark"] .bg-light .display-5,
+        [data-bs-theme="dark"] .bg-light h1,
+        [data-bs-theme="dark"] .bg-light h2,
+        [data-bs-theme="dark"] .bg-light h3,
+        [data-bs-theme="dark"] .bg-light h4,
+        [data-bs-theme="dark"] .bg-light h5,
+        [data-bs-theme="dark"] .bg-light h6 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .bg-light .lead,
+        [data-bs-theme="dark"] .bg-light p {
+            color: #e5e7eb !important;
+        }
+        
+        [data-bs-theme="dark"] .bg-light .text-muted {
+            color: #d1d5db !important;
+        }
+        
+
+        
+        [data-bs-theme="dark"] h1, 
+        [data-bs-theme="dark"] h2, 
+        [data-bs-theme="dark"] h3, 
+        [data-bs-theme="dark"] h4, 
+        [data-bs-theme="dark"] h5, 
+        [data-bs-theme="dark"] h6 {
+            color: #f8fafc !important;
+        }
+        
+        [data-bs-theme="dark"] p {
+            color: #cbd5e1 !important;
+        }
+        
+        [data-bs-theme="dark"] .text-white {
+            color: #f8fafc !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        /* Dark theme text colors for regular sections */
+        [data-bs-theme="dark"] section:not(.hero-section) .display-4,
+        [data-bs-theme="dark"] section:not(.hero-section) .display-5,
+        [data-bs-theme="dark"] section:not(.hero-section) h1,
+        [data-bs-theme="dark"] section:not(.hero-section) h2,
+        [data-bs-theme="dark"] section:not(.hero-section) h3,
+        [data-bs-theme="dark"] section:not(.hero-section) h4,
+        [data-bs-theme="dark"] section:not(.hero-section) h5,
+        [data-bs-theme="dark"] section:not(.hero-section) h6 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) .lead,
+        [data-bs-theme="dark"] section:not(.hero-section) p {
+            color: #e5e7eb !important;
+        }
+        
+        [data-bs-theme="dark"] section:not(.hero-section) .text-muted {
+            color: #d1d5db !important;
+        }
+        
+
+        
+        /* Dark theme bubble colors */
+        [data-bs-theme="dark"] .background-bubble {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        [data-bs-theme="dark"] .bubble-3d {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        [data-bs-theme="dark"] .detail-bubble {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
+        }
+        .hero-section {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(120deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Light theme hero section */
+        .hero-section {
+            background: linear-gradient(120deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        /* Dark theme hero section */
+        [data-bs-theme="dark"] .hero-section {
+            background: linear-gradient(120deg, #1e40af 0%, #1e3a8a 100%);
+        }
+        
+        /* Hero section text colors - Light theme */
+        .hero-section .hero-title,
+        .hero-section h1,
+        .hero-section h2,
+        .hero-section h3,
+        .hero-section h4,
+        .hero-section h5,
+        .hero-section h6 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            font-weight: 800;
+        }
+        
+        .hero-section .hero-subtitle,
+        .hero-section .lead,
+        .hero-section p {
+            color: #f8fafc !important;
+            font-weight: 500;
+        }
+        
+        .hero-section .text-muted {
+            color: #e2e8f0 !important;
+            font-weight: 500;
+        }
+        
+        /* Hero section text colors - Dark theme */
+        [data-bs-theme="dark"] .hero-section .hero-title,
+        [data-bs-theme="dark"] .hero-section h1,
+        [data-bs-theme="dark"] .hero-section h2,
+        [data-bs-theme="dark"] .hero-section h3,
+        [data-bs-theme="dark"] .hero-section h4,
+        [data-bs-theme="dark"] .hero-section h5,
+        [data-bs-theme="dark"] .hero-section h6 {
+            color: #ffffff !important;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+            font-weight: 800;
+        }
+        
+        [data-bs-theme="dark"] .hero-section .hero-subtitle,
+        [data-bs-theme="dark"] .hero-section .lead,
+        [data-bs-theme="dark"] .hero-section p {
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+        
+        [data-bs-theme="dark"] .hero-section .text-muted {
+            color: #f1f5f9 !important;
+            font-weight: 500;
+        }
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+        
+        /* Force hero section text colors to override all other styles */
+        .hero-section * {
+            color: inherit;
+        }
+        
+        .hero-section .hero-title,
+        .hero-section h1,
+        .hero-section h2,
+        .hero-section h3,
+        .hero-section h4,
+        .hero-section h5,
+        .hero-section h6 {
+            color: #ffffff !important;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.5);
+            font-weight: 800;
+        }
+        
+        .hero-section .hero-subtitle,
+        .hero-section .lead,
+        .hero-section p {
+            color: #ffffff !important;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .hero-section .text-muted {
+            color: #f1f5f9 !important;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        /* New Hero Section Styles */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Hero Background Elements */
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.6;
+            animation: float-orb 20s ease-in-out infinite;
+        }
+        
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff6b6b, transparent);
+            top: -150px;
+            right: -150px;
+            animation-delay: 0s;
+            z-index: 1;
+        }
+        
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #4ecdc4, transparent);
+            bottom: -200px;
+            left: -200px;
+            animation-delay: 5s;
+            z-index: 1;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #a8edea, transparent);
+            top: 60%;
+            right: 5%;
+            animation-delay: 10s;
+            z-index: 1;
+        }
+        
+        .mesh-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+        }
+        
+        /* Hero Content */
+        .hero-content {
+            position: relative;
+            z-index: 3;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Hero Stats */
+        .hero-stats {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff !important;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #f1f5f9 !important;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        /* Company Logos */
+        .company-logos {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .company-logo {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .company-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Hero Visual Container */
+        .hero-visual-container {
+            position: relative;
+            z-index: 3;
+            height: 600px;
+        }
+        
+        /* 3D Device Mockup */
+        .hero-device-mockup {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .device-screen {
+            width: 300px;
+            height: 500px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-interface {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .app-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .app-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .note-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .note-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .note-text {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Professional Floating Elements */
+        .floating-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float-gentle 4s ease-in-out infinite;
+            z-index: 3;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-element:hover {
+            transform: scale(1.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .element-icon {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Individual bubble positioning and colors - Randomly distributed */
+        .bubble-1 {
+            top: 8%;
+            left: 5%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            animation-delay: 0s;
+        }
+        
+        .bubble-2 {
+            top: 18%;
+            right: 8%;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            animation-delay: 0.5s;
+        }
+        
+        .bubble-3 {
+            top: 38%;
+            left: 3%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            animation-delay: 1s;
+        }
+        
+        .bubble-4 {
+            top: 28%;
+            right: 3%;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            animation-delay: 1.5s;
+        }
+        
+        .bubble-5 {
+            top: 48%;
+            left: 8%;
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            animation-delay: 2s;
+        }
+        
+        .bubble-6 {
+            top: 58%;
+            right: 12%;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            animation-delay: 2.5s;
+        }
+        
+        .bubble-7 {
+            top: 68%;
+            left: 15%;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            animation-delay: 3s;
+        }
+        
+        .bubble-8 {
+            top: 78%;
+            right: 6%;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            animation-delay: 3.5s;
+        }
+        
+        .bubble-9 {
+            top: 88%;
+            left: 12%;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            animation-delay: 4s;
+        }
+        
+        .bubble-10 {
+            top: 98%;
+            right: 18%;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            animation-delay: 4.5s;
+        }
+        
+
+        
+        /* Data Visualization */
+        .data-visualization {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            height: 60px;
+            z-index: 2;
+        }
+        
+        .chart-bar {
+            width: 8px;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 4px;
+            animation: chart-animate 3s ease-in-out infinite;
+        }
+        
+        .bar-1 { height: 40px; animation-delay: 0s; }
+        .bar-2 { height: 60px; animation-delay: 0.2s; }
+        .bar-3 { height: 30px; animation-delay: 0.4s; }
+        .bar-4 { height: 50px; animation-delay: 0.6s; }
+        .bar-5 { height: 35px; animation-delay: 0.8s; }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: particle-float 4s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        .particle-1 { top: 15%; left: 25%; animation-delay: 0s; }
+        .particle-2 { top: 35%; right: 25%; animation-delay: 1s; }
+        .particle-3 { bottom: 25%; left: 35%; animation-delay: 2s; }
+        .particle-4 { top: 55%; left: 55%; animation-delay: 3s; }
+        .particle-5 { bottom: 45%; right: 25%; animation-delay: 0.5s; }
+        
+        /* Use Cases & Industries Section - Text Visibility */
+        .use-case-card {
+            background: #ffffff !important;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .use-case-card h5 {
+            color: #1e293b !important;
+            font-weight: 700;
+        }
+        
+        .use-case-card p {
+            color: #475569 !important;
+            font-weight: 500;
+        }
+        
+        .use-case-card .text-muted {
+            color: #64748b !important;
+            font-weight: 500;
+        }
+        
+        .use-case-card ul li {
+            color: #64748b !important;
+            font-weight: 500;
+        }
+        
+        /* Dark theme for Use Cases section */
+        [data-bs-theme="dark"] .use-case-card {
+            background: #1f2937 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-bs-theme="dark"] .use-case-card h5 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card p {
+            color: #d1d5db !important;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card .text-muted {
+            color: #9ca3af !important;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card ul li {
+            color: #9ca3af !important;
+        }
+        
+        /* Section title and subtitle visibility */
+        .bg-light h2.display-4 {
+            color: #1e293b !important;
+            font-weight: 800;
+        }
+        
+        .bg-light .lead.text-muted {
+            color: #64748b !important;
+            font-weight: 500;
+        }
+        
+        [data-bs-theme="dark"] .bg-light h2.display-4 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .bg-light .lead.text-muted {
+            color: #d1d5db !important;
+        }
+        
+        /* Responsive positioning for floating elements and data visualization */
+        @media (max-width: 1200px) {
+            .floating-element {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .element-icon {
+                font-size: 1.2rem;
+            }
+            
+            .bubble-1 { top: 6%; left: 3%; }
+            .bubble-2 { top: 16%; right: 6%; }
+            .bubble-3 { top: 36%; left: 2%; }
+            .bubble-4 { top: 26%; right: 2%; }
+            .bubble-5 { top: 46%; left: 6%; }
+            .bubble-6 { top: 56%; right: 10%; }
+            .bubble-7 { top: 66%; left: 12%; }
+            .bubble-8 { top: 76%; right: 4%; }
+            .bubble-9 { top: 86%; left: 10%; }
+            .bubble-10 { top: 96%; right: 15%; }
+        }
+        
+        @media (max-width: 768px) {
+            .floating-element {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .element-icon {
+                font-size: 1rem;
+            }
+            
+            .bubble-1 { top: 5%; left: 2%; }
+            .bubble-2 { top: 15%; right: 4%; }
+            .bubble-3 { top: 35%; left: 1%; }
+            .bubble-4 { top: 25%; right: 1%; }
+            .bubble-5 { top: 45%; left: 4%; }
+            .bubble-6 { top: 55%; right: 8%; }
+            .bubble-7 { top: 65%; left: 10%; }
+            .bubble-8 { top: 75%; right: 3%; }
+            .bubble-9 { top: 85%; left: 8%; }
+            .bubble-10 { top: 95%; right: 12%; }
+            
+            .data-visualization {
+                bottom: 3%;
+                height: 50px;
+            }
+            
+            .particle {
+                width: 3px;
+                height: 3px;
+            }
+        }
+        
+        /* Dark theme hero section - stronger overrides */
+        [data-bs-theme="dark"] .hero-section .hero-title,
+        [data-bs-theme="dark"] .hero-section h1,
+        [data-bs-theme="dark"] .hero-section h2,
+        [data-bs-theme="dark"] .hero-section h3,
+        [data-bs-theme="dark"] .hero-section h4,
+        [data-bs-theme="dark"] .hero-section h5,
+        [data-bs-theme="dark"] .hero-section h6 {
+            color: #ffffff !important;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            font-weight: 800;
+        }
+        
+        [data-bs-theme="dark"] .hero-section .hero-subtitle,
+        [data-bs-theme="dark"] .hero-section .lead,
+        [data-bs-theme="dark"] .hero-section p {
+            color: #ffffff !important;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        
+        [data-bs-theme="dark"] .hero-section .text-muted {
+            color: #f8fafc !important;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.92);
+            margin-bottom: 2.2rem;
+            font-weight: 500;
+        }
+        .hero-cta {
+            font-size: 1.15rem;
+            padding: 0.85rem 2.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            box-shadow: 0 4px 24px 0 rgba(59,130,246,0.2);
+            background: #ffffff !important;
+            color: #1d4ed8 !important;
+            border: none;
+        }
+        
+        .hero-cta:hover {
+            background: #f8fafc !important;
+            color: #1e40af !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px 0 rgba(59,130,246,0.3);
+        }
+        
+        /* Dark theme hero buttons */
+        [data-bs-theme="dark"] .hero-cta {
+            background: #ffffff !important;
+            color: #1e40af !important;
+        }
+        
+        [data-bs-theme="dark"] .hero-cta:hover {
+            background: #f8fafc !important;
+            color: #1e3a8a !important;
+        }
+        .hero-social-proof {
+            margin-top: 2.5rem;
+            opacity: 0.92;
+        }
+        .hero-social-proof img {
+            height: 32px;
+            margin-right: 1.5rem;
+            opacity: 0.7;
+        }
+        
+        .hero-social-proof p {
+            color: #e2e8f0 !important;
+            font-weight: 500;
+        }
+        
+        /* Dark theme hero social proof */
+        [data-bs-theme="dark"] .hero-social-proof p {
+            color: #f1f5f9 !important;
+        }
+        /* Feature Cards with Enhanced Animations */
+        .feature-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px -5px rgb(0 0 0 / 0.1), 0 4px 10px -2px rgb(0 0 0 / 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Running lines effect */
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        /* Spark effects */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        /* Additional spark effects for variety */
+        .feature-card:nth-child(odd)::before {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            animation-delay: 0.5s;
+        }
+        
+        .feature-card:nth-child(3n)::before {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            animation-delay: 1s;
+        }
+        
+        .feature-card:nth-child(4n)::before {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            animation-delay: 1.5s;
+        }
+        
+        /* Running lines with different colors */
+        .feature-card:nth-child(2n)::after {
+            background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+        }
+        
+        .feature-card:nth-child(3n)::after {
+            background: linear-gradient(90deg, transparent, #4ecdc4, transparent);
+        }
+        
+        .feature-card:nth-child(4n)::after {
+            background: linear-gradient(90deg, transparent, #a8edea, transparent);
+        }
+        
+        .feature-card:nth-child(5n)::after {
+            background: linear-gradient(90deg, transparent, #f093fb, transparent);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            border-color: #6366f1;
+        }
+
+        .feature-card:nth-child(odd):hover {
+            transform: translateY(-8px) scale(1.02) rotate(1deg);
+        }
+
+        .feature-card:nth-child(even):hover {
+            transform: translateY(-8px) scale(1.02) rotate(-1deg);
+        }
+
+        /* Enhanced Feature Icons with Animations */
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* Individual icon colors */
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            box-shadow: 0 10px 25px rgba(168, 237, 234, 0.3);
+        }
+        
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            box-shadow: 0 10px 25px rgba(255, 154, 158, 0.3);
+        }
+        
+        .feature-card:nth-child(5) .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card:nth-child(6) .feature-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
+        }
+        
+        .feature-card:nth-child(7) .feature-icon {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .feature-card:nth-child(8) .feature-icon {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);
+        }
+        
+        .feature-card:nth-child(9) .feature-icon {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            box-shadow: 0 10px 25px rgba(168, 237, 234, 0.3);
+        }
+        
+        .feature-card:nth-child(10) .feature-icon {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            box-shadow: 0 10px 25px rgba(255, 154, 158, 0.3);
+        }
+        
+        .feature-card:nth-child(11) .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card:nth-child(12) .feature-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-card:hover .feature-icon::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        /* Floating Animation for Icons */
+        .feature-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(4) .feature-icon {
+            animation-delay: 0.6s;
+        }
+
+        .feature-card:nth-child(5) .feature-icon {
+            animation-delay: 0.8s;
+        }
+
+        .feature-card:nth-child(6) .feature-icon {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(2deg); }
+            50% { transform: translateY(-25px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-2deg); }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+            50% { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+        }
+        
+        @keyframes float-bubble {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1); 
+                opacity: 0.6;
+            }
+            25% { 
+                transform: translateY(-20px) translateX(10px) scale(1.1); 
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-40px) translateX(-5px) scale(0.9); 
+                opacity: 1;
+            }
+            75% { 
+                transform: translateY(-20px) translateX(-15px) scale(1.05); 
+                opacity: 0.7;
+            }
+        }
+        
+        @keyframes float-bubble-3d {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1) rotate(0deg); 
+                opacity: 0.7;
+                box-shadow: 0 8px 32px rgba(255,255,255,0.2);
+            }
+            20% { 
+                transform: translateY(-25px) translateX(15px) scale(1.15) rotate(5deg); 
+                opacity: 0.9;
+                box-shadow: 0 12px 48px rgba(255,255,255,0.3);
+            }
+            40% { 
+                transform: translateY(-50px) translateX(-10px) scale(0.85) rotate(-3deg); 
+                opacity: 1;
+                box-shadow: 0 15px 60px rgba(255,255,255,0.4);
+            }
+            60% { 
+                transform: translateY(-30px) translateX(-20px) scale(1.1) rotate(8deg); 
+                opacity: 0.8;
+                box-shadow: 0 10px 40px rgba(255,255,255,0.25);
+            }
+            80% { 
+                transform: translateY(-15px) translateX(5px) scale(0.95) rotate(-2deg); 
+                opacity: 0.9;
+                box-shadow: 0 6px 24px rgba(255,255,255,0.2);
+            }
+        }
+        
+        @keyframes float-detail {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1); 
+                opacity: 0.8;
+            }
+            33% { 
+                transform: translateY(-15px) translateX(8px) scale(1.2); 
+                opacity: 1;
+            }
+            66% { 
+                transform: translateY(-25px) translateX(-5px) scale(0.8); 
+                opacity: 0.9;
+            }
+        }
+        
+        /* Enhanced floating elements */
+        .floating-element {
+            transition: all 0.3s ease;
+        }
+        
+        .floating-element:hover {
+            transform: scale(1.2) rotate(10deg);
+            animation-play-state: paused;
+        }
+        
+        /* Sparkle effects */
+        .sparkle {
+            pointer-events: none;
+        }
+        
+        /* Background bubble styling */
+        .background-bubble {
+            pointer-events: none;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .background-bubble:hover {
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+        
+        /* 3D bubble styling */
+        .bubble-3d {
+            z-index: 2;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .bubble-3d:hover {
+            transform: scale(1.3) rotate(10deg);
+            box-shadow: 0 20px 60px rgba(255,255,255,0.4) !important;
+        }
+        
+        /* Detail bubble styling */
+        .detail-bubble {
+            z-index: 3;
+            filter: drop-shadow(0 2px 8px rgba(255,255,255,0.3));
+        }
+        
+        .detail-bubble:hover {
+            transform: scale(1.5);
+            filter: drop-shadow(0 4px 16px rgba(255,255,255,0.5));
+        }
+        
+        /* Hero section positioning for bubbles */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Additional floating elements for sections */
+        .section-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        .section-sparkle:nth-child(2n) {
+            animation-delay: 1s;
+        }
+        
+        .section-sparkle:nth-child(3n) {
+            animation-delay: 2s;
+        }
+        
+        /* Enhanced section backgrounds */
+        .py-5 {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .py-5::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Performance optimizations */
+        .feature-card {
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        .floating-element {
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Optimized animations for better performance */
+        @media (prefers-reduced-motion: reduce) {
+            .floating-element,
+            .sparkle,
+            .feature-card::after,
+            .feature-card::before {
+                animation: none;
+            }
+        }
+        
+        /* Intersection Observer for animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s ease-out;
+        }
+        
+        .animate-on-scroll.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pulse Animation for Premium Card */
+        .feature-card.border-primary {
+            animation: pulse 2s infinite;
+        }
+        
+        /* New Hero Animations */
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+
+        
+        @keyframes chart-animate {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.2); }
+        }
+        
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.7; }
+            50% { transform: translateY(-30px) translateX(10px); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+            50% { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1), 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            100% { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        }
+
+        /* Feature List Items Animation */
+        .feature-card ul li {
+            transition: all 0.3s ease;
+            transform: translateX(0);
+        }
+
+        .feature-card:hover ul li {
+            transform: translateX(5px);
+        }
+
+        .feature-card:hover ul li:nth-child(1) { transition-delay: 0.1s; }
+        .feature-card:hover ul li:nth-child(2) { transition-delay: 0.2s; }
+        .feature-card:hover ul li:nth-child(3) { transition-delay: 0.3s; }
+        .feature-card:hover ul li:nth-child(4) { transition-delay: 0.4s; }
+
+        /* Check Icon Animation */
+        .feature-card ul li i {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover ul li i {
+            transform: scale(1.2);
+            color: #10b981 !important;
+        }
+
+        /* Section Title Animation */
+        .features-section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .features-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transform: translateX(-50%);
+            transition: width 0.6s ease;
+        }
+
+        .features-section-title.animate::after {
+            width: 100px;
+        }
+
+        /* Gradient Text Animation */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Step Numbers */
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto;
+        }
+
+        /* Feature Badges */
+        .feature-badge {
+            width: 50px;
+            height: 50px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Testimonial Cards */
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+        }
+
+        /* Comparison Card */
+        .comparison-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid #6366f1;
+            color: #6366f1;
+            background: transparent;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: #6366f1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        /* Navigation */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #6366f1 !important;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #1f2937 !important;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #6366f1 !important;
+        }
+        
+        /* Dark theme navigation */
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.9) !important;
+            border-bottom: 1px solid #374151;
+        }
+        
+        [data-bs-theme="dark"] .navbar-brand {
+            color: #6366f1 !important;
+        }
+        
+        [data-bs-theme="dark"] .nav-link {
+            color: #e5e7eb !important;
+        }
+        
+        [data-bs-theme="dark"] .nav-link:hover {
+            color: #6366f1 !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* New Section Styles */
+        .use-case-card, .testimonial-card, .integration-card, .enterprise-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+        }
+        
+        /* Card text colors */
+        .use-case-card h5,
+        .testimonial-card h5,
+        .integration-card h5,
+        .enterprise-card h5 {
+            color: #1e293b !important;
+            font-weight: 600;
+        }
+        
+        .use-case-card p,
+        .testimonial-card p,
+        .integration-card p,
+        .enterprise-card p {
+            color: #475569 !important;
+        }
+        
+        .use-case-card .text-muted,
+        .testimonial-card .text-muted,
+        .integration-card .text-muted,
+        .enterprise-card .text-muted {
+            color: #64748b !important;
+        }
+        
+        /* Dark theme cards */
+        [data-bs-theme="dark"] .use-case-card,
+        [data-bs-theme="dark"] .testimonial-card,
+        [data-bs-theme="dark"] .integration-card,
+        [data-bs-theme="dark"] .enterprise-card {
+            background: #1f2937;
+            border-color: #374151;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card h5,
+        [data-bs-theme="dark"] .testimonial-card h5,
+        [data-bs-theme="dark"] .integration-card h5,
+        [data-bs-theme="dark"] .enterprise-card h5 {
+            color: #f9fafb !important;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card p,
+        [data-bs-theme="dark"] .testimonial-card p,
+        [data-bs-theme="dark"] .integration-card p,
+        [data-bs-theme="dark"] .enterprise-card p {
+            color: #d1d5db !important;
+        }
+        
+        [data-bs-theme="dark"] .use-case-card .text-muted,
+        [data-bs-theme="dark"] .testimonial-card .text-muted,
+        [data-bs-theme="dark"] .integration-card .text-muted,
+        [data-bs-theme="dark"] .enterprise-card .text-muted {
+            color: #9ca3af !important;
+        }
+
+        .use-case-card:hover, .testimonial-card:hover, .integration-card:hover, .enterprise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            border-color: #6366f1;
+        }
+
+        .use-case-icon img, .enterprise-icon img {
+            transition: all 0.4s ease;
+        }
+
+        .use-case-card:hover .use-case-icon img, .enterprise-card:hover .enterprise-icon img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .integration-card {
+            transition: all 0.3s ease;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px -10px rgb(0 0 0 / 0.2);
+        }
+
+        .integration-card img {
+            transition: all 0.3s ease;
+        }
+
+        .integration-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .analytics-showcase img, .mobile-showcase img, .integration-showcase img {
+            border-radius: 20px;
+            box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .analytics-showcase:hover img, .mobile-showcase:hover img, .integration-showcase:hover img {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.2);
+        }
+
+        /* Testimonial Card Enhancements */
+        .testimonial-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 4rem;
+            color: #6366f1;
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        /* Security Icon Enhancements */
+        .security-icon {
+            transition: all 0.3s ease;
+        }
+
+        .security-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer Link Enhancements */
+        .footer-link {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #6366f1;
+            transform: translateX(5px);
+        }
+        
+        /* Footer text colors */
+        .footer h5 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .footer .text-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /* Trusted by Teams Worldwide section text colors */
+        .testimonial-card {
+            background: var(--bs-body-bg) !important;
+            border: 1px solid var(--bs-border-color) !important;
+        }
+
+        .testimonial-card h6 {
+            color: var(--bs-body-color) !important;
+        }
+
+        .testimonial-card p {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        .testimonial-card .text-muted {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        .testimonial-card small {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        /* Seamless Integrations section text colors */
+        .integration-card {
+            background: var(--bs-body-bg) !important;
+            border: 1px solid var(--bs-border-color) !important;
+        }
+
+        .integration-card h6 {
+            color: var(--bs-body-color) !important;
+        }
+
+        .integration-card small {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        /* Enterprise-Grade Features section text colors */
+        .enterprise-card {
+            background: var(--bs-body-bg) !important;
+            border: 1px solid var(--bs-border-color) !important;
+        }
+
+        .enterprise-card h5 {
+            color: var(--bs-body-color) !important;
+        }
+
+        .enterprise-card p {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        .enterprise-card .text-muted {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        /* Section headings and text for all sections */
+        .py-5 h2, .py-5 .display-4 {
+            color: var(--bs-body-color) !important;
+        }
+
+        .py-5 .lead {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        .py-5 .text-muted {
+            color: var(--bs-secondary-color) !important;
+        }
+
+        /* Footer enhanced visibility - Matching task page styling */
+        .footer {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+        }
+
+        /* Ensure footer stays black in both themes - Override any theme changes */
+        [data-bs-theme="light"] .footer,
+        [data-bs-theme="dark"] .footer,
+        .footer.bg-dark,
+        footer.bg-dark {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+        }
+
+        /* Additional specificity to override Bootstrap theme classes */
+        footer.bg-dark,
+        .footer.bg-dark,
+        [data-bs-theme="light"] footer.bg-dark,
+        [data-bs-theme="dark"] footer.bg-dark {
+            background: #000000 !important;
+        }
+
+        .footer h5, .footer h6 {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .footer h5 {
+            font-size: 1.1rem !important;
+            font-weight: bold !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .footer h6 {
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.3px !important;
+        }
+
+        .footer p {
+            color: #e2e8f0 !important;
+            line-height: 1.6 !important;
+            font-weight: 400 !important;
+        }
+
+        .footer .text-muted {
+            color: #94a3b8 !important;
+            font-weight: 400 !important;
+        }
+
+        .footer .opacity-75 {
+            color: #e2e8f0 !important;
+            opacity: 0.9 !important;
+            font-weight: 400 !important;
+        }
+
+        .footer small {
+            color: #64748b !important;
+            font-weight: 400 !important;
+        }
+
+        .footer .opacity-25 {
+            opacity: 0.3 !important;
+        }
+
+        .footer .border-light {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .footer hr {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            opacity: 0.5 !important;
+        }
+
+        .footer a {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .footer a:hover {
+            color: #6366f1 !important;
+            transform: translateX(3px) !important;
+        }
+
+        .footer .footer-link {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .footer .footer-link:hover {
+            color: #6366f1 !important;
+            transform: translateX(3px) !important;
+        }
+
+        /* Social media icons styling */
+        .footer .d-flex.gap-3 a {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            opacity: 0.8 !important;
+        }
+
+        .footer .d-flex.gap-3 a:hover {
+            color: #6366f1 !important;
+            opacity: 1 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Button styling in footer */
+        .footer .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            color: #ffffff !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .footer .btn-outline-light:hover {
+            background-color: #6366f1 !important;
+            border-color: #6366f1 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+        }
+
+
+
+        .footer .border-light {
+            border-color: var(--bs-light) !important;
+        }
+
+        .footer .opacity-25 {
+            opacity: 0.25 !important;
+        }
+
+        /* Enhanced Button Styles */
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+        }
+        
+        /* Button visibility in both themes */
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid #6366f1;
+            color: #6366f1 !important;
+            background: transparent;
+            font-weight: 600;
+        }
+        
+        .btn-outline-primary:hover {
+            background: #6366f1;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Dark theme buttons */
+        [data-bs-theme="dark"] .btn-outline-primary {
+            border-color: #6366f1;
+            color: #6366f1 !important;
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-primary:hover {
+            background: #6366f1;
+            color: #ffffff !important;
+        }
+
+        /* Hero Image and Floating Elements */
+        .hero-image-container {
+            position: relative;
+        }
+
+        .hero-placeholder {
+            transition: all 0.4s ease;
+        }
+
+        .hero-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4) !important;
+        }
+
+        .company-logo {
+            transition: all 0.3s ease;
+        }
+
+        .company-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .floating-card {
+            transition: all 0.3s ease;
+        }
+
+        .floating-card:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
+        }
+
+        /* Mobile Responsive Enhancements */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.1rem; }
+            .hero-section { min-height: 70vh; }
+            
+            .use-case-card, .testimonial-card, .integration-card, .enterprise-card {
+                margin-bottom: 1rem;
+            }
+            
+            .analytics-showcase img, .mobile-showcase img, .integration-showcase img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .floating-elements {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (unchanged) -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-check2-square me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="btn btn-primary ms-2" href="login.html">Get Started</a></li>
+                    <li class="nav-item"><button id="themeToggle" class="btn btn-outline-primary ms-2" title="Toggle theme"><i class="bi bi-moon-fill" id="themeIcon"></i></button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Professional Hero Section -->
+    <section class="hero-section">
+        <!-- Enhanced Background -->
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="mesh-gradient"></div>
+        </div>
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <!-- Hero Badge -->
+                        <div class="hero-badge mb-4">
+                            <span class="badge bg-white text-primary px-3 py-2 rounded-pill shadow-sm">
+                                <i class="bi bi-star-fill me-2"></i>
+                                #1 AI Note-Taking Platform
+                            </span>
+                        </div>
+                        
+                        <!-- Main Title -->
+                        <h1 class="hero-title display-3 fw-bold mb-4 ">
+                            Transform Your Ideas Into
+                            <span class="text-gradient">Intelligent Insights</span>
+                        </h1>
+                        
+                        <!-- Subtitle -->
+                        <p class="hero-subtitle lead mb-4">
+                            QuickNotes AI revolutionizes productivity with advanced AI that captures, organizes, and extracts 
+                            actionable insights from your notes in real-time. Experience the future of intelligent note-taking.
+                        </p>
+                        
+                        <!-- Stats -->
+                        <div class="hero-stats mb-4">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="stat-number">10K+</h3>
+                                        <p class="stat-label">Active Users</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="stat-number">99.9%</h3>
+                                        <p class="stat-label">Uptime</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="stat-number">50+</h3>
+                                        <p class="stat-label">Integrations</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="hero-cta-group mb-4">
+                            <a href="#features" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-rocket-takeoff me-2"></i>
+                                Start Free Trial
+                            </a>
+                            <a href="#demo" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-play-circle me-2"></i>
+                                Watch Demo
+                            </a>
+                        </div>
+                        
+                        <!-- Social Proof -->
+                        <div class="hero-social-proof">
+                            <p class="text-muted mb-3">Trusted by leading companies worldwide</p>
+                            <div class="company-logos">
+                                <div class="company-logo me-3">
+                                    <i class="bi bi-building"></i>
+                                    <span>Microsoft</span>
+                                </div>
+                                <div class="company-logo me-3">
+                                    <i class="bi bi-building"></i>
+                                    <span>Google</span>
+                                </div>
+                                <div class="company-logo me-3">
+                                    <i class="bi bi-building"></i>
+                                    <span>Apple</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="hero-visual-container">
+                        <!-- Main 3D Device Mockup -->
+                        <div class="hero-device-mockup">
+                            <div class="device-screen">
+                                <div class="app-interface">
+                                    <div class="app-header">
+                                        <div class="app-icon">
+                                            <i class="bi bi-check2-square"></i>
+                                        </div>
+                                        <div class="app-title">QuickNotes AI</div>
+                                    </div>
+                                    <div class="app-content">
+                                        <div class="note-item">
+                                            <div class="note-icon">
+                                                <i class="bi bi-lightbulb"></i>
+                                            </div>
+                                            <div class="note-text">Meeting notes with AI insights...</div>
+                                        </div>
+                                        <div class="note-item">
+                                            <div class="note-icon">
+                                                <i class="bi bi-graph-up"></i>
+                                            </div>
+                                            <div class="note-text">Project analytics dashboard...</div>
+                                        </div>
+                                        <div class="note-item">
+                                            <div class="note-icon">
+                                                <i class="bi bi-chat-dots"></i>
+                                            </div>
+                                            <div class="note-text">Voice transcription ready...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        
+                        <!-- Professional Floating Elements -->
+                        <div class="floating-element bubble-1">
+                            <div class="element-icon">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-2">
+                            <div class="element-icon">
+                                <i class="bi bi-mic-fill"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-3">
+                            <div class="element-icon">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-4">
+                            <div class="element-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-5">
+                            <div class="element-icon">
+                                <i class="bi bi-lightning-charge"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-6">
+                            <div class="element-icon">
+                                <i class="bi bi-robot"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-7">
+                            <div class="element-icon">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-8">
+                            <div class="element-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-9">
+                            <div class="element-icon">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-element bubble-10">
+                            <div class="element-icon">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Animated Data Visualization -->
+                        <div class="data-visualization">
+                            <div class="chart-bar bar-1"></div>
+                            <div class="chart-bar bar-2"></div>
+                            <div class="chart-bar bar-3"></div>
+                            <div class="chart-bar bar-4"></div>
+                            <div class="chart-bar bar-5"></div>
+                        </div>
+                        
+                        <!-- Particle Effects -->
+                        <div class="particle particle-1"></div>
+                        <div class="particle particle-2"></div>
+                        <div class="particle particle-3"></div>
+                        <div class="particle particle-4"></div>
+                        <div class="particle particle-5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Features Section -->
+    <section id="features" class="py-5">
+        <!-- Sparkle effects -->
+        <div class="section-sparkle" style="top: 10%; left: 10%;"></div>
+        <div class="section-sparkle" style="top: 20%; right: 15%;"></div>
+        <div class="section-sparkle" style="bottom: 30%; left: 20%;"></div>
+        <div class="section-sparkle" style="top: 60%; right: 10%;"></div>
+        <div class="section-sparkle" style="bottom: 10%; left: 50%;"></div>
+        
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Everything You Need to Stay Productive</h2>
+                <p class="lead text-muted">From voice notes to AI insights, we've built the complete productivity toolkit</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Voice-to-Text Notes -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-mic-fill"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Voice-to-Text Notes</h4>
+                        <p class="text-muted mb-3">Transform your thoughts into text instantly with advanced speech recognition. Perfect for meetings, brainstorming, and quick note-taking.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time transcription</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Multiple language support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Noise cancellation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>High accuracy recognition</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Task Recommendations -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-bullseye"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Task Recommendations</h4>
+                        <p class="text-muted mb-3">Get intelligent suggestions powered by GPT to improve your productivity and focus. Our AI analyzes your patterns and recommends optimal task sequences.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart task prioritization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Productivity optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Focus enhancement tips</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Personalized suggestions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sentiment Analysis -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-search-heart"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Sentiment Analysis</h4>
+                        <p class="text-muted mb-3">Detect the emotional tone of your voice notes and automatically tag them accordingly. Understand stress levels, positivity, and mood patterns.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Emotion detection</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Stress level monitoring</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Automatic mood tagging</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Wellness insights</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Automatic Time Blocking -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Automatic Time Blocking</h4>
+                        <p class="text-muted mb-3">Convert your tasks into calendar blocks for focused work sessions. AI automatically schedules optimal time slots based on your productivity patterns.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart scheduling</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Focus time allocation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Productivity optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Calendar integration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Export Tasks -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-download"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Export Tasks (CSV/PDF)</h4>
+                        <p class="text-muted mb-3">Export your task history by time range or tags. Generate comprehensive reports for analysis, sharing, or backup purposes.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Flexible export formats</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Time-based filtering</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Tag-based organization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Professional reports</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Recurring Tasks Setup -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Recurring Tasks Setup</h4>
+                        <p class="text-muted mb-3">Create repeatable tasks with flexible scheduling options. Set up daily, weekly, monthly, or custom recurring patterns for consistent productivity.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Flexible recurrence patterns</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom scheduling</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Automatic task generation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Habit tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- WhatsApp/Telegram Integration -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="700">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">WhatsApp/Telegram Integration</h4>
+                        <p class="text-muted mb-3">Forward voice notes from WhatsApp or Telegram and watch them automatically transcribe into actionable tasks. Seamless cross-platform workflow.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Instant voice forwarding</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Automatic transcription</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Task creation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Cross-platform sync</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Conversational Assistant -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="800">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-chat-square-text"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Conversational Assistant</h4>
+                        <p class="text-muted mb-3">Chat with your notes using natural language. Query, manage, and get insights from your data through an intuitive conversational interface powered by GPT.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Natural language queries</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Intelligent responses</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Context-aware interactions</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart note management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Personal Knowledge Graph -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="900">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Personal Knowledge Graph</h4>
+                        <p class="text-muted mb-3">Automatically link related tasks and notes into knowledge bubbles. Discover connections and insights you never knew existed in your data.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Automatic linking</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Knowledge discovery</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Relationship mapping</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Insight generation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Premium Badge & Access UI -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1000">
+                    <div class="feature-card border-primary border-2">
+                        <div class="feature-icon">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Premium Badge & Access UI</h4>
+                        <p class="text-muted mb-3">Premium users get exclusive UI features and a special badge. Unlock advanced capabilities and enjoy a premium experience.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Premium user badge</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Exclusive UI features</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced capabilities</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priority access</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Team Export -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1100">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-share"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Team Export (Slack/Email)</h4>
+                        <p class="text-muted mb-3">Share selected tasks or summaries directly to Slack or Email. Keep your team informed and collaborate seamlessly across platforms.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Direct Slack integration</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Email sharing</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Task summaries</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Team collaboration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Multilingual Voice Note Converter -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1200">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-translate"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Multilingual Voice Note Converter</h4>
+                        <p class="text-muted mb-3">Speak in any language - Hindi, Spanish, Tamil, French, German, and more. Our AI automatically translates, summarizes, and formats your voice notes into clear English summaries.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Multi-language voice recognition</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Automatic translation to English</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart summarization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Professional formatting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Microlearning Reminders -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1300">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Microlearning Reminders</h4>
+                        <p class="text-muted mb-3">Never stop learning with personalized daily micro-lessons. Get bite-sized knowledge nuggets tailored to your field and interests, delivered alongside your task reminders.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Personalized learning content</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Daily knowledge nuggets</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Field-specific insights</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Seamless integration with tasks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Smart Task Management -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1200">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-list-check"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Smart Task Management</h4>
+                        <p class="text-muted mb-3">Convert notes to actionable tasks with intelligent deadlines, priorities, and progress tracking. Never miss a deadline again.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Auto task creation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart deadline setting</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Progress tracking</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priority management</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Calendar Integration -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="1300">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Calendar Integration</h4>
+                        <p class="text-muted mb-3">Seamlessly sync with Google Calendar and other calendar services. Schedule tasks, set reminders, and manage your time effectively.</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Google Calendar sync</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Multi-calendar support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Smart scheduling</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Reminder management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5 bg-light">
+        <!-- Sparkle effects -->
+        <div class="section-sparkle" style="top: 15%; left: 15%;"></div>
+        <div class="section-sparkle" style="top: 40%; right: 20%;"></div>
+        <div class="section-sparkle" style="bottom: 25%; left: 30%;"></div>
+        
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">How QuickNotes AI Works</h2>
+                <p class="lead text-muted">Three simple steps to transform your productivity</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="step-number mb-3">1</div>
+                        <h4 class="fw-bold mb-3">Capture</h4>
+                        <p class="text-muted">Speak your thoughts or type them out. Our AI instantly transcribes and organizes your ideas into structured notes and tasks.</p>
+                        <div class="step-icon mt-3">
+                            <i class="bi bi-mic-fill text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="step-number mb-3">2</div>
+                        <h4 class="fw-bold mb-3">Organize</h4>
+                        <p class="text-muted">AI automatically categorizes your content, suggests priorities, and creates actionable tasks with deadlines and reminders.</p>
+                        <div class="step-icon mt-3">
+                            <i class="bi bi-diagram-3 text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="step-number mb-3">3</div>
+                        <h4 class="fw-bold mb-3">Execute</h4>
+                        <p class="text-muted">Track progress, get insights, and collaborate with your team. Export data, integrate with calendars, and stay on top of everything.</p>
+                        <div class="step-icon mt-3">
+                            <i class="bi bi-graph-up text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why QuickNotes AI Section -->
+    <section class="py-5">
+        <!-- Sparkle effects -->
+        <div class="section-sparkle" style="top: 20%; left: 10%;"></div>
+        <div class="section-sparkle" style="top: 50%; right: 10%;"></div>
+        <div class="section-sparkle" style="bottom: 20%; left: 40%;"></div>
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2 class="display-5 fw-bold mb-4 features-section-title gradient-text">Why Choose QuickNotes AI?</h2>
+                    <p class="lead text-muted mb-4">Built for modern teams who need more than just another note-taking app</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-lightning-charge text-warning"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Lightning Fast</h5>
+                                    <p class="text-muted mb-0">Capture ideas in seconds with voice-to-text that's faster than typing</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-shield-check text-success"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Enterprise Security</h5>
+                                    <p class="text-muted mb-0">Bank-level encryption and compliance with GDPR, SOC 2, and more</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-arrow-repeat text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Seamless Integration</h5>
+                                    <p class="text-muted mb-0">Works with your existing tools: Google Calendar, Slack, WhatsApp, and more</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="comparison-card p-4 rounded-4 shadow-lg">
+                        <h4 class="fw-bold mb-4 text-center">vs. Traditional Note Apps</h4>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <h6 class="fw-bold text-muted">Others</h6>
+                                    <ul class="list-unstyled small text-muted">
+                                        <li>Manual organization</li>
+                                        <li>Basic search</li>
+                                        <li>No AI insights</li>
+                                        <li>Limited integrations</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-primary bg-opacity-10 rounded-3 border border-primary">
+                                    <h6 class="fw-bold text-primary">QuickNotes AI</h6>
+                                    <ul class="list-unstyled small text-primary">
+                                        <li>AI-powered organization</li>
+                                        <li>Smart search & filters</li>
+                                        <li>Intelligent insights</li>
+                                        <li>Deep integrations</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Use Cases & Industries Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Built for Every Industry</h2>
+                <p class="lead text-muted">From startups to Fortune 500 companies, QuickNotes AI adapts to your workflow</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #ff6b6b, #ffa500); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Business & Consulting</h5>
+                        <p class="text-muted">Capture client meetings, project updates, and strategic insights. Transform conversations into actionable business plans.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Client meeting transcription</li>
+                            <li>• Project milestone tracking</li>
+                            <li>• Strategic planning notes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);">
+                                <i class="bi bi-code-slash"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Technology & Development</h5>
+                        <p class="text-muted">Document code reviews, architecture decisions, and sprint planning. Keep your development team aligned and productive.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Code review notes</li>
+                            <li>• Architecture documentation</li>
+                            <li>• Sprint planning sessions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #a8edea, #fed6e3); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(168, 237, 234, 0.3);">
+                                <i class="bi bi-mortarboard-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Education & Research</h5>
+                        <p class="text-muted">Record lectures, research findings, and academic discussions. Organize knowledge and accelerate learning outcomes.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Lecture transcription</li>
+                            <li>• Research note organization</li>
+                            <li>• Academic collaboration</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #ff9a9e, #fecfef); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(255, 154, 158, 0.3);">
+                                <i class="bi bi-heart-pulse-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Healthcare & Medical</h5>
+                        <p class="text-muted">Document patient consultations, medical procedures, and research findings. Maintain accurate medical records with AI assistance.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Patient consultation notes</li>
+                            <li>• Medical procedure documentation</li>
+                            <li>• Research data organization</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Legal & Compliance</h5>
+                        <p class="text-muted">Record client consultations, case notes, and legal research. Ensure compliance and maintain detailed legal documentation.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Client consultation records</li>
+                            <li>• Case note organization</li>
+                            <li>• Legal research documentation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="use-case-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="use-case-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);">
+                                <i class="bi bi-palette-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Creative & Media</h5>
+                        <p class="text-muted">Capture creative brainstorming, content planning, and production notes. Transform ideas into compelling content.</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Creative brainstorming sessions</li>
+                            <li>• Content planning notes</li>
+                            <li>• Production workflow tracking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Success Stories Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Trusted by Teams Worldwide</h2>
+                <p class="lead text-muted">See how organizations are transforming their productivity with QuickNotes AI</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa500); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);" class="me-3">SC</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Sarah Chen</h6>
+                                <small class="text-muted">Product Manager, TechCorp</small>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-3">"QuickNotes AI has revolutionized our sprint planning. We capture meeting insights instantly and convert them into actionable tasks. Our productivity has increased by 40%."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="text-warning me-2">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <small class="text-muted">5.0 rating</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #4ecdc4, #44a08d); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);" class="me-3">MR</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Marcus Rodriguez</h6>
+                                <small class="text-muted">Consultant, McKinsey</small>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-3">"The multilingual support is incredible. I can conduct interviews in Spanish and get perfect English summaries. It's like having a professional translator on my team."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="text-warning me-2">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <small class="text-muted">5.0 rating</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-card bg-white p-4 rounded-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #a8edea, #fed6e3); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(168, 237, 234, 0.3);" class="me-3">EW</div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Dr. Emily Watson</h6>
+                                <small class="text-muted">Research Director, Stanford</small>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-3">"The AI-powered organization is game-changing for our research team. It automatically categorizes our findings and creates connections we would have missed."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="text-warning me-2">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <small class="text-muted">5.0 rating</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Ecosystem Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Seamless Integrations</h2>
+                <p class="lead text-muted">Works with the tools you already love and trust</p>
+            </div>
+            
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="integration-showcase">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); width: 100%; max-width: 500px; height: 300px; border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.15);">
+                            <!-- Animated elements -->
+                            <div style="position: absolute; top: 30px; left: 30px; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; animation: float 3s ease-in-out infinite;"></div>
+                            <div style="position: absolute; top: 100px; right: 50px; width: 30px; height: 30px; background: rgba(255,255,255,0.15); border-radius: 50%; animation: float 3s ease-in-out infinite 1s;"></div>
+                            <div style="position: absolute; bottom: 80px; left: 80px; width: 35px; height: 35px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: float 3s ease-in-out infinite 2s;"></div>
+                            
+                            <div class="text-center text-white" style="position: relative; z-index: 2; padding: 2rem;">
+                                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 2rem; border: 1px solid rgba(255,255,255,0.2);">
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                                            <i class="bi bi-calendar-check"></i>
+                                        </div>
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                                            <i class="bi bi-chat-dots"></i>
+                                        </div>
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #a8edea, #fed6e3); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                                            <i class="bi bi-whatsapp"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2" style="font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Integration Ecosystem</h4>
+                                    <p class="mb-0 opacity-90" style="font-size: 0.9rem;">Connect • Sync • Automate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ff6b6b, #ffa500); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);">
+                                    <i class="bi bi-calendar-check"></i>
+                                </div>
+                                <h6 class="fw-bold">Google Calendar</h6>
+                                <small class="text-muted">Auto-schedule tasks</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(78, 205, 196, 0.3);">
+                                    <i class="bi bi-chat-dots"></i>
+                                </div>
+                                <h6 class="fw-bold">Slack</h6>
+                                <small class="text-muted">Team collaboration</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #a8edea, #fed6e3); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(168, 237, 234, 0.3);">
+                                    <i class="bi bi-whatsapp"></i>
+                                </div>
+                                <h6 class="fw-bold">WhatsApp</h6>
+                                <small class="text-muted">Voice note forwarding</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ff9a9e, #fecfef); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(255, 154, 158, 0.3);">
+                                    <i class="bi bi-telegram"></i>
+                                </div>
+                                <h6 class="fw-bold">Telegram</h6>
+                                <small class="text-muted">Instant transcription</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);">
+                                    <i class="bi bi-journal-text"></i>
+                                </div>
+                                <h6 class="fw-bold">Notion</h6>
+                                <small class="text-muted">Knowledge sync</small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="integration-card text-center p-3 bg-white rounded-3 shadow-sm">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin: 0 auto 1rem; box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);">
+                                    <i class="bi bi-lightning-charge"></i>
+                                </div>
+                                <h6 class="fw-bold">Zapier</h6>
+                                <small class="text-muted">Custom workflows</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance & Analytics Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2 class="display-5 fw-bold mb-4 features-section-title gradient-text">Powerful Analytics & Insights</h2>
+                    <p class="lead text-muted mb-4">Track your productivity patterns and optimize your workflow with AI-powered analytics</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-graph-up text-success"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Productivity Trends</h5>
+                                    <p class="text-muted mb-0">Visualize your productivity patterns and identify peak performance hours</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-pie-chart text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Task Analytics</h5>
+                                    <p class="text-muted mb-0">Understand task completion rates, time allocation, and priority distribution</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-lightbulb text-warning"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">AI Insights</h5>
+                                    <p class="text-muted mb-0">Get personalized recommendations to improve your productivity and focus</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="analytics-showcase">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); width: 100%; max-width: 500px; height: 300px; border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.15);">
+                            <!-- Animated elements -->
+                            <div style="position: absolute; top: 40px; left: 40px; width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; animation: float 3s ease-in-out infinite;"></div>
+                            <div style="position: absolute; top: 120px; right: 60px; width: 35px; height: 35px; background: rgba(255,255,255,0.15); border-radius: 50%; animation: float 3s ease-in-out infinite 1s;"></div>
+                            <div style="position: absolute; bottom: 100px; left: 100px; width: 45px; height: 45px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: float 3s ease-in-out infinite 2s;"></div>
+                            
+                            <div class="text-center text-white" style="position: relative; z-index: 2; padding: 2rem;">
+                                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 2rem; border: 1px solid rgba(255,255,255,0.2);">
+                                    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                                            <i class="bi bi-graph-up"></i>
+                                        </div>
+                                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                                            <i class="bi bi-pie-chart"></i>
+                                        </div>
+                                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #a8edea, #fed6e3); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                                            <i class="bi bi-lightbulb"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2" style="font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Analytics Dashboard</h4>
+                                    <p class="mb-0 opacity-90" style="font-size: 0.9rem;">Track • Analyze • Optimize</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Experience Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="mobile-showcase">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); width: 100%; max-width: 400px; height: 250px; border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.15);">
+                            <!-- Animated elements -->
+                            <div style="position: absolute; top: 25px; left: 25px; width: 35px; height: 35px; background: rgba(255,255,255,0.2); border-radius: 50%; animation: float 3s ease-in-out infinite;"></div>
+                            <div style="position: absolute; top: 80px; right: 35px; width: 25px; height: 25px; background: rgba(255,255,255,0.15); border-radius: 50%; animation: float 3s ease-in-out infinite 1s;"></div>
+                            <div style="position: absolute; bottom: 70px; left: 70px; width: 30px; height: 30px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: float 3s ease-in-out infinite 2s;"></div>
+                            
+                            <div class="text-center text-white" style="position: relative; z-index: 2; padding: 1.5rem;">
+                                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.2);">
+                                    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                                        <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem;">
+                                            <i class="bi bi-phone"></i>
+                                        </div>
+                                        <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem;">
+                                            <i class="bi bi-cloud-arrow-up"></i>
+                                        </div>
+                                        <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #a8edea, #fed6e3); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem;">
+                                            <i class="bi bi-wifi"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="mb-2" style="font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Mobile App</h4>
+                                    <p class="mb-0 opacity-90" style="font-size: 0.9rem;">Productive anywhere</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h2 class="display-5 fw-bold mb-4 features-section-title gradient-text">Productive Anywhere</h2>
+                    <p class="lead text-muted mb-4">Capture ideas on the go with our powerful mobile app. Sync seamlessly across all your devices.</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-phone text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Mobile-First Design</h5>
+                                    <p class="text-muted mb-0">Optimized for mobile productivity with intuitive touch gestures</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-cloud-arrow-up text-success"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Real-time Sync</h5>
+                                    <p class="text-muted mb-0">Your notes and tasks sync instantly across all devices</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex align-items-start">
+                                <div class="feature-badge me-3">
+                                    <i class="bi bi-wifi text-warning"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Offline Support</h5>
+                                    <p class="text-muted mb-0">Work offline and sync when you're back online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-outline-primary me-3">
+                            <i class="bi bi-apple me-2"></i>App Store
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="bi bi-google-play me-2"></i>Google Play
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Enterprise-Grade Features</h2>
+                <p class="lead text-muted">Built for scale, security, and compliance</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="enterprise-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="enterprise-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #ff6b6b, #ffa500); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Team Management</h5>
+                        <p class="text-muted small">Advanced user management, role-based access control, and team collaboration features.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="enterprise-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="enterprise-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Advanced Security</h5>
+                        <p class="text-muted small">SSO integration, audit logs, data encryption, and compliance with enterprise security standards.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="enterprise-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="enterprise-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #a8edea, #fed6e3); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(168, 237, 234, 0.3);">
+                                <i class="bi bi-code-square"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">API Access</h5>
+                        <p class="text-muted small">RESTful APIs for custom integrations, webhooks, and automated workflows.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="enterprise-card text-center p-4 rounded-4 bg-white shadow-sm">
+                        <div class="enterprise-icon mb-3">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 10px 25px rgba(240, 147, 251, 0.3);">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Dedicated Support</h5>
+                        <p class="text-muted small">24/7 priority support, dedicated account manager, and custom training programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust & Security Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Trust & Security</h2>
+                <p class="lead text-muted">Your data is protected with enterprise-grade security</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <div class="security-icon mb-3">
+                            <i class="bi bi-shield-lock text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="fw-bold">End-to-End Encryption</h5>
+                        <p class="text-muted small">All your data is encrypted in transit and at rest</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="security-icon mb-3">
+                            <i class="bi bi-globe text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="fw-bold">GDPR Compliant</h5>
+                        <p class="text-muted small">Full compliance with data protection regulations</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="security-icon mb-3">
+                            <i class="bi bi-server text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="fw-bold">SOC 2 Certified</h5>
+                        <p class="text-muted small">Enterprise-grade security and compliance</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-center">
+                        <div class="security-icon mb-3">
+                            <i class="bi bi-cloud-check text-info" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="fw-bold">99.9% Uptime</h5>
+                        <p class="text-muted small">Reliable cloud infrastructure you can count on</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 features-section-title gradient-text">Choose Your Perfect Plan</h2>
+                <p class="lead text-muted">Start free and upgrade as you grow</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <!-- Free Plan -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card text-center">
+                        <h4 class="fw-bold mb-3">Free Plan</h4>
+                        <p class="text-muted mb-4">Perfect for getting started</p>
+                        <div class="mb-4">
+                            <span class="display-4 fw-bold text-primary">₹0</span>
+                            <span class="text-muted">/month</span>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Voice-to-text notes (100/month)</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Basic task management</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Daily view</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Basic analytics</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Email support</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-outline-primary w-100">Get Started Free</a>
+                    </div>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card text-center border-primary border-2 position-relative">
+                        <div class="position-absolute top-0 start-50 translate-middle">
+                            <span class="badge bg-primary px-3 py-2 rounded-pill">Most Popular</span>
+                        </div>
+                        <h4 class="fw-bold mb-3">Premium Plan</h4>
+                        <p class="text-muted mb-4">For power users & teams</p>
+                        <div class="mb-4">
+                            <span class="display-4 fw-bold text-primary">₹499</span>
+                            <span class="text-muted">/month</span>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Everything in Free, plus:</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Unlimited voice notes</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>AI-powered organization</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Weekly & monthly views</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Google Calendar integration</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced analytics</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Priority support</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Export functionality</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>All Advanced AI Features</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-primary w-100">Upgrade Now</a>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card text-center">
+                        <h4 class="fw-bold mb-3">Enterprise</h4>
+                        <p class="text-muted mb-4">For large organizations</p>
+                        <div class="mb-4">
+                            <span class="display-4 fw-bold text-primary">Custom</span>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Everything in Premium, plus:</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom integrations</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced security</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Dedicated support</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>SLA guarantees</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom training</li>
+                        </ul>
+                        <a href="mailto:enterprise@quicknotesai.com" class="btn btn-outline-primary w-100">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-5" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); position: relative; overflow: hidden;">
+        <!-- Enhanced floating elements -->
+        <div class="floating-element" style="position: absolute; top: 20px; left: 50px; width: 40px; height: 40px; background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; animation: float 4s ease-in-out infinite; box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);">
+            <i class="bi bi-star-fill"></i>
+        </div>
+        <div class="floating-element" style="position: absolute; top: 80px; right: 80px; width: 35px; height: 35px; background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; animation: float 4s ease-in-out infinite 1s; box-shadow: 0 7px 14px rgba(78, 205, 196, 0.3);">
+            <i class="bi bi-graph-up"></i>
+        </div>
+        <div class="floating-element" style="position: absolute; bottom: 60px; left: 100px; width: 30px; height: 30px; background: linear-gradient(45deg, #a8edea, #fed6e3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; animation: float 4s ease-in-out infinite 2s; box-shadow: 0 6px 12px rgba(168, 237, 234, 0.3);">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        
+        <!-- Sparkle effects -->
+        <div class="sparkle" style="position: absolute; top: 30px; left: 200px; width: 4px; height: 4px; background: white; border-radius: 50%; animation: sparkle 2s ease-in-out infinite;"></div>
+        <div class="sparkle" style="position: absolute; top: 120px; right: 150px; width: 3px; height: 3px; background: white; border-radius: 50%; animation: sparkle 2s ease-in-out infinite 0.5s;"></div>
+        <div class="sparkle" style="position: absolute; bottom: 40px; left: 300px; width: 5px; height: 5px; background: white; border-radius: 50%; animation: sparkle 2s ease-in-out infinite 1s;"></div>
+        
+        <div class="container">
+            <div class="text-center text-white" data-aos="fade-up">
+                <h2 class="display-4 fw-bold mb-3 ">Ready to Transform Your Productivity?</h2>
+                <p class="lead mb-4 opacity-90">Join thousands of teams already using QuickNotes AI to stay organized and productive</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="login.html" class="btn btn-light btn-lg px-4 py-3">
+                        <i class="bi bi-play-circle me-2"></i>Start Free Trial
+                    </a>
+                    <a href="about.html" class="btn btn-outline-light btn-lg px-4 py-3" style="color: white;">
+                        <i class="bi bi-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+                <div class="mt-4">
+                    <small class="opacity-75">No credit card required • 14-day free trial • Cancel anytime</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Footer -->
+    <footer class="bg-dark text-light py-5" style="background: #000000 !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 fw-bold">
+                        <i class="bi bi-check2-square me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="opacity-75 mb-4">Transform your productivity with AI-powered voice notes and intelligent task management. Stay organized, boost efficiency, and achieve your goals.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
+                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-light opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="footerThemeToggle">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Theme Toggle Functionality
+        function initializeTheme() {
+            // Initialize theme manager if available
+            if (window.themeManager) {
+                window.themeManager.updateThemeIcon();
+                
+                // Ensure theme toggle buttons work
+                const themeToggle = document.getElementById('themeToggle');
+                const footerThemeToggle = document.getElementById('footerThemeToggle');
+                
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', function() {
+                        window.themeManager.toggleTheme();
+                    });
+                }
+                
+                if (footerThemeToggle) {
+                    footerThemeToggle.addEventListener('click', function() {
+                        window.themeManager.toggleTheme();
+                    });
+                }
+            } else {
+                // Fallback theme toggle
+                const themeToggle = document.getElementById('themeToggle');
+                const footerThemeToggle = document.getElementById('footerThemeToggle');
+                const themeIcon = document.getElementById('themeIcon');
+                
+                function updateThemeIcon() {
+                    const theme = document.documentElement.getAttribute('data-bs-theme');
+                    if (theme === 'dark') {
+                        themeIcon.classList.remove('bi-moon-fill');
+                        themeIcon.classList.add('bi-sun-fill');
+                    } else {
+                        themeIcon.classList.remove('bi-sun-fill');
+                        themeIcon.classList.add('bi-moon-fill');
+                    }
+                }
+                
+                function toggleTheme() {
+                    if (window.utils && window.utils.theme && window.utils.theme.toggle) {
+                        window.utils.theme.toggle();
+                    } else {
+                        // Fallback theme toggle
+                        const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                        document.documentElement.setAttribute('data-bs-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                    }
+                    updateThemeIcon();
+                }
+                
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', toggleTheme);
+                }
+                
+                if (footerThemeToggle) {
+                    footerThemeToggle.addEventListener('click', toggleTheme);
+                }
+                
+                updateThemeIcon();
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+            
+            // Enhanced performance optimizations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            // Enhanced Intersection Observer for better performance
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        // Unobserve after animation to improve performance
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all feature cards and sections
+            document.querySelectorAll('.feature-card, .py-5, .bg-light').forEach(el => {
+                el.classList.add('animate-on-scroll');
+                observer.observe(el);
+            });
+            
+            // Throttled scroll handler for better performance
+            let ticking = false;
+            function updateScrollAnimations() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        // Add any scroll-based animations here
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', updateScrollAnimations, { passive: true });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Enhanced interactive animations with better performance
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                    this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 8px 25px -5px rgb(0 0 0 / 0.1), 0 4px 10px -2px rgb(0 0 0 / 0.05)';
+                });
+            });
+
+            // Animate features section title when it comes into view
+            const featuresTitle = document.querySelector('.features-section-title');
+            if (featuresTitle) {
+                const titleObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animate');
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                titleObserver.observe(featuresTitle);
+            }
+
+            // Enhanced staggered animation to feature cards with better performance
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 50); // Reduced delay for faster loading
+                    }
+                });
+            }, observerOptions);
+
+            featureCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.4s ease, transform 0.4s ease'; // Faster transitions
+                cardObserver.observe(card);
+            });
+            
+            // Preload critical images for better performance
+            const preloadImages = () => {
+                const imageUrls = [
+                    // Add any critical image URLs here
+                ];
+                
+                imageUrls.forEach(url => {
+                    const img = new Image();
+                    img.src = url;
+                });
+            };
+            
+            // Call preload after page load
+            window.addEventListener('load', preloadImages);
+        });
+    </script>
+</body>
+</html>

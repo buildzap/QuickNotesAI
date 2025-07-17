@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard Test - QuickNotes AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        .test-section {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .status-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        .status-success { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-check2-square me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem" style="display: none;"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem" style="display: none;"><a class="nav-link" href="team-dashboard.html">Team Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="bi bi-gear me-2"></i>Team Dashboard Test
+                </h1>
+                
+                <div class="test-section">
+                    <h5><i class="bi bi-info-circle me-2"></i>Test Instructions</h5>
+                    <p>This page tests the team dashboard functionality and helps diagnose any issues with team task loading.</p>
+                    <ul>
+                        <li><strong>Authentication:</strong> Check if user is logged in and premium</li>
+                        <li><strong>Team Creation:</strong> Create a default team if none exists</li>
+                        <li><strong>Sample Tasks:</strong> Create sample team tasks for testing</li>
+                        <li><strong>Data Loading:</strong> Verify team tasks are loaded correctly</li>
+                    </ul>
+                </div>
+
+                <div class="test-section">
+                    <h5><i class="bi bi-check-circle me-2"></i>Current Status</h5>
+                    <div id="statusDisplay">
+                        <p>Loading status...</p>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h5><i class="bi bi-tools me-2"></i>Test Controls</h5>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button class="btn btn-primary w-100 mb-2" onclick="testTeamCreation()">
+                                <i class="bi bi-people me-1"></i>Create Team
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success w-100 mb-2" onclick="createSampleTeamTasks()">
+                                <i class="bi bi-plus-circle me-1"></i>Sample Tasks
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info w-100 mb-2" onclick="testTeamDashboard()">
+                                <i class="bi bi-speedometer2 me-1"></i>Test Dashboard
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-warning w-100 mb-2" onclick="debugTeamData()">
+                                <i class="bi bi-bug me-1"></i>Debug Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h5><i class="bi bi-list-check me-2"></i>Team Data Status</h5>
+                    <div id="teamDataStatus">
+                        <p>Checking team data...</p>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h5><i class="bi bi-arrow-right-circle me-2"></i>Quick Actions</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="team-dashboard.html" class="btn btn-outline-primary w-100 mb-2">
+                                <i class="bi bi-speedometer2 me-1"></i>Go to Team Dashboard
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="team.html" class="btn btn-outline-success w-100 mb-2">
+                                <i class="bi bi-people me-1"></i>Go to Team Management
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/nav-utils.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <script>
+        // Test functions
+        async function testTeamCreation() {
+            try {
+                console.log('[Test] Testing team creation...');
+                
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showStatus('User not authenticated', 'error');
+                    return;
+                }
+                
+                // Create default team
+                const teamData = {
+                    name: 'Test Team',
+                    description: 'Test team created for dashboard testing',
+                    createdBy: user.uid,
+                    createdAt: new Date(),
+                    members: [user.uid],
+                    isDefault: true
+                };
+                
+                const teamRef = await firebase.firestore()
+                    .collection('teams')
+                    .add(teamData);
+                
+                console.log('[Test] Team created with ID:', teamRef.id);
+                
+                // Update user profile
+                await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .update({
+                        teamId: teamRef.id,
+                        isTeamAdmin: true
+                    });
+                
+                showStatus('Team created successfully!', 'success');
+                updateTeamDataStatus();
+                
+            } catch (error) {
+                console.error('[Test] Error creating team:', error);
+                showStatus('Error creating team: ' + error.message, 'error');
+            }
+        }
+
+        async function createSampleTeamTasks() {
+            try {
+                console.log('[Test] Creating sample team tasks...');
+                
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showStatus('User not authenticated', 'error');
+                    return;
+                }
+                
+                // Get user's team
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                
+                const userData = userDoc.data();
+                const teamId = userData.teamId;
+                
+                if (!teamId) {
+                    showStatus('No team found. Create a team first.', 'warning');
+                    return;
+                }
+                
+                // Create sample tasks
+                const sampleTasks = [
+                    {
+                        title: 'Test Task 1',
+                        description: 'This is a test task for dashboard testing',
+                        priority: 'high',
+                        status: 'in-progress',
+                        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                        assignedTo: 'test.member@team.com',
+                        teamAssignment: {
+                            assignedToTeam: true,
+                            teamId: teamId,
+                            teamName: 'Test Team',
+                            memberId: 'test.member@team.com',
+                            memberName: 'Test Member',
+                            assignedAt: new Date().toISOString(),
+                            assignedBy: user.uid
+                        },
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        userId: user.uid,
+                        taskType: 'team'
+                    },
+                    {
+                        title: 'Test Task 2',
+                        description: 'Another test task for dashboard testing',
+                        priority: 'medium',
+                        status: 'pending',
+                        dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                        assignedTo: 'another.member@team.com',
+                        teamAssignment: {
+                            assignedToTeam: true,
+                            teamId: teamId,
+                            teamName: 'Test Team',
+                            memberId: 'another.member@team.com',
+                            memberName: 'Another Member',
+                            assignedAt: new Date().toISOString(),
+                            assignedBy: user.uid
+                        },
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        userId: user.uid,
+                        taskType: 'team'
+                    }
+                ];
+                
+                for (const taskData of sampleTasks) {
+                    await firebase.firestore()
+                        .collection('tasks')
+                        .add(taskData);
+                }
+                
+                showStatus('Sample team tasks created successfully!', 'success');
+                updateTeamDataStatus();
+                
+            } catch (error) {
+                console.error('[Test] Error creating sample tasks:', error);
+                showStatus('Error creating sample tasks: ' + error.message, 'error');
+            }
+        }
+
+        async function testTeamDashboard() {
+            try {
+                console.log('[Test] Testing team dashboard...');
+                
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showStatus('User not authenticated', 'error');
+                    return;
+                }
+                
+                // Check if user has team
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                
+                const userData = userDoc.data();
+                const teamId = userData.teamId;
+                
+                if (!teamId) {
+                    showStatus('No team found. Create a team first.', 'warning');
+                    return;
+                }
+                
+                // Check if team exists
+                const teamDoc = await firebase.firestore()
+                    .collection('teams')
+                    .doc(teamId)
+                    .get();
+                
+                if (!teamDoc.exists) {
+                    showStatus('Team not found in database', 'error');
+                    return;
+                }
+                
+                // Check for team tasks
+                const tasksSnapshot = await firebase.firestore()
+                    .collection('tasks')
+                    .where('teamAssignment.assignedToTeam', '==', true)
+                    .limit(10)
+                    .get();
+                
+                showStatus(`Team dashboard test completed! Found ${tasksSnapshot.size} team tasks.`, 'success');
+                
+            } catch (error) {
+                console.error('[Test] Error testing team dashboard:', error);
+                showStatus('Error testing team dashboard: ' + error.message, 'error');
+            }
+        }
+
+        async function debugTeamData() {
+            try {
+                console.log('[Test] Debugging team data...');
+                
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    showStatus('User not authenticated', 'error');
+                    return;
+                }
+                
+                // Get user data
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                
+                const userData = userDoc.data();
+                
+                // Get team data
+                let teamData = null;
+                if (userData.teamId) {
+                    const teamDoc = await firebase.firestore()
+                        .collection('teams')
+                        .doc(userData.teamId)
+                        .get();
+                    
+                    if (teamDoc.exists) {
+                        teamData = teamDoc.data();
+                    }
+                }
+                
+                // Get team tasks
+                const tasksSnapshot = await firebase.firestore()
+                    .collection('tasks')
+                    .where('teamAssignment.assignedToTeam', '==', true)
+                    .limit(10)
+                    .get();
+                
+                const debugInfo = {
+                    user: {
+                        uid: user.uid,
+                        email: user.email,
+                        teamId: userData.teamId,
+                        role: userData.role,
+                        premium: userData.premium
+                    },
+                    team: teamData,
+                    teamTasks: tasksSnapshot.size
+                };
+                
+                console.log('[Test] Debug info:', debugInfo);
+                showStatus(`Debug info logged to console. Team tasks: ${tasksSnapshot.size}`, 'info');
+                
+            } catch (error) {
+                console.error('[Test] Error debugging team data:', error);
+                showStatus('Error debugging team data: ' + error.message, 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusDisplay = document.getElementById('statusDisplay');
+            const statusClass = type === 'success' ? 'status-success' : 
+                               type === 'error' ? 'status-error' : 
+                               type === 'warning' ? 'status-warning' : 'status-info';
+            
+            statusDisplay.innerHTML = `
+                <div class="status-indicator ${statusClass}">
+                    <i class="bi bi-${type === 'success' ? 'check-circle' : 
+                                     type === 'error' ? 'x-circle' : 
+                                     type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-1"></i>
+                    ${message}
+                </div>
+            `;
+        }
+
+        async function updateTeamDataStatus() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    document.getElementById('teamDataStatus').innerHTML = `
+                        <div class="status-indicator status-error">
+                            <i class="bi bi-x-circle me-1"></i>User not authenticated
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                
+                const userData = userDoc.data();
+                const teamId = userData.teamId;
+                
+                let teamData = null;
+                if (teamId) {
+                    const teamDoc = await firebase.firestore()
+                        .collection('teams')
+                        .doc(teamId)
+                        .get();
+                    
+                    if (teamDoc.exists) {
+                        teamData = teamDoc.data();
+                    }
+                }
+                
+                const tasksSnapshot = await firebase.firestore()
+                    .collection('tasks')
+                    .where('teamAssignment.assignedToTeam', '==', true)
+                    .limit(10)
+                    .get();
+                
+                const statusHtml = `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="status-indicator ${user ? 'status-success' : 'status-error'}">
+                                <i class="bi bi-person me-1"></i>User: ${user ? 'Authenticated' : 'Not Authenticated'}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="status-indicator ${userData.role === 'premium' ? 'status-success' : 'status-warning'}">
+                                <i class="bi bi-crown me-1"></i>Role: ${userData.role || 'free'}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="status-indicator ${teamId ? 'status-success' : 'status-error'}">
+                                <i class="bi bi-people me-1"></i>Team: ${teamId ? 'Found' : 'Not Found'}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="status-indicator ${tasksSnapshot.size > 0 ? 'status-success' : 'status-warning'}">
+                                <i class="bi bi-list-task me-1"></i>Tasks: ${tasksSnapshot.size}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('teamDataStatus').innerHTML = statusHtml;
+                
+            } catch (error) {
+                console.error('[Test] Error updating team data status:', error);
+                document.getElementById('teamDataStatus').innerHTML = `
+                    <div class="status-indicator status-error">
+                        <i class="bi bi-x-circle me-1"></i>Error loading team data
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize test page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Test] Initializing team dashboard test page...');
+            
+            // Check authentication status
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    showStatus('User authenticated: ' + user.email, 'success');
+                    updateTeamDataStatus();
+                } else {
+                    showStatus('User not authenticated', 'error');
+                }
+            });
+            
+            // Update status every 5 seconds
+            setInterval(updateTeamDataStatus, 5000);
+        });
+    </script>
+</body>
+</html> 

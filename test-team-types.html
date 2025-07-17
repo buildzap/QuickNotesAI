@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Types Test - QuickNotes AI</title>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .team-type-demo {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .team-type-category {
+            margin-bottom: 2rem;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .team-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .team-type-card {
+            background: var(--background-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .team-type-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .team-type-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .team-type-value {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+
+        /* Enhanced Team Type Dropdown Styling */
+        #teamType {
+            font-size: 0.9rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        #teamType:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        #teamType optgroup {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            background: var(--background-main);
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #teamType option {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background: var(--background-card);
+            padding: 0.5rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        #teamType option:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #teamType option:checked {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            font-weight: 500;
+        }
+
+        .demo-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: var(--background-main);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="text-center mb-4">
+            <h1 class="mb-3">
+                <i class="fas fa-users text-primary me-2"></i>
+                Team Types Demo
+            </h1>
+            <p class="text-muted">Explore the new categorized team types in QuickNotes AI</p>
+        </div>
+
+        <!-- Demo Dropdown -->
+        <div class="demo-section">
+            <h4 class="mb-3">
+                <i class="fas fa-list-ul me-2"></i>
+                Interactive Team Type Dropdown
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="teamType" class="form-label">
+                        <i class="fas fa-tag me-1"></i>Team Type
+                    </label>
+                    <select class="form-control" id="teamType">
+                        <option value="">Select team type</option>
+                        
+                        <!-- Business & Professional -->
+                        <optgroup label="🏢 Business & Professional">
+                            <option value="project">Project Team</option>
+                            <option value="department">Department</option>
+                            <option value="cross-functional">Cross-functional</option>
+                            <option value="ad-hoc">Ad-hoc</option>
+                            <option value="startup">Startup Team</option>
+                            <option value="consulting">Consulting Team</option>
+                            <option value="research">Research Team</option>
+                            <option value="marketing">Marketing Team</option>
+                            <option value="sales">Sales Team</option>
+                            <option value="hr">HR Team</option>
+                            <option value="finance">Finance Team</option>
+                            <option value="operations">Operations Team</option>
+                        </optgroup>
+                        
+                        <!-- Domain & Technical -->
+                        <optgroup label="🌐 Domain & Technical">
+                            <option value="web-development">Web Development</option>
+                            <option value="mobile-development">Mobile Development</option>
+                            <option value="ai-ml">AI & Machine Learning</option>
+                            <option value="data-science">Data Science</option>
+                            <option value="cybersecurity">Cybersecurity</option>
+                            <option value="cloud-computing">Cloud Computing</option>
+                            <option value="devops">DevOps</option>
+                            <option value="ui-ux">UI/UX Design</option>
+                            <option value="blockchain">Blockchain</option>
+                            <option value="iot">Internet of Things</option>
+                            <option value="robotics">Robotics</option>
+                            <option value="biotech">Biotechnology</option>
+                            <option value="fintech">FinTech</option>
+                            <option value="healthtech">HealthTech</option>
+                            <option value="edtech">EdTech</option>
+                        </optgroup>
+                        
+                        <!-- Games & Entertainment -->
+                        <optgroup label="🎮 Games & Entertainment">
+                            <option value="game-development">Game Development</option>
+                            <option value="esports">Esports Team</option>
+                            <option value="gaming-community">Gaming Community</option>
+                            <option value="board-games">Board Games</option>
+                            <option value="card-games">Card Games</option>
+                            <option value="puzzle-solving">Puzzle Solving</option>
+                            <option value="roleplay">Roleplay & RPG</option>
+                            <option value="streaming">Content Streaming</option>
+                            <option value="podcast">Podcast Team</option>
+                            <option value="youtube">YouTube Channel</option>
+                            <option value="twitch">Twitch Streamers</option>
+                            <option value="music-band">Music Band</option>
+                            <option value="dance-group">Dance Group</option>
+                            <option value="theater">Theater Group</option>
+                            <option value="film-production">Film Production</option>
+                        </optgroup>
+                        
+                        <!-- Fun & Social -->
+                        <optgroup label="🎉 Fun & Social">
+                            <option value="book-club">Book Club</option>
+                            <option value="cooking-club">Cooking Club</option>
+                            <option value="travel-group">Travel Group</option>
+                            <option value="fitness-group">Fitness Group</option>
+                            <option value="yoga-class">Yoga Class</option>
+                            <option value="running-club">Running Club</option>
+                            <option value="cycling-group">Cycling Group</option>
+                            <option value="hiking-club">Hiking Club</option>
+                            <option value="photography">Photography Club</option>
+                            <option value="art-group">Art Group</option>
+                            <option value="crafting">Crafting Circle</option>
+                            <option value="gardening">Gardening Club</option>
+                            <option value="pet-lovers">Pet Lovers</option>
+                            <option value="language-exchange">Language Exchange</option>
+                            <option value="study-group">Study Group</option>
+                            <option value="volunteer">Volunteer Group</option>
+                            <option value="charity">Charity Team</option>
+                            <option value="environmental">Environmental Group</option>
+                            <option value="community-service">Community Service</option>
+                        </optgroup>
+                        
+                        <!-- Education & Learning -->
+                        <optgroup label="📚 Education & Learning">
+                            <option value="study-buddy">Study Buddy Group</option>
+                            <option value="online-course">Online Course Team</option>
+                            <option value="workshop">Workshop Group</option>
+                            <option value="mentorship">Mentorship Program</option>
+                            <option value="coding-bootcamp">Coding Bootcamp</option>
+                            <option value="language-learning">Language Learning</option>
+                            <option value="skill-sharing">Skill Sharing</option>
+                            <option value="academic-research">Academic Research</option>
+                            <option value="thesis-group">Thesis Group</option>
+                            <option value="dissertation">Dissertation Team</option>
+                        </optgroup>
+                        
+                        <!-- Creative & Design -->
+                        <optgroup label="🎨 Creative & Design">
+                            <option value="design-studio">Design Studio</option>
+                            <option value="creative-agency">Creative Agency</option>
+                            <option value="content-creation">Content Creation</option>
+                            <option value="social-media">Social Media Team</option>
+                            <option value="branding">Branding Team</option>
+                            <option value="graphic-design">Graphic Design</option>
+                            <option value="illustration">Illustration Team</option>
+                            <option value="animation">Animation Team</option>
+                            <option value="3d-modeling">3D Modeling</option>
+                            <option value="architecture">Architecture Team</option>
+                            <option value="interior-design">Interior Design</option>
+                            <option value="fashion-design">Fashion Design</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-4">
+                        <h6>Selected Team Type:</h6>
+                        <div id="selectedTeamType" class="alert alert-info">
+                            No team type selected
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Type Categories Overview -->
+        <div class="team-type-demo">
+            <h3 class="mb-4">
+                <i class="fas fa-th-large me-2"></i>
+                Team Type Categories
+            </h3>
+
+            <!-- Business & Professional -->
+            <div class="team-type-category">
+                <div class="category-title">🏢 Business & Professional</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">📋</div>
+                        <div class="team-type-name">Project Team</div>
+                        <div class="team-type-value">project</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🏢</div>
+                        <div class="team-type-name">Department</div>
+                        <div class="team-type-value">department</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🔄</div>
+                        <div class="team-type-name">Cross-functional</div>
+                        <div class="team-type-value">cross-functional</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🚀</div>
+                        <div class="team-type-name">Startup Team</div>
+                        <div class="team-type-value">startup</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain & Technical -->
+            <div class="team-type-category">
+                <div class="category-title">🌐 Domain & Technical</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">💻</div>
+                        <div class="team-type-name">Web Development</div>
+                        <div class="team-type-value">web-development</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">📱</div>
+                        <div class="team-type-name">Mobile Development</div>
+                        <div class="team-type-value">mobile-development</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🤖</div>
+                        <div class="team-type-name">AI & Machine Learning</div>
+                        <div class="team-type-value">ai-ml</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🔒</div>
+                        <div class="team-type-name">Cybersecurity</div>
+                        <div class="team-type-value">cybersecurity</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games & Entertainment -->
+            <div class="team-type-category">
+                <div class="category-title">🎮 Games & Entertainment</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎮</div>
+                        <div class="team-type-name">Game Development</div>
+                        <div class="team-type-value">game-development</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🏆</div>
+                        <div class="team-type-name">Esports Team</div>
+                        <div class="team-type-value">esports</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎲</div>
+                        <div class="team-type-name">Board Games</div>
+                        <div class="team-type-value">board-games</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎵</div>
+                        <div class="team-type-name">Music Band</div>
+                        <div class="team-type-value">music-band</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fun & Social -->
+            <div class="team-type-category">
+                <div class="category-title">🎉 Fun & Social</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">📚</div>
+                        <div class="team-type-name">Book Club</div>
+                        <div class="team-type-value">book-club</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🍳</div>
+                        <div class="team-type-name">Cooking Club</div>
+                        <div class="team-type-value">cooking-club</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🏃‍♂️</div>
+                        <div class="team-type-name">Running Club</div>
+                        <div class="team-type-value">running-club</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">📸</div>
+                        <div class="team-type-name">Photography Club</div>
+                        <div class="team-type-value">photography</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education & Learning -->
+            <div class="team-type-category">
+                <div class="category-title">📚 Education & Learning</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">👥</div>
+                        <div class="team-type-name">Study Buddy Group</div>
+                        <div class="team-type-value">study-buddy</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">💻</div>
+                        <div class="team-type-name">Coding Bootcamp</div>
+                        <div class="team-type-value">coding-bootcamp</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎓</div>
+                        <div class="team-type-name">Mentorship Program</div>
+                        <div class="team-type-value">mentorship</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🔬</div>
+                        <div class="team-type-name">Academic Research</div>
+                        <div class="team-type-value">academic-research</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creative & Design -->
+            <div class="team-type-category">
+                <div class="category-title">🎨 Creative & Design</div>
+                <div class="team-type-grid">
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎨</div>
+                        <div class="team-type-name">Design Studio</div>
+                        <div class="team-type-value">design-studio</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">📱</div>
+                        <div class="team-type-name">Social Media Team</div>
+                        <div class="team-type-value">social-media</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🎬</div>
+                        <div class="team-type-name">Animation Team</div>
+                        <div class="team-type-value">animation</div>
+                    </div>
+                    <div class="team-type-card">
+                        <div class="team-type-icon">🏗️</div>
+                        <div class="team-type-name">Architecture Team</div>
+                        <div class="team-type-value">architecture</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="demo-section">
+            <h4 class="mb-3">
+                <i class="fas fa-chart-bar me-2"></i>
+                Team Types Statistics
+            </h4>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">75+</div>
+                    <div class="stat-label">Team Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🏢</div>
+                    <div class="stat-label">Business</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🌐</div>
+                    <div class="stat-label">Technical</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🎮</div>
+                    <div class="stat-label">Games</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">🎉</div>
+                    <div class="stat-label">Fun & Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="text-center mt-4">
+            <a href="team.html" class="btn btn-primary me-2">
+                <i class="fas fa-arrow-left me-1"></i>
+                Back to Team Page
+            </a>
+            <a href="task.html" class="btn btn-outline-primary">
+                <i class="fas fa-tasks me-1"></i>
+                Go to Tasks
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Team type selection handler
+        document.getElementById('teamType').addEventListener('change', function() {
+            const selectedValue = this.value;
+            const selectedOption = this.options[this.selectedIndex];
+            const displayDiv = document.getElementById('selectedTeamType');
+            
+            if (selectedValue) {
+                displayDiv.className = 'alert alert-success';
+                displayDiv.innerHTML = `
+                    <strong>${selectedOption.text}</strong><br>
+                    <small class="text-muted">Value: ${selectedValue}</small>
+                `;
+            } else {
+                displayDiv.className = 'alert alert-info';
+                displayDiv.textContent = 'No team type selected';
+            }
+        });
+
+        // Add click handlers to team type cards
+        document.querySelectorAll('.team-type-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const value = this.querySelector('.team-type-value').textContent;
+                const name = this.querySelector('.team-type-name').textContent;
+                
+                // Update dropdown
+                const select = document.getElementById('teamType');
+                select.value = value;
+                
+                // Trigger change event
+                select.dispatchEvent(new Event('change'));
+                
+                // Add visual feedback
+                this.style.transform = 'scale(1.05)';
+                this.style.boxShadow = '0 8px 25px rgba(99, 102, 241, 0.3)';
+                
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                }, 300);
+            });
+        });
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', newTheme);
+        }
+
+        // Add theme toggle button
+        const themeBtn = document.createElement('button');
+        themeBtn.className = 'btn btn-outline-secondary position-fixed';
+        themeBtn.style.cssText = 'top: 20px; right: 20px; z-index: 1000;';
+        themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+        themeBtn.onclick = toggleTheme;
+        document.body.appendChild(themeBtn);
+    </script>
+</body>
+</html> 

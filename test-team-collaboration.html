@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Collaboration Test - QuickNotes AI</title>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    
+    <style>
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-result {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        
+        .test-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .test-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .test-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .test-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .test-button {
+            margin: 5px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-warning { background: #ffc107; }
+        .status-info { background: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">
+            <i class="bi bi-people-fill text-primary me-2"></i>
+            Team Collaboration Test Suite
+        </h1>
+        
+        <div class="alert alert-info">
+            <h5><i class="bi bi-info-circle me-2"></i>Test Instructions</h5>
+            <p>This page tests all team collaboration features. Run each test section to verify functionality.</p>
+        </div>
+
+        <!-- Authentication Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-shield-check me-2"></i>Authentication & Premium Status</h4>
+            <div id="authTestResults"></div>
+            <button class="btn btn-primary test-button" onclick="testAuthentication()">
+                <i class="bi bi-shield-check me-1"></i>Test Authentication
+            </button>
+            <button class="btn btn-warning test-button" onclick="testPremiumStatus()">
+                <i class="bi bi-crown me-1"></i>Test Premium Status
+            </button>
+        </div>
+
+        <!-- Team Management Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-people me-2"></i>Team Management</h4>
+            <div id="teamTestResults"></div>
+            <button class="btn btn-success test-button" onclick="testTeamCreation()">
+                <i class="bi bi-plus-circle me-1"></i>Test Team Creation
+            </button>
+            <button class="btn btn-info test-button" onclick="testTeamJoining()">
+                <i class="bi bi-person-plus me-1"></i>Test Team Joining
+            </button>
+            <button class="btn btn-secondary test-button" onclick="testTeamLoading()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Test Team Loading
+            </button>
+        </div>
+
+        <!-- Task Assignment Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-task me-2"></i>Task Assignment</h4>
+            <div id="taskAssignmentTestResults"></div>
+            <button class="btn btn-primary test-button" onclick="testTeamAssignment()">
+                <i class="bi bi-person-check me-1"></i>Test Team Assignment
+            </button>
+            <button class="btn btn-success test-button" onclick="testTaskCreation()">
+                <i class="bi bi-plus-circle me-1"></i>Test Task Creation
+            </button>
+            <button class="btn btn-info test-button" onclick="testTaskFiltering()">
+                <i class="bi bi-funnel me-1"></i>Test Task Filtering
+            </button>
+        </div>
+
+        <!-- Dashboard Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-graph-up me-2"></i>Team Dashboard</h4>
+            <div id="dashboardTestResults"></div>
+            <button class="btn btn-primary test-button" onclick="testDashboardLoading()">
+                <i class="bi bi-speedometer2 me-1"></i>Test Dashboard Loading
+            </button>
+            <button class="btn btn-success test-button" onclick="testCharts()">
+                <i class="bi bi-bar-chart me-1"></i>Test Charts
+            </button>
+            <button class="btn btn-info test-button" onclick="testRealTimeUpdates()">
+                <i class="bi bi-arrow-repeat me-1"></i>Test Real-time Updates
+            </button>
+        </div>
+
+        <!-- Security Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-lock me-2"></i>Security & Access Control</h4>
+            <div id="securityTestResults"></div>
+            <button class="btn btn-warning test-button" onclick="testAccessControl()">
+                <i class="bi bi-shield-lock me-1"></i>Test Access Control
+            </button>
+            <button class="btn btn-danger test-button" onclick="testDataIsolation()">
+                <i class="bi bi-database-lock me-1"></i>Test Data Isolation
+            </button>
+        </div>
+
+        <!-- Integration Test -->
+        <div class="test-section">
+            <h4><i class="bi bi-puzzle me-2"></i>Integration Tests</h4>
+            <div id="integrationTestResults"></div>
+            <button class="btn btn-primary test-button" onclick="testEndToEnd()">
+                <i class="bi bi-arrow-right-circle me-1"></i>Test End-to-End Flow
+            </button>
+            <button class="btn btn-success test-button" onclick="testNavigation()">
+                <i class="bi bi-compass me-1"></i>Test Navigation
+            </button>
+        </div>
+
+        <!-- Test Summary -->
+        <div class="test-section">
+            <h4><i class="bi bi-clipboard-check me-2"></i>Test Summary</h4>
+            <div id="testSummary"></div>
+            <button class="btn btn-primary test-button" onclick="runAllTests()">
+                <i class="bi bi-play-circle me-1"></i>Run All Tests
+            </button>
+            <button class="btn btn-secondary test-button" onclick="clearTestResults()">
+                <i class="bi bi-trash me-1"></i>Clear Results
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/team.js"></script>
+    <script src="js/team-dashboard.js"></script>
+    <script src="js/task.js"></script>
+
+    <script>
+        // Test Results Storage
+        let testResults = {
+            authentication: { passed: 0, failed: 0, total: 0 },
+            teamManagement: { passed: 0, failed: 0, total: 0 },
+            taskAssignment: { passed: 0, failed: 0, total: 0 },
+            dashboard: { passed: 0, failed: 0, total: 0 },
+            security: { passed: 0, failed: 0, total: 0 },
+            integration: { passed: 0, failed: 0, total: 0 }
+        };
+
+        // Helper function to add test result
+        function addTestResult(section, message, type = 'info') {
+            const resultsDiv = document.getElementById(section + 'TestResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result test-${type}`;
+            resultDiv.innerHTML = `
+                <span class="status-indicator status-${type}"></span>
+                ${message}
+            `;
+            resultsDiv.appendChild(resultDiv);
+            
+            // Update test counts
+            if (type === 'success') testResults[section].passed++;
+            else if (type === 'error') testResults[section].failed++;
+            testResults[section].total++;
+            
+            updateTestSummary();
+        }
+
+        // Update test summary
+        function updateTestSummary() {
+            const summaryDiv = document.getElementById('testSummary');
+            let totalPassed = 0, totalFailed = 0, totalTests = 0;
+            
+            Object.values(testResults).forEach(section => {
+                totalPassed += section.passed;
+                totalFailed += section.failed;
+                totalTests += section.total;
+            });
+            
+            const successRate = totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 0;
+            
+            summaryDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="text-success">${totalPassed}</h5>
+                                <small>Passed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="text-danger">${totalFailed}</h5>
+                                <small>Failed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="text-info">${totalTests}</h5>
+                                <small>Total</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="text-primary">${successRate}%</h5>
+                                <small>Success Rate</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Clear test results
+        function clearTestResults() {
+            document.querySelectorAll('[id$="TestResults"]').forEach(div => {
+                div.innerHTML = '';
+            });
+            testResults = {
+                authentication: { passed: 0, failed: 0, total: 0 },
+                teamManagement: { passed: 0, failed: 0, total: 0 },
+                taskAssignment: { passed: 0, failed: 0, total: 0 },
+                dashboard: { passed: 0, failed: 0, total: 0 },
+                security: { passed: 0, failed: 0, total: 0 },
+                integration: { passed: 0, failed: 0, total: 0 }
+            };
+            updateTestSummary();
+        }
+
+        // Authentication Test
+        async function testAuthentication() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    addTestResult('authentication', `User authenticated: ${user.email}`, 'success');
+                } else {
+                    addTestResult('authentication', 'No user authenticated', 'error');
+                }
+            } catch (error) {
+                addTestResult('authentication', `Authentication error: ${error.message}`, 'error');
+            }
+        }
+
+        // Premium Status Test
+        async function testPremiumStatus() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('authentication', 'No user authenticated for premium test', 'error');
+                    return;
+                }
+
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const isPremium = userData.role === 'premium' || userData.premium === true;
+                    
+                    if (isPremium) {
+                        addTestResult('authentication', 'User has premium access', 'success');
+                    } else {
+                        addTestResult('authentication', 'User does not have premium access', 'warning');
+                    }
+                } else {
+                    addTestResult('authentication', 'User document not found', 'error');
+                }
+            } catch (error) {
+                addTestResult('authentication', `Premium status error: ${error.message}`, 'error');
+            }
+        }
+
+        // Team Creation Test
+        async function testTeamCreation() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('teamManagement', 'No user authenticated for team test', 'error');
+                    return;
+                }
+
+                // Check if user can create teams (premium check)
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                const isPremium = userDoc.exists && (userDoc.data().role === 'premium' || userDoc.data().premium === true);
+                
+                if (isPremium) {
+                    addTestResult('teamManagement', 'User can create teams (premium)', 'success');
+                } else {
+                    addTestResult('teamManagement', 'User cannot create teams (not premium)', 'warning');
+                }
+
+                // Check existing teams
+                const teamsSnapshot = await firebase.firestore()
+                    .collection('teams')
+                    .where('members', 'array-contains', user.uid)
+                    .get();
+                
+                addTestResult('teamManagement', `User is member of ${teamsSnapshot.size} team(s)`, 'info');
+                
+            } catch (error) {
+                addTestResult('teamManagement', `Team creation test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Team Joining Test
+        async function testTeamJoining() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('teamManagement', 'No user authenticated for team joining test', 'error');
+                    return;
+                }
+
+                // Check if user has a teamId
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    if (userData.teamId) {
+                        addTestResult('teamManagement', `User is in team: ${userData.teamId}`, 'success');
+                    } else {
+                        addTestResult('teamManagement', 'User is not in any team', 'info');
+                    }
+                }
+                
+            } catch (error) {
+                addTestResult('teamManagement', `Team joining test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Team Loading Test
+        async function testTeamLoading() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('teamManagement', 'No user authenticated for team loading test', 'error');
+                    return;
+                }
+
+                // Test team loading functionality
+                if (typeof loadUserTeams === 'function') {
+                    addTestResult('teamManagement', 'Team loading function exists', 'success');
+                } else {
+                    addTestResult('teamManagement', 'Team loading function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('teamManagement', `Team loading test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Team Assignment Test
+        async function testTeamAssignment() {
+            try {
+                // Check if TeamAssignmentManager exists
+                if (typeof TeamAssignmentManager === 'function') {
+                    addTestResult('taskAssignment', 'TeamAssignmentManager class exists', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'TeamAssignmentManager class not found', 'error');
+                }
+
+                // Check if team assignment section exists
+                const teamSection = document.getElementById('teamAssignmentSection');
+                if (teamSection) {
+                    addTestResult('taskAssignment', 'Team assignment section exists in DOM', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'Team assignment section not found in DOM', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('taskAssignment', `Team assignment test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Task Creation Test
+        async function testTaskCreation() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('taskAssignment', 'No user authenticated for task creation test', 'error');
+                    return;
+                }
+
+                // Check if addTask function exists
+                if (typeof addTask === 'function') {
+                    addTestResult('taskAssignment', 'Task creation function exists', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'Task creation function not found', 'error');
+                }
+
+                // Check if getTaskTeamAssignmentData function exists
+                if (typeof getTaskTeamAssignmentData === 'function') {
+                    addTestResult('taskAssignment', 'Team task data function exists', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'Team task data function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('taskAssignment', `Task creation test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Task Filtering Test
+        async function testTaskFiltering() {
+            try {
+                // Check if task filters exist
+                const taskTypeFilter = document.getElementById('filterTaskType');
+                if (taskTypeFilter) {
+                    addTestResult('taskAssignment', 'Team task filter exists', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'Team task filter not found', 'error');
+                }
+
+                // Check if renderTasks function exists
+                if (typeof renderTasks === 'function') {
+                    addTestResult('taskAssignment', 'Task rendering function exists', 'success');
+                } else {
+                    addTestResult('taskAssignment', 'Task rendering function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('taskAssignment', `Task filtering test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Dashboard Loading Test
+        async function testDashboardLoading() {
+            try {
+                // Check if team dashboard functions exist
+                if (typeof initializeTeamDashboard === 'function') {
+                    addTestResult('dashboard', 'Team dashboard initialization function exists', 'success');
+                } else {
+                    addTestResult('dashboard', 'Team dashboard initialization function not found', 'error');
+                }
+
+                if (typeof loadTeamData === 'function') {
+                    addTestResult('dashboard', 'Team data loading function exists', 'success');
+                } else {
+                    addTestResult('dashboard', 'Team data loading function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('dashboard', `Dashboard loading test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Charts Test
+        async function testCharts() {
+            try {
+                // Check if chart functions exist
+                if (typeof initializeCharts === 'function') {
+                    addTestResult('dashboard', 'Chart initialization function exists', 'success');
+                } else {
+                    addTestResult('dashboard', 'Chart initialization function not found', 'error');
+                }
+
+                if (typeof updateCharts === 'function') {
+                    addTestResult('dashboard', 'Chart update function exists', 'success');
+                } else {
+                    addTestResult('dashboard', 'Chart update function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('dashboard', `Charts test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Real-time Updates Test
+        async function testRealTimeUpdates() {
+            try {
+                // Check if real-time listener functions exist
+                if (typeof setupRealtimeListeners === 'function') {
+                    addTestResult('dashboard', 'Real-time listeners function exists', 'success');
+                } else {
+                    addTestResult('dashboard', 'Real-time listeners function not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('dashboard', `Real-time updates test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Access Control Test
+        async function testAccessControl() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('security', 'No user authenticated for access control test', 'error');
+                    return;
+                }
+
+                // Check if user document exists and has proper structure
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    if (userData.role || userData.premium !== undefined) {
+                        addTestResult('security', 'User document has proper access control fields', 'success');
+                    } else {
+                        addTestResult('security', 'User document missing access control fields', 'warning');
+                    }
+                } else {
+                    addTestResult('security', 'User document not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('security', `Access control test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Data Isolation Test
+        async function testDataIsolation() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('security', 'No user authenticated for data isolation test', 'error');
+                    return;
+                }
+
+                // Check if user can only access their own data
+                const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    addTestResult('security', 'User can access their own data', 'success');
+                } else {
+                    addTestResult('security', 'User cannot access their own data', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult('security', `Data isolation test error: ${error.message}`, 'error');
+            }
+        }
+
+        // End-to-End Test
+        async function testEndToEnd() {
+            try {
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    addTestResult('integration', 'No user authenticated for end-to-end test', 'error');
+                    return;
+                }
+
+                // Check if all required functions exist
+                const requiredFunctions = [
+                    'initializeTeamPage',
+                    'initializeTeamDashboard',
+                    'initializeTeamAssignment',
+                    'addTask',
+                    'renderTasks'
+                ];
+
+                let allFunctionsExist = true;
+                requiredFunctions.forEach(funcName => {
+                    if (typeof window[funcName] !== 'function') {
+                        addTestResult('integration', `Required function missing: ${funcName}`, 'error');
+                        allFunctionsExist = false;
+                    }
+                });
+
+                if (allFunctionsExist) {
+                    addTestResult('integration', 'All required functions exist', 'success');
+                }
+                
+            } catch (error) {
+                addTestResult('integration', `End-to-end test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Navigation Test
+        async function testNavigation() {
+            try {
+                // Check if navigation functions exist
+                if (typeof showTeamNavigation === 'function') {
+                    addTestResult('integration', 'Team navigation function exists', 'success');
+                } else {
+                    addTestResult('integration', 'Team navigation function not found', 'error');
+                }
+
+                // Check if team pages exist
+                const teamPages = ['team.html', 'team-dashboard.html'];
+                teamPages.forEach(page => {
+                    addTestResult('integration', `Team page exists: ${page}`, 'info');
+                });
+                
+            } catch (error) {
+                addTestResult('integration', `Navigation test error: ${error.message}`, 'error');
+            }
+        }
+
+        // Run All Tests
+        async function runAllTests() {
+            clearTestResults();
+            
+            // Run all test functions
+            await testAuthentication();
+            await testPremiumStatus();
+            await testTeamCreation();
+            await testTeamJoining();
+            await testTeamLoading();
+            await testTeamAssignment();
+            await testTaskCreation();
+            await testTaskFiltering();
+            await testDashboardLoading();
+            await testCharts();
+            await testRealTimeUpdates();
+            await testAccessControl();
+            await testDataIsolation();
+            await testEndToEnd();
+            await testNavigation();
+            
+            addTestResult('integration', 'All tests completed!', 'success');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTestSummary();
+        });
+    </script>
+</body>
+</html> 

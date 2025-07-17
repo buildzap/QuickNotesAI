@@ -1,0 +1,78 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isPremiumUser() {
+      return isAuthenticated() && 
+        (resource.data.role == 'premium' || 
+         resource.data.premium == true || 
+         resource.data.isPremium == true);
+    }
+    
+    function isTeamMember(teamId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        request.auth.uid in resource.data.members;
+    }
+    
+    function isTeamAdmin(teamId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/teams/$(teamId)) &&
+        request.auth.uid in resource.data.admins;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isPremiumUser());
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Teams collection - Premium only
+    match /teams/{teamId} {
+      allow read: if isAuthenticated() && isTeamMember(teamId);
+      allow create: if isAuthenticated() && isPremiumUser();
+      allow update, delete: if isAuthenticated() && isTeamAdmin(teamId);
+    }
+    
+    // Tasks collection
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.userId) || 
+        (resource.data.teamAssignment != null && 
+         isTeamMember(resource.data.teamAssignment.teamId))
+      );
+      allow create: if isAuthenticated() && (
+        isOwner(request.resource.data.userId) ||
+        (request.resource.data.teamAssignment != null && 
+         isTeamAdmin(request.resource.data.teamAssignment.teamId))
+      );
+      allow update, delete: if isAuthenticated() && (
+        isOwner(resource.data.userId) ||
+        (resource.data.teamAssignment != null && 
+         isTeamAdmin(resource.data.teamAssignment.teamId))
+      );
+    }
+    
+    // Assigned tasks subcollection
+    match /users/{userId}/assignedTasks/{taskId} {
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Development mode - allow localhost access
+    match /{document=**} {
+      allow read, write: if request.auth != null && 
+        (request.auth.token.email_verified == true || 
+         request.auth.token.email.matches('.*@localhost.*'));
+    }
+  }
+}

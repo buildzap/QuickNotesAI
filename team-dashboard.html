@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float-gentle 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .floating-bg-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            background: var(--gradient-secondary);
+            animation-delay: 2s;
+        }
+
+        .floating-bg-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            background: var(--gradient-accent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Pagination Styles */
+        .chart-actions .btn-group {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .chart-actions .btn-group .btn {
+            border-radius: 0;
+            border: 1px solid var(--border-color);
+            background: var(--background-card);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .chart-actions .btn-group .btn:first-child {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+
+        .chart-actions .btn-group .btn:last-child {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+        }
+
+        .chart-actions .btn-group .btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .chart-actions .btn-group .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chart-actions .btn-group #pageInfo {
+            background: var(--background-card);
+            color: var(--text-secondary);
+            font-weight: 500;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Font Awesome Icon Fixes */
+        .fas, .far, .fab, .fa {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands" !important;
+            font-weight: 900;
+        }
+
+        .far {
+            font-weight: 400;
+        }
+
+        .fab {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400;
+        }
+
+        /* Icon Test Styles */
+        .icon-test {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--background-card);
+        }
+
+        .icon-test i {
+            font-size: 1.5rem;
+            margin-right: 5px;
+        }
+
+        /* Filter Controls Styling */
+        .filter-controls {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-controls .form-select {
+            font-size: 0.875rem;
+            border-radius: 6px;
+        }
+
+        .filter-controls .btn {
+            font-size: 0.875rem;
+            border-radius: 6px;
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+
+        .navbar-toggler {
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Task Tile Grid Layout - More Compact for 8 tiles in 2 rows */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Task Tile Styles - More Compact */
+        .task-tile {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 160px;
+        }
+
+        .task-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .task-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .task-tile:hover::before {
+            transform: scaleX(1);
+        }
+
+        .task-tile.completed {
+            opacity: 0.9;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .task-tile.completed::before {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            transform: scaleX(1);
+        }
+
+        .task-tile.pending {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .task-tile.pending::before {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            transform: scaleX(1);
+        }
+
+        .task-tile.in-progress {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .task-tile.in-progress::before {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            transform: scaleX(1);
+        }
+
+        .task-tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.3rem;
+        }
+
+        .task-tile-title-section {
+            margin-bottom: 0.4rem;
+        }
+
+        .task-tile-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.2;
+            padding: 0.2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .task-tile-title.completed {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .task-tile-description {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: 2.4em;
+            word-wrap: break-word;
+        }
+
+        .task-tile-description.completed {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .task-tile-priority {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .task-tile-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            margin-bottom: 0.4rem;
+            padding: 0.3rem;
+            background: var(--background-main);
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .task-date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .task-date-item i {
+            font-size: 0.7rem;
+            width: 14px;
+            text-align: center;
+        }
+
+        .task-date-label {
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        .task-date-value {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        /* Task Tile Footer */
+        .task-tile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            padding-top: 0.4rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .task-tile-meta {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+
+        .task-tile-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            background: var(--background-main);
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-pending {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-in-progress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .task-tile-member-info {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            gap: 0.2rem;
+        }
+
+        .task-tile-team-assignment {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .task-tile-team-assignment:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            max-width: none;
+        }
+
+        .task-tile-team-label {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem; /* Position on the bottom-right */
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            z-index: 2;
+        }
+
+        .task-tile-input-method {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .task-tile-input-method.voice {
+            color: #ffffff;
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+
+        .task-tile-input-method.manual {
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .task-tile-input-method.import {
+            color: #ffffff;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .task-tile-input-method.template {
+            color: #ffffff;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        /* Team name display in task tile footer */
+        .task-tile-team-name {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-right: auto;
+        }
+
+        .task-tile-team-name i {
+            font-size: 0.7rem;
+            color: var(--primary-color);
+        }
+
+        /* Enhanced Theme Support for Better Readability */
+        [data-bs-theme="dark"] .priority-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        [data-bs-theme="dark"] .priority-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        [data-bs-theme="dark"] .priority-low {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        [data-bs-theme="dark"] .status-completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+        }
+
+        [data-bs-theme="dark"] .status-pending {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        [data-bs-theme="dark"] .status-in-progress {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        /* Enhanced Typography for Better Readability */
+        .dashboard-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card-subtitle {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .insight-text {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .insight-text-muted {
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Enhanced Insight Text Visibility */
+        .alert-heading {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary) !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert .small.text-muted {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-primary) !important;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        [data-bs-theme="dark"] .alert .small.text-muted {
+            color: var(--text-primary) !important;
+            opacity: 0.95;
+        }
+
+        /* Enhanced Analysis Text */
+        #teamStatusAnalysis,
+        #teamStatusRecommendations,
+        #teamPriorityAnalysis,
+        #teamPriorityRecommendations,
+        #memberPerformanceAnalysis,
+        #memberPerformanceRecommendations {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-primary) !important;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        [data-bs-theme="dark"] #teamStatusAnalysis,
+        [data-bs-theme="dark"] #teamStatusRecommendations,
+        [data-bs-theme="dark"] #teamPriorityAnalysis,
+        [data-bs-theme="dark"] #teamPriorityRecommendations,
+        [data-bs-theme="dark"] #memberPerformanceAnalysis,
+        [data-bs-theme="dark"] #memberPerformanceRecommendations {
+            color: var(--text-primary) !important;
+            opacity: 0.95;
+        }
+
+        /* Enhanced Indicator Labels */
+        .indicator-label.text-muted {
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-primary) !important;
+            opacity: 0.8;
+        }
+
+        [data-bs-theme="dark"] .indicator-label.text-muted {
+            color: var(--text-primary) !important;
+            opacity: 0.9;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Enhanced Chart Labels */
+        .chart-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .chart-subtitle {
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Enhanced Form Controls */
+        .form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .form-control, .form-select {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            background-color: var(--background-card);
+            border-color: var(--border-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        }
+
+        /* Enhanced Button Typography */
+        .btn {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn-sm {
+            font-size: 0.8rem;
+        }
+
+        .btn-lg {
+            font-size: 1rem;
+        }
+
+        /* Enhanced Badge Typography */
+        .badge {
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        /* Enhanced Alert Typography */
+        .alert {
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .task-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.6rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .task-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .task-tile {
+                min-height: 140px;
+                padding: 0.5rem;
+            }
+
+            .task-tile-footer {
+                flex-direction: column;
+                gap: 0.2rem;
+                align-items: stretch;
+            }
+
+            .task-tile-member-info {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .task-grid {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .task-tile {
+                padding: 0.5rem;
+                min-height: 140px;
+            }
+        }
+
+        /* Legacy Team Task Card Styles (keeping for backward compatibility) */
+        .team-task-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .team-task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .team-task-card.completed {
+            border-left: 4px solid #28a745;
+            opacity: 0.8;
+        }
+
+        .team-task-card.in-progress {
+            border-left: 4px solid #ffc107;
+        }
+
+        .team-task-card.pending {
+            border-left: 4px solid #dc3545;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .task-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .task-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .task-assignment {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-dates {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .task-dates span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .task-status {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-badge.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.in-progress {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.pending {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .priority-high {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .priority-medium {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .priority-low {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* Dark mode adjustments for team task cards */
+        [data-bs-theme="dark"] .team-task-card {
+            background: var(--background-card);
+            border-color: var(--border-color);
+        }
+
+        [data-bs-theme="dark"] .task-title {
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="dark"] .task-description {
+            color: var(--text-secondary);
+        }
+
+        [data-bs-theme="dark"] .task-meta {
+            color: var(--text-muted);
+        }
+
+        /* Premium Banner Styles */
+        .premium-banner {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            border-bottom: 2px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 32px;
+            overflow: hidden;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .premium-user .premium-banner {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        body:not(.premium-user) .premium-banner {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            position: absolute !important;
+            top: -100px !important;
+            left: -100px !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+        }
+
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: premium-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes premium-glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem 0;
+            position: relative;
+            z-index: 1;
+            gap: 0.75rem;
+        }
+
+        .premium-banner-icon {
+            font-size: 0.85rem;
+            color: #ffd700;
+            animation: crown-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        }
+
+        @keyframes crown-pulse {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+            }
+            50% { 
+                transform: scale(1.1) rotate(2deg); 
+                filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+            }
+        }
+
+        .premium-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .premium-banner-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin: 0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .premium-banner-badge {
+            display: flex;
+            align-items: center;
+        }
+
+        .premium-banner-badge .badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a2e;
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: badge-shine 3s ease-in-out infinite;
+        }
+
+        @keyframes badge-shine {
+            0%, 100% { 
+                box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Compact Main Content */
+        .main-content {
+            padding-top: 80px;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Compact Team Dashboard Hero Section */
+        .team-dashboard-hero {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .team-dashboard-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-dashboard-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-dashboard-hero p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        /* Compact Stats Cards */
+        .stats-card {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            text-align: center;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-card h3 {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0;
+        }
+
+        .stats-value {
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stats-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stats-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Compact Chart Containers */
+        .chart-container {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+
+        .chart-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 0;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Compact Button Styles */
+        .btn {
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--gradient-accent);
+            border: none;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            color: white;
+        }
+
+        /* Compact Alert Styles */
+        .alert {
+            border-radius: 8px;
+            border: none;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        /* Compact Badge Styles */
+        .badge {
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .badge-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        /* Compact Form Styles */
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.5rem 0.8rem;
+            background: var(--background-card);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            background: var(--background-card);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-select-sm {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        /* Professional Chart Analytics Styles */
+        .pro-chart-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .pro-chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg) !important;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-controls .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .chart-controls .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Performance Indicators */
+        .performance-indicator {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .performance-indicator:hover {
+            transform: scale(1.05);
+            border-color: var(--border-color);
+        }
+
+        .indicator-value {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .indicator-label {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Interactive Tooltips */
+        .chart-tooltip {
+            position: absolute;
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            max-width: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip-header {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .tooltip-content {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .tooltip-insights {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Analysis Panels */
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+
+        .alert-heading {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Dark theme adjustments for professional charts */
+        [data-bs-theme="dark"] .chart-tooltip {
+            background: var(--background-card);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="dark"] .performance-indicator {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-bs-theme="dark"] .pro-chart-card {
+            background: var(--background-card);
+        }
+
+        /* Compact Team Info Section */
+        .team-info-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .team-info-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+        }
+
+        .team-info-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        /* Compact Member List */
+        .member-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.4rem;
+            background: var(--background-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .member-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .member-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .member-email {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Compact Smart Digest Section */
+        .smart-digest-section {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .smart-digest-title {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .smart-digest-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .digest-content {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .digest-meta {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+        }
+
+        .digest-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .digest-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+
+        .digest-actions {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .team-dashboard-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .team-dashboard-hero p {
+                font-size: 0.9rem;
+            }
+            
+            .stats-card {
+                margin-bottom: 1rem;
+            }
+            
+            .chart-actions {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .team-info-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .digest-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+
+    <!-- Premium Banner -->
+    <div class="premium-banner" id="premiumBanner">
+        <div class="premium-banner-content">
+            <i class="fas fa-crown premium-banner-icon"></i>
+            <div class="premium-banner-text">
+                <h6 class="premium-banner-title">Premium User</h6>
+                <div class="premium-banner-badge">
+                    <span class="badge">Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="fas fa-check-double me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link active" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Team Dashboard Hero Section -->
+        <section class="team-dashboard-hero">
+            <div class="container">
+                <div class="team-dashboard-hero-content text-center">
+                    <h1>Team Dashboard</h1>
+                    <p>Monitor team performance, track progress, and collaborate effectively</p>
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-3">
+                            <div class="stats-card text-center">
+                                <div class="stats-icon mx-auto">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3 id="totalTeamTasks" class="mb-0">0</h3>
+                                <small class="text-muted">Team Tasks</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card text-center">
+                                <div class="stats-icon mx-auto">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3 id="completedTeamTasks" class="mb-0">0</h3>
+                                <small class="text-muted">Completed</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card text-center">
+                                <div class="stats-icon mx-auto">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h3 id="pendingTeamTasks" class="mb-0">0</h3>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card text-center">
+                                <div class="stats-icon mx-auto">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                                <h3 id="teamMembers" class="mb-0">0</h3>
+                                <small class="text-muted">Members</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Alerts Container -->
+            <div id="alertsContainer"></div>
+            
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading team dashboard...</p>
+            </div>
+
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h5 class="chart-title">
+                                <i class="fas fa-crown me-2"></i>My Admin Teams
+                            </h5>
+                            <div class="chart-actions">
+                                <button class="btn btn-outline-primary btn-sm me-2" onclick="refreshAdminTeams()" title="Refresh admin teams">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" onclick="createNewTeam()" title="Create new team">
+                                    <i class="fas fa-plus me-1"></i>New Team
+                                </button>
+                            </div>
+                        </div>
+                        <div id="adminTeamsList">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted mt-2">Loading admin teams...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Info Section -->
+            <div class="team-info-section" id="teamInfoSection" style="display: none;">
+                <div class="team-info-header">
+                    <div>
+                        <h5 class="team-info-title" id="teamName">Team Name</h5>
+                        <p class="team-info-subtitle" id="teamDescription">Team description</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="manualRefresh()">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                        <button class="btn btn-outline-success btn-sm" onclick="manageTeam()">
+                            <i class="fas fa-cog me-1"></i>Manage Team
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Team Members:</h6>
+                        <ul class="member-list" id="teamMembersList">
+                            <!-- Team members will be loaded here -->
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h5 class="chart-title">
+                                <i class="fas fa-bolt me-2"></i>Quick Actions
+                            </h5>
+                            <div class="chart-actions">
+                                <button class="btn btn-outline-secondary btn-sm me-2" onclick="manualRefresh()" title="Refresh Data">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a href="task.html?mode=team" class="btn btn-primary w-100 mb-2">
+                                    <i class="fas fa-plus-circle me-1"></i>Add Team Task
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="task.html?mode=team" class="btn btn-outline-primary w-100 mb-2">
+                                    <i class="fas fa-tasks me-1"></i>View Team Tasks
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="team.html" class="btn btn-outline-success w-100 mb-2">
+                                    <i class="fas fa-users me-1"></i>Team Management
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-info w-100 mb-2" onclick="generateTeamDigest()">
+                                    <i class="fas fa-file-alt me-1"></i>Team Digest
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- My Team Task Section -->
+                        <div class="mt-4">
+                            <div class="chart-header">
+                                <h6 class="chart-title">
+                                    <i class="fas fa-tasks me-2"></i>My Team Task
+                                </h6>
+                                <div class="chart-actions">
+                                    <span id="teamTasksStatus" class="badge bg-secondary me-2">
+                                        <i class="fas fa-hourglass-half me-1"></i>Loading...
+                                    </span>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-secondary" onclick="previousPage()" id="prevPageBtn" disabled>
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <span class="btn btn-outline-secondary" id="pageInfo">Page 1</span>
+                                        <button class="btn btn-outline-secondary" onclick="nextPage()" id="nextPageBtn">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Filter Controls -->
+                            <div class="filter-controls mb-3">
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <select class="form-select form-select-sm" id="teamFilter" onchange="applyFilters()">
+                                            <option value="">All Teams</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-select form-select-sm" id="statusFilter" onchange="applyFilters()">
+                                            <option value="">All Status</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="completed">Completed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-select form-select-sm" id="priorityFilter" onchange="applyFilters()">
+                                            <option value="">All Priority</option>
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-select form-select-sm" id="memberFilter" onchange="applyFilters()">
+                                            <option value="">All Members</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-secondary btn-sm w-100" onclick="clearFilters()">
+                                            <i class="fas fa-times me-1"></i>Clear Filters
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="recentTeamTasksList">
+                                <div class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="text-muted mt-2">Loading team tasks...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Team Analytics Charts -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-success mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-chart-pie me-2"></i>Team Task Status Distribution
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="teamStatusInsightsBtn" class="btn btn-outline-success btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="teamStatusExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-success text-white">
+                                        <i class="fas fa-users me-1"></i>Team
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="completedTasksCount">0</div>
+                                        <div class="indicator-label text-muted small">Completed</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-warning fw-bold" id="inProgressTasksCount">0</div>
+                                        <div class="indicator-label text-muted small">In Progress</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-danger bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-danger fw-bold" id="pendingTasksCount">0</div>
+                                        <div class="indicator-label text-muted small">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="teamStatusChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="teamStatusTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="teamStatusAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-success border-2 border-success border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-chart-pie me-1"></i>Status Analysis
+                                            </h6>
+                                            <div id="teamStatusAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Team Insights
+                                            </h6>
+                                            <div id="teamStatusRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-warning mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-chart-bar me-2"></i>Team Task Priority Distribution
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="teamPriorityInsightsBtn" class="btn btn-outline-warning btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="teamPriorityExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>Priority
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-danger bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-danger fw-bold" id="highPriorityCount">0</div>
+                                        <div class="indicator-label text-muted small">High Priority</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-warning fw-bold" id="mediumPriorityCount">0</div>
+                                        <div class="indicator-label text-muted small">Medium</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="lowPriorityCount">0</div>
+                                        <div class="indicator-label text-muted small">Low Priority</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="teamPriorityChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="teamPriorityTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="teamPriorityAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-chart-bar me-1"></i>Priority Analysis
+                                            </h6>
+                                            <div id="teamPriorityAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Resource Tips
+                                            </h6>
+                                            <div id="teamPriorityRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Team Analytics Row -->
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-primary mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-chart-line me-2"></i>Team Member Performance
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="memberPerformanceInsightsBtn" class="btn btn-outline-primary btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="memberPerformanceExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-primary text-white">
+                                        <i class="fas fa-user-friends me-1"></i>Performance
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-primary bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-primary fw-bold" id="topPerformer">-</div>
+                                        <div class="indicator-label text-muted small">Top Performer</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="avgTasksPerMember">0</div>
+                                        <div class="indicator-label text-muted small">Avg Tasks/Member</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-info fw-bold" id="teamEfficiency">0%</div>
+                                        <div class="indicator-label text-muted small">Team Efficiency</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="memberPerformanceChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="memberPerformanceTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="memberPerformanceAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-primary border-2 border-primary border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-chart-line me-1"></i>Performance Analysis
+                                            </h6>
+                                            <div id="memberPerformanceAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Optimization Tips
+                                            </h6>
+                                            <div id="memberPerformanceRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-info mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-calendar-alt me-2"></i>Team Activity Timeline
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="activityTimelineInsightsBtn" class="btn btn-outline-info btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="activityTimelineExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-info text-white">
+                                        <i class="fas fa-clock me-1"></i>Timeline
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-info fw-bold" id="peakActivityDay">-</div>
+                                        <div class="indicator-label text-muted small">Peak Day</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="totalActivities">0</div>
+                                        <div class="indicator-label text-muted small">Total Activities</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-warning fw-bold" id="activityTrend">-</div>
+                                        <div class="indicator-label text-muted small">Trend</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="activityTimelineChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="activityTimelineTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="activityTimelineAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-info border-2 border-info border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-calendar-alt me-1"></i>Activity Analysis
+                                            </h6>
+                                            <div id="activityTimelineAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Schedule Tips
+                                            </h6>
+                                            <div id="activityTimelineRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Team Analytics Row -->
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-danger border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-danger mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-chart-area me-2"></i>Team Task Completion Trend
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="completionTrendInsightsBtn" class="btn btn-outline-danger btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="completionTrendExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-danger text-white">
+                                        <i class="fas fa-trending-up me-1"></i>Trend
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-danger bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-danger fw-bold" id="completionRate">0%</div>
+                                        <div class="indicator-label text-muted small">Completion Rate</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="avgCompletionTime">-</div>
+                                        <div class="indicator-label text-muted small">Avg Time</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-warning bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-warning fw-bold" id="overdueTasks">0</div>
+                                        <div class="indicator-label text-muted small">Overdue</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="completionTrendChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="completionTrendTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="completionTrendAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-danger border-2 border-danger border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-chart-area me-1"></i>Trend Analysis
+                                            </h6>
+                                            <div id="completionTrendAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Improvement Tips
+                                            </h6>
+                                            <div id="completionTrendRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-2 border-secondary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                        <div class="card-body d-flex flex-column" style="min-height:400px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="card-title text-secondary mb-0" style="font-size: 0.95rem;">
+                                    <i class="fas fa-chart-donut me-2"></i>Team Workload Distribution
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="chart-controls me-3">
+                                        <button id="workloadDistributionInsightsBtn" class="btn btn-outline-secondary btn-sm" style="font-size: 0.8rem;">
+                                            <i class="fas fa-lightbulb me-1"></i>Insights
+                                        </button>
+                                        <button id="workloadDistributionExportBtn" class="btn btn-outline-secondary btn-sm ms-2" style="font-size: 0.8rem;">
+                                            <i class="fas fa-download me-1"></i>Export
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-secondary text-white">
+                                        <i class="fas fa-balance-scale me-1"></i>Workload
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-secondary bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-secondary fw-bold" id="workloadBalance">-</div>
+                                        <div class="indicator-label text-muted small">Balance Score</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-info bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-info fw-bold" id="busiestMember">-</div>
+                                        <div class="indicator-label text-muted small">Busiest Member</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="performance-indicator bg-success bg-opacity-10 rounded p-2 text-center">
+                                        <div class="indicator-value text-success fw-bold" id="availableCapacity">0</div>
+                                        <div class="indicator-label text-muted small">Available Capacity</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart Container -->
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center position-relative">
+                                <canvas id="workloadDistributionChart"></canvas>
+                                
+                                <!-- Interactive Tooltip -->
+                                <div id="workloadDistributionTooltip" class="chart-tooltip d-none">
+                                    <div class="tooltip-header"></div>
+                                    <div class="tooltip-content"></div>
+                                    <div class="tooltip-insights"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Analysis Panel -->
+                            <div id="workloadDistributionAnalysisPanel" class="mt-3 d-none">
+                                <div class="alert alert-secondary border-2 border-secondary border-opacity-25">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-chart-donut me-1"></i>Workload Analysis
+                                            </h6>
+                                            <div id="workloadDistributionAnalysis" class="small text-muted"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="alert-heading mb-2" style="font-size: 0.85rem;">
+                                                <i class="fas fa-lightbulb me-1"></i>Balance Tips
+                                            </h6>
+                                            <div id="workloadDistributionRecommendations" class="small text-muted"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Digest Section -->
+            <div class="smart-digest-section" id="smartDigestSection">
+                <div class="digest-header">
+                    <h5 class="digest-title">
+                        <i class="fas fa-file-alt me-2"></i>Team Smart Digest
+                    </h5>
+                    <div class="digest-actions">
+                        <button class="btn btn-outline-primary btn-sm" onclick="generateTeamDigest()">
+                            <i class="fas fa-magic me-1"></i>Generate Digest
+                        </button>
+                        <button class="btn btn-outline-success btn-sm" onclick="shareTeamDigest()">
+                            <i class="fas fa-share me-1"></i>Share
+                        </button>
+                    </div>
+                </div>
+                <div id="digestContent">
+                    <p class="text-muted">Click "Generate Digest" to create a comprehensive team performance report.</p>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 fw-bold">
+                        <i class="fas fa-check-double me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
+                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-secondary opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-primary btn-sm" id="footerThemeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/nav-utils.js"></script>
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    
+    <!-- Utility Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <!-- Team Dashboard Scripts -->
+    <script src="js/team-dashboard.js"></script>
+    <script src="js/task-loader.js"></script>
+</body>
+</html> 

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/task.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Floating Background Elements */
+        .floating-bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float-gentle 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .floating-bg-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            background: var(--gradient-secondary);
+            animation-delay: 2s;
+        }
+
+        .floating-bg-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            background: var(--gradient-accent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Modern Voice-to-Text Section */
+        .voice-section {
+            background: var(--background-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .voice-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .voice-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .voice-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .voice-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .voice-controls {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .voice-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .voice-button:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .voice-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .voice-button.listening {
+            animation: pulse 1.5s infinite;
+            background: var(--gradient-accent);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .voice-status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .voice-transcript {
+            background: var(--background-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 60px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* Compact Task History */
+        .task-history {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .task-history-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-history-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .task-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .task-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .task-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .task-item:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin: 0;
+            flex: 1;
+        }
+
+        .task-priority {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .priority-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .priority-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .priority-low {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .task-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .task-date {
+            font-size: 0.7rem;
+        }
+
+        .task-status {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            background: var(--background-main);
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .task-action-btn {
+            padding: 0.1rem 0.3rem;
+            font-size: 0.7rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .task-action-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        /* Compact Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--background-card);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Compact Form */
+        .task-form {
+            background: var(--background-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-control {
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .voice-button {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+            
+            .task-filters {
+                flex-direction: column;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .task-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .task-list::-webkit-scrollbar-track {
+            background: var(--background-main);
+        }
+
+        .task-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .task-list::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+        }
+
+        .footer h5, .footer h6 {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+
+        .footer p, .footer a {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .footer a:hover {
+            color: #6366f1 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2"></i>
+                <span>QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="task.html">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="padding-top: 80px;">
+        <div class="row">
+            <div class="col-12">
+                <!-- Voice-to-Text Section -->
+                <div class="voice-section">
+                    <div class="voice-header">
+                        <h1 class="voice-title">Voice-to-Text</h1>
+                        <p class="voice-subtitle">Speak naturally and let AI transcribe your tasks</p>
+                    </div>
+                    <div class="voice-controls">
+                        <button id="voiceCommandFab" class="voice-button" title="Click to start voice recording">
+                            <i class="bi bi-mic-fill"></i>
+                        </button>
+                        <div class="voice-status" id="voiceStatus">Click the microphone to start recording</div>
+                        <div class="voice-transcript" id="voiceTranscript" style="display: none;">
+                            <strong>Transcript:</strong> <span id="transcriptText"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Summary -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-number" id="totalTasks">0</div>
+                        <div class="summary-label">Total Tasks</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="completedTasks">0</div>
+                        <div class="summary-label">Completed</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="pendingTasks">0</div>
+                        <div class="summary-label">Pending</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="highPriorityTasks">0</div>
+                        <div class="summary-label">High Priority</div>
+                    </div>
+                </div>
+
+                <!-- Task Form -->
+                <div class="task-form">
+                    <h5 class="mb-3">Add New Task</h5>
+                    <form id="taskForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskTitle" class="form-label">Task Title</label>
+                                <input type="text" class="form-control" id="taskTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskPriority" class="form-label">Priority</label>
+                                <select class="form-control" id="taskPriority">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskDueDate" class="form-label">Due Date</label>
+                                <input type="datetime-local" class="form-control" id="taskDueDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="taskStatus" class="form-label">Status</label>
+                                <select class="form-control" id="taskStatus">
+                                    <option value="pending" selected>Pending</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </form>
+                </div>
+
+                <!-- Task History -->
+                <div class="task-history">
+                    <div class="task-history-header">
+                        <h5 class="task-history-title">Task History</h5>
+                        <div class="task-filters">
+                            <select class="filter-select" id="filterPriority">
+                                <option value="">All Priorities</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                            <select class="filter-select" id="filterStatus">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            <button class="btn btn-sm btn-outline-secondary" id="clearFiltersBtn">Clear</button>
+                        </div>
+                    </div>
+                    <div class="task-list" id="taskList">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5" style="background: #000000 !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="bi bi-check2-square me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="text-light opacity-75 mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
+                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
+                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-light opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="footerThemeToggle">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <!-- Base Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Utility Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme manager and ensure theme toggle works
+            if (window.themeManager) {
+                window.themeManager.updateThemeIcon();
+                
+                // Ensure theme toggle button works
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', function() {
+                        window.themeManager.toggleTheme();
+                    });
+                }
+            }
+            
+            // Force brand link to always go to index.html (defensive against cache/JS overrides)
+            var brandLink = document.getElementById('brandHomeLink');
+            if (brandLink) {
+                brandLink.setAttribute('href', 'index.html');
+                brandLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+    
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    
+    <!-- Google Configuration -->
+    <script src="js/google-config.js"></script>
+    
+    <!-- Google Calendar Integration -->
+    <script src="js/gcal.js"></script>
+    
+    <!-- Google API Scripts -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Application Logic -->
+    <script src="js/task.js"></script>
+    
+    <!-- Voice Command Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const voiceButton = document.getElementById('voiceCommandFab');
+            const voiceStatus = document.getElementById('voiceStatus');
+            const voiceTranscript = document.getElementById('voiceTranscript');
+            const transcriptText = document.getElementById('transcriptText');
+            let isListening = false;
+
+            if (voiceButton) {
+                voiceButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (window.startVoiceCommand && typeof window.startVoiceCommand === 'function') {
+                        if (!isListening) {
+                            voiceButton.classList.add('listening');
+                            voiceStatus.textContent = 'Listening... Speak now!';
+                            isListening = true;
+                            window.startVoiceCommand({
+                                onStop: function(transcript) {
+                                    voiceButton.classList.remove('listening');
+                                    voiceStatus.textContent = 'Click the microphone to start recording';
+                                    isListening = false;
+                                    if (transcript) {
+                                        voiceTranscript.style.display = 'block';
+                                        transcriptText.textContent = transcript;
+                                        // Auto-fill task title with transcript
+                                        document.getElementById('taskTitle').value = transcript;
+                                    }
+                                },
+                                onError: function() {
+                                    voiceButton.classList.remove('listening');
+                                    voiceStatus.textContent = 'Error occurred. Please try again.';
+                                    isListening = false;
+                                }
+                            });
+                        } else {
+                            if (window.stopVoiceCommand && typeof window.stopVoiceCommand === 'function') {
+                                window.stopVoiceCommand();
+                            }
+                            voiceButton.classList.remove('listening');
+                            voiceStatus.textContent = 'Click the microphone to start recording';
+                            isListening = false;
+                        }
+                    } else {
+                        voiceStatus.textContent = 'Voice recognition not available';
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Clear Filters Function -->
+    <script>
+        function clearAllFilters() {
+            const clearBtn = document.getElementById('clearFiltersBtn');
+            const originalText = clearBtn.innerHTML;
+            clearBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Clearing...';
+            clearBtn.disabled = true;
+            
+            document.getElementById('filterPriority').value = '';
+            document.getElementById('filterStatus').value = '';
+            
+            if (window.taskState && window.taskState.filters) {
+                window.taskState.filters.priority = '';
+                window.taskState.filters.status = '';
+            }
+            
+            if (window.renderTasks && typeof window.renderTasks === 'function') {
+                window.renderTasks(1);
+            }
+            
+            showToast('All filters cleared successfully!', 'success');
+            
+            setTimeout(() => {
+                clearBtn.innerHTML = originalText;
+                clearBtn.disabled = false;
+            }, 500);
+        }
+        
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            const toastHTML = `
+                <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="bi bi-info-circle me-2 text-${type}"></i>
+                        <strong class="me-auto">QuickNotes AI</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+    </script>
+</body>
+</html> 

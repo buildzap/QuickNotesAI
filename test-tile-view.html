@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Tile View</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Test Tile View Functionality</h2>
+        
+        <!-- Task History Section -->
+        <div class="task-history mb-4">
+            <div class="task-history-header">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="task-history-title mb-0">Task History</h5>
+                    <button class="btn btn-outline-primary btn-sm" id="viewModeToggle" onclick="toggleViewMode()">
+                        <i class="bi bi-grid-3x3-gap me-1"></i>Tile View
+                    </button>
+                </div>
+            </div>
+            <div class="task-list" id="taskList">
+                <!-- Tasks will be populated here in list format -->
+            </div>
+            <div class="task-grid" id="taskGrid" style="display: none;">
+                <!-- Tasks will be populated here in tile format -->
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" onclick="addTestTask()">Add Test Task</button>
+        <button class="btn btn-secondary" onclick="console.log('Current view mode:', currentViewMode)">Check View Mode</button>
+    </div>
+
+    <script>
+        // Mock taskState for testing
+        const taskState = {
+            tasks: [],
+            filters: {
+                priority: '',
+                status: '',
+                inputMethod: '',
+                date: '',
+                title: '',
+                recurring: ''
+            }
+        };
+
+        let currentViewMode = 'list';
+        let currentTaskPage = 1;
+        const TASKS_PER_PAGE = 10;
+
+        // Helper functions
+        const escapeHtml = (text) => {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        };
+
+        const formatDate = (date) => {
+            if (!date) return 'No date';
+            return new Date(date).toLocaleDateString();
+        };
+
+        const getPriorityColor = (priority) => {
+            switch (priority?.toLowerCase()) {
+                case 'high': return 'danger';
+                case 'medium': return 'warning';
+                case 'low': return 'success';
+                default: return 'secondary';
+            }
+        };
+
+        const getStatusDisplayText = (status) => {
+            switch (status?.toLowerCase()) {
+                case 'completed': return '✔️ Completed';
+                case 'in-progress': return '⏳ In Progress';
+                case 'pending': return '⏸️ Pending';
+                case 'not-started': return '📋 Not Started';
+                default: return '📋 Pending';
+            }
+        };
+
+        const getStatusColor = (status) => {
+            switch (status?.toLowerCase()) {
+                case 'completed': return 'success';
+                case 'in-progress': return 'warning';
+                case 'pending': return 'info';
+                case 'not-started': return 'secondary';
+                default: return 'info';
+            }
+        };
+
+        // Add test task
+        function addTestTask() {
+            const testTask = {
+                id: Date.now().toString(),
+                title: `Test Task ${taskState.tasks.length + 1}`,
+                description: `This is a test task description for task ${taskState.tasks.length + 1}`,
+                dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                priority: ['high', 'medium', 'low'][Math.floor(Math.random() * 3)],
+                status: ['pending', 'in-progress', 'completed'][Math.floor(Math.random() * 3)],
+                inputMethod: ['manual', 'voice'][Math.floor(Math.random() * 2)],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                tags: ['test', 'demo'],
+                recurring: Math.random() > 0.7
+            };
+            
+            taskState.tasks.push(testTask);
+            console.log('Added test task:', testTask);
+            
+            // Re-render current view
+            if (currentViewMode === 'tiles') {
+                renderTaskGrid(currentTaskPage);
+            } else {
+                renderTasks(currentTaskPage);
+            }
+        }
+
+        // Render tasks in list view
+        function renderTasks(page = 1) {
+            console.log('[renderTasks] Starting render for page:', page);
+            currentTaskPage = page;
+            const tasksContainer = document.getElementById('taskList');
+            if (!tasksContainer) {
+                console.error('[renderTasks] taskList element not found');
+                return;
+            }
+            tasksContainer.innerHTML = '';
+
+            let tasks = Array.isArray(taskState.tasks) ? [...taskState.tasks] : [];
+            console.log('[renderTasks] Total tasks:', tasks.length);
+            
+            if (!tasks.length) {
+                console.log('[renderTasks] No tasks to display');
+                tasksContainer.innerHTML = '<div class="text-muted text-center p-4">No tasks found.</div>';
+                return;
+            }
+
+            // Sort by updatedAt descending
+            tasks.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+            // Pagination
+            const totalTasks = tasks.length;
+            const totalPages = Math.ceil(totalTasks / TASKS_PER_PAGE);
+            const startIdx = (page - 1) * TASKS_PER_PAGE;
+            const endIdx = startIdx + TASKS_PER_PAGE;
+            const pagedTasks = tasks.slice(startIdx, endIdx);
+
+            // Render each task
+            pagedTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-item card mb-2 border-start-4 border-${getPriorityColor(task.priority)}`;
+                
+                const checked = task.status === 'completed' ? 'checked' : '';
+                const strikeClass = task.status === 'completed' ? 'text-decoration-line-through text-muted' : '';
+                const lastUpdated = formatDate(task.updatedAt);
+
+                taskElement.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="form-check-input me-2 task-complete-checkbox" data-task-id="${task.id}" ${checked}>
+                            <div class="${strikeClass}">
+                                <h5 class="card-title task-title">${escapeHtml(task.title)}</h5>
+                                <p class="card-text mb-1">
+                                    <small class="text-muted">Created: ${formatDate(task.createdAt)}</small><br>
+                                    <small class="text-muted">Due: ${formatDate(task.dueDate)}</small><br>
+                                    <small class="text-muted">Updated: ${lastUpdated}</small><br>
+                                    <small class="text-muted">Input: ${task.inputMethod === 'voice' ? '🎤 Voice' : '✏️ Manual'}</small>
+                                </p>
+                                <p class="card-text mb-1">${escapeHtml(task.description)}</p>
+                                <div class="mb-1">
+                                    ${task.tags.map(tag => `<span class='badge bg-secondary me-1'>${escapeHtml(tag)}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge rounded-pill text-bg-${getPriorityColor(task.priority)} me-2">${escapeHtml(task.priority)}</span>
+                        <span class="badge rounded-pill text-bg-${getStatusColor(task.status)}">${getStatusDisplayText(task.status)}</span>
+                    </div>
+                </div>`;
+                
+                tasksContainer.appendChild(taskElement);
+            });
+        }
+
+        // Render tasks in grid view
+        function renderTaskGrid(page = 1) {
+            console.log('[renderTaskGrid] Starting render for page:', page);
+            currentTaskPage = page;
+            const tasksContainer = document.getElementById('taskGrid');
+            if (!tasksContainer) {
+                console.error('[renderTaskGrid] taskGrid element not found');
+                return;
+            }
+            tasksContainer.innerHTML = '';
+
+            let tasks = Array.isArray(taskState.tasks) ? [...taskState.tasks] : [];
+            console.log('[renderTaskGrid] Total tasks:', tasks.length);
+            
+            if (!tasks.length) {
+                console.log('[renderTaskGrid] No tasks to display');
+                tasksContainer.innerHTML = '<div class="text-muted text-center p-4">No tasks found.</div>';
+                return;
+            }
+
+            // Sort by updatedAt descending
+            tasks.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+            // Pagination
+            const totalTasks = tasks.length;
+            const totalPages = Math.ceil(totalTasks / TASKS_PER_PAGE);
+            const startIdx = (page - 1) * TASKS_PER_PAGE;
+            const endIdx = startIdx + TASKS_PER_PAGE;
+            const pagedTasks = tasks.slice(startIdx, endIdx);
+
+            // Create grid container
+            const gridContainer = document.createElement('div');
+            gridContainer.className = 'row g-3';
+
+            // Render each task as a tile
+            pagedTasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'col-md-6 col-lg-4';
+                
+                const checked = task.status === 'completed' ? 'checked' : '';
+                const strikeClass = task.status === 'completed' ? 'text-decoration-line-through text-muted' : '';
+                const lastUpdated = formatDate(task.updatedAt);
+                
+                const statusText = getStatusDisplayText(task.status);
+                const statusColor = getStatusColor(task.status);
+
+                taskElement.innerHTML = `
+                <div class="card h-100 border-${getPriorityColor(task.priority)} task-tile">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input task-complete-checkbox" data-task-id="${task.id}" ${checked}>
+                            </div>
+                        </div>
+                        
+                        <h6 class="card-title ${strikeClass} mb-2">
+                            ${escapeHtml(task.title)}
+                        </h6>
+                        
+                        <p class="card-text small mb-2 flex-grow-1">
+                            ${escapeHtml(task.description)}
+                        </p>
+                        
+                        <div class="task-meta small text-muted mb-2">
+                            <div><i class="bi bi-calendar3"></i> Due: ${formatDate(task.dueDate)}</div>
+                            <div><i class="bi bi-clock"></i> Updated: ${lastUpdated}</div>
+                            <div><i class="bi bi-keyboard"></i> ${task.inputMethod === 'voice' ? '🎤 Voice' : '✏️ Manual'}</div>
+                        </div>
+                        
+                        <div class="task-tags mb-2">
+                            ${task.tags.map(tag => `<span class='badge bg-secondary me-1 small'>${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                        
+                        <div class="task-badges">
+                            <span class="badge rounded-pill text-bg-${getPriorityColor(task.priority)} me-1">${escapeHtml(task.priority)}</span>
+                            <span class="badge rounded-pill text-bg-${statusColor}">${statusText}</span>
+                        </div>
+                    </div>
+                </div>`;
+                
+                gridContainer.appendChild(taskElement);
+            });
+
+            tasksContainer.appendChild(gridContainer);
+        }
+
+        // Toggle view mode
+        function toggleViewMode() {
+            const viewModeBtn = document.getElementById('viewModeToggle');
+            const taskList = document.getElementById('taskList');
+            const taskGrid = document.getElementById('taskGrid');
+            
+            console.log('Toggling view mode from:', currentViewMode);
+            
+            if (currentViewMode === 'list') {
+                currentViewMode = 'tiles';
+                if (viewModeBtn) viewModeBtn.innerHTML = '<i class="bi bi-list-ul me-1"></i>List View';
+                if (taskList) taskList.style.display = 'none';
+                if (taskGrid) taskGrid.style.display = 'block';
+                console.log('Switching to tile view');
+                renderTaskGrid(currentTaskPage || 1);
+            } else {
+                currentViewMode = 'list';
+                if (viewModeBtn) viewModeBtn.innerHTML = '<i class="bi bi-grid-3x3-gap me-1"></i>Tile View';
+                if (taskList) taskList.style.display = 'block';
+                if (taskGrid) taskGrid.style.display = 'none';
+                console.log('Switching to list view');
+                renderTasks(currentTaskPage || 1);
+            }
+        }
+
+        // Initialize view mode
+        function initializeViewMode() {
+            const taskList = document.getElementById('taskList');
+            const taskGrid = document.getElementById('taskGrid');
+            const viewModeBtn = document.getElementById('viewModeToggle');
+            
+            console.log('Initializing view mode...');
+            
+            if (taskList && taskGrid && viewModeBtn) {
+                taskList.style.display = 'block';
+                taskGrid.style.display = 'none';
+                currentViewMode = 'list';
+                viewModeBtn.innerHTML = '<i class="bi bi-grid-3x3-gap me-1"></i>Tile View';
+                console.log('View mode initialized: List view');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            initializeViewMode();
+            renderTasks(1);
+        });
+    </script>
+</body>
+</html> 

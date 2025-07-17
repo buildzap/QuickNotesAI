@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Recurring Task Sync - Step by Step</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Test Recurring Task Sync - Step by Step</h1>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Step 1: Create Recurring Task</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>1. Go to <a href="http://localhost:5500/task.html" target="_blank">Tasks Page</a></p>
+                                <p>2. Fill in the form:</p>
+                                <ul>
+                                    <li><strong>Title:</strong> "Daily Standup"</li>
+                                    <li><strong>Description:</strong> "Daily team meeting"</li>
+                                    <li><strong>Due Date:</strong> Any future date</li>
+                                    <li><strong>Priority:</strong> High</li>
+                                    <li><strong>Status:</strong> In Progress</li>
+                                </ul>
+                                <p>3. Check "Make this task recurring"</p>
+                                <p>4. Set Frequency to "Daily"</p>
+                                <p>5. Set Repeat Time to "09:00"</p>
+                                <p>6. Click "Add Task"</p>
+                                
+                                <button class="btn btn-primary" onclick="checkStep1()">
+                                    <i class="bi bi-check-circle me-2"></i>Check Step 1
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Step 2: Connect Google Calendar</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>1. Scroll down to Calendar Integration section</p>
+                                <p>2. Click "Connect to Google Calendar"</p>
+                                <p>3. Sign in with your Google account</p>
+                                <p>4. Grant calendar permissions</p>
+                                <p>5. Verify status shows "Connected"</p>
+                                
+                                <button class="btn btn-primary" onclick="checkStep2()">
+                                    <i class="bi bi-check-circle me-2"></i>Check Step 2
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Step 3: Sync Recurring Task</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>1. Find your recurring task in the list</p>
+                                <p>2. Look for 🔄 icon next to task title</p>
+                                <p>3. Click the three dots menu (⋮)</p>
+                                <p>4. Click "Sync to Google Calendar"</p>
+                                <p>5. Select "1 Month" in the modal</p>
+                                <p>6. Click "Sync to Calendar"</p>
+                                
+                                <button class="btn btn-primary" onclick="checkStep3()">
+                                    <i class="bi bi-check-circle me-2"></i>Check Step 3
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Step 4: Verify Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>1. Check your Google Calendar</p>
+                                <p>2. Look for "Daily Standup 🔄" event</p>
+                                <p>3. Verify event time is 09:00 (not due date time)</p>
+                                <p>4. Check recurrence is daily for 1 month</p>
+                                <p>5. Verify description includes sync duration</p>
+                                
+                                <button class="btn btn-success" onclick="checkStep4()">
+                                    <i class="bi bi-check-circle me-2"></i>Check Step 4
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Debug Tools</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <button class="btn btn-info w-100 mb-2" onclick="testModal()">
+                                        <i class="bi bi-window me-2"></i>Test Modal
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-warning w-100 mb-2" onclick="debugSync()">
+                                        <i class="bi bi-bug me-2"></i>Debug Sync
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-secondary w-100 mb-2" onclick="openTasksPage()">
+                                        <i class="bi bi-arrow-right me-2"></i>Open Tasks
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Console Output:</h5>
+                    <div id="consoleOutput" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;">
+                        <div>Console output will appear here...</div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-bug me-2"></i>Debug Information</h5>
+                    <div id="debugInfo">
+                        <p><strong>User Role:</strong> <span id="userRoleDebug">Loading...</span></p>
+                        <p><strong>Google Calendar Connected:</strong> <span id="gcalStatusDebug">Loading...</span></p>
+                        <p><strong>Recurring Tasks Found:</strong> <span id="recurringTasksDebug">Loading...</span></p>
+                        <p><strong>Sync Buttons Found:</strong> <span id="syncButtonsDebug">Loading...</span></p>
+                        <p><strong>Modal Element:</strong> <span id="modalElementDebug">Loading...</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sync Duration Modal -->
+    <div class="modal fade" id="syncDurationModal" tabindex="-1" aria-labelledby="syncDurationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="syncDurationModalLabel">
+                        <i class="bi bi-calendar-plus me-2"></i>Sync Recurring Task to Google Calendar
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Task:</label>
+                        <p class="text-muted mb-2" id="syncTaskTitle">Loading...</p>
+                        <label class="form-label fw-semibold">Recurrence:</label>
+                        <p class="text-muted mb-3" id="syncTaskRecurrence">Loading...</p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="syncDuration" class="form-label fw-semibold">Sync Duration:</label>
+                        <select class="form-select" id="syncDuration" required>
+                            <option value="">Select duration</option>
+                            <option value="1week">1 Week</option>
+                            <option value="1month" selected>1 Month</option>
+                        </select>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Calendar events will be created at the recurring time for the selected duration.
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <small>
+                            <i class="bi bi-clock me-1"></i>
+                            <strong>Note:</strong> Events will be created starting from the next occurrence at the recurring time, not the due date.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmSyncBtn">
+                        <i class="bi bi-calendar-plus me-2"></i>Sync to Calendar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mock console.log to display in the page
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const consoleOutput = document.getElementById('consoleOutput');
+        
+        function addToConsole(message, type = 'log') {
+            const div = document.createElement('div');
+            div.className = type === 'error' ? 'text-danger' : 'text-light';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            addToConsole(args.join(' '));
+        };
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            addToConsole(args.join(' '), 'error');
+        };
+
+        function testModal() {
+            console.log('[Test] Testing modal functionality...');
+            
+            const testTask = {
+                id: 'test-task-123',
+                title: 'Daily Standup',
+                recurring: true,
+                recurrence: {
+                    type: 'daily',
+                    time: '09:00'
+                }
+            };
+            
+            showSyncDurationModal(testTask, testTask.title);
+        }
+
+        function debugSync() {
+            console.log('[Test] Running debug sync functionality...');
+            
+            // Check if we're on the tasks page
+            if (window.debugSyncFunctionality) {
+                window.debugSyncFunctionality();
+            } else {
+                console.log('[Test] Debug function not available. Please run this from the tasks page.');
+            }
+        }
+
+        function openTasksPage() {
+            window.open('http://localhost:5500/task.html', '_blank');
+        }
+
+        function checkStep1() {
+            console.log('[Test] Checking Step 1: Recurring Task Creation');
+            console.log('[Test] Please ensure you have created a recurring task with:');
+            console.log('[Test] - Title: "Daily Standup"');
+            console.log('[Test] - Recurrence: Daily at 09:00');
+            console.log('[Test] - Success message: "Recurring task created! Use the sync button to add to Google Calendar."');
+        }
+
+        function checkStep2() {
+            console.log('[Test] Checking Step 2: Google Calendar Connection');
+            console.log('[Test] Please ensure:');
+            console.log('[Test] - Google Calendar is connected');
+            console.log('[Test] - Status shows "Connected"');
+            console.log('[Test] - No error messages in console');
+        }
+
+        function checkStep3() {
+            console.log('[Test] Checking Step 3: Sync Process');
+            console.log('[Test] Please ensure:');
+            console.log('[Test] - Sync button appears in task menu (three dots)');
+            console.log('[Test] - Modal appears when clicking sync');
+            console.log('[Test] - Duration selection works (1 week or 1 month)');
+            console.log('[Test] - Success message after sync');
+        }
+
+        function checkStep4() {
+            console.log('[Test] Checking Step 4: Results Verification');
+            console.log('[Test] Please check your Google Calendar for:');
+            console.log('[Test] - Event title: "Daily Standup 🔄"');
+            console.log('[Test] - Event time: 09:00 (not the due date time)');
+            console.log('[Test] - Recurrence: Daily for selected duration');
+            console.log('[Test] - Description includes sync duration info');
+        }
+
+        // Mock functions for testing
+        function formatRecurrenceInfo(recurrence) {
+            if (!recurrence) return '';
+            
+            const type = recurrence.type || '';
+            const time = recurrence.time || '';
+            
+            let info = '';
+            switch (type) {
+                case 'daily':
+                    info = 'Daily';
+                    break;
+                case 'weekly':
+                    info = 'Weekly';
+                    break;
+                case 'monthly':
+                    info = 'Monthly';
+                    break;
+                default:
+                    info = type;
+            }
+            
+            if (time) {
+                info += ` at ${time}`;
+            }
+            
+            return info;
+        }
+
+        function showSyncDurationModal(task, taskTitle) {
+            console.log('[Test] Showing sync duration modal for task:', taskTitle);
+            
+            // Update modal content
+            const syncTaskTitle = document.getElementById('syncTaskTitle');
+            const syncTaskRecurrence = document.getElementById('syncTaskRecurrence');
+            
+            if (syncTaskTitle) {
+                syncTaskTitle.textContent = taskTitle;
+            }
+            
+            if (syncTaskRecurrence) {
+                const recurrenceInfo = formatRecurrenceInfo(task.recurrence);
+                syncTaskRecurrence.textContent = recurrenceInfo;
+            }
+            
+            // Show modal
+            const modalElement = document.getElementById('syncDurationModal');
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+                console.log('[Test] Modal shown successfully');
+            } else {
+                console.error('[Test] Modal element not found!');
+            }
+        }
+
+        // Add event listener for confirm button
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmSyncBtn = document.getElementById('confirmSyncBtn');
+            if (confirmSyncBtn) {
+                confirmSyncBtn.addEventListener('click', function() {
+                    const syncDuration = document.getElementById('syncDuration').value;
+                    console.log('[Test] Sync confirmed with duration:', syncDuration);
+                    
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('syncDurationModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+                    
+                    console.log('[Test] SUCCESS: Modal functionality working correctly!');
+                    console.log('[Test] In real implementation, this would sync to Google Calendar');
+                });
+            }
+        });
+
+        console.log('[Test] Step-by-step test page loaded');
+        console.log('[Test] Use the buttons above to test each step');
+
+        // Update debug information
+        function updateDebugInfo() {
+            // User role
+            const userRoleElement = document.getElementById('userRoleDebug');
+            if (userRoleElement) {
+                userRoleElement.textContent = window.userRole || 'Not set';
+            }
+            
+            // Google Calendar status
+            const gcalStatusElement = document.getElementById('gcalStatusDebug');
+            if (gcalStatusElement) {
+                const isConnected = window.gcal && window.gcal.isSignedIn && window.gcal.isSignedIn();
+                gcalStatusElement.textContent = isConnected ? 'Connected' : 'Not Connected';
+            }
+            
+            // Recurring tasks
+            const recurringTasksElement = document.getElementById('recurringTasksDebug');
+            if (recurringTasksElement) {
+                const recurringTasks = window.taskState?.tasks?.filter(t => t.recurring) || [];
+                recurringTasksElement.textContent = `${recurringTasks.length} recurring tasks found`;
+            }
+            
+            // Sync buttons
+            const syncButtonsElement = document.getElementById('syncButtonsDebug');
+            if (syncButtonsElement) {
+                const syncButtons = document.querySelectorAll('.sync-recurring-task-btn');
+                syncButtonsElement.textContent = `${syncButtons.length} sync buttons found`;
+            }
+            
+            // Modal element
+            const modalElement = document.getElementById('modalElementDebug');
+            if (modalElement) {
+                const syncModal = document.getElementById('syncDurationModal');
+                modalElement.textContent = syncModal ? 'Found' : 'Not Found';
+            }
+        }
+        
+        // Update debug info every 2 seconds
+        setInterval(updateDebugInfo, 2000);
+        updateDebugInfo(); // Initial update
+        
+        // Test sync modal function
+        function testSyncModal() {
+            console.log('[Test] Testing sync modal...');
+            
+            // Check if user is premium
+            if (window.userRole !== 'premium') {
+                console.log('[Test] User is not premium:', window.userRole);
+                alert('User must be premium to test sync functionality');
+                return;
+            }
+            
+            // Check if Google Calendar is connected
+            if (!window.gcal || !window.gcal.isSignedIn || !window.gcal.isSignedIn()) {
+                console.log('[Test] Google Calendar not connected');
+                alert('Please connect to Google Calendar first');
+                return;
+            }
+            
+            // Find a recurring task
+            const recurringTasks = window.taskState?.tasks?.filter(t => t.recurring) || [];
+            if (recurringTasks.length === 0) {
+                console.log('[Test] No recurring tasks found');
+                alert('No recurring tasks found. Please create a recurring task first.');
+                return;
+            }
+            
+            const testTask = recurringTasks[0];
+            console.log('[Test] Using test task:', testTask);
+            
+            // Show the sync modal
+            showSyncDurationModal(testTask, testTask.title);
+        }
+        
+        // Add test button
+        const testButton = document.createElement('button');
+        testButton.className = 'btn btn-warning mt-3';
+        testButton.innerHTML = '<i class="bi bi-play-circle me-2"></i>Test Sync Modal';
+        testButton.onclick = testSyncModal;
+        document.getElementById('debugInfo').appendChild(testButton);
+    </script>
+</body>
+</html> 

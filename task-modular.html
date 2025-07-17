@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/task.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link href="js/task-styles.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+    <div class="floating-bg-element"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-check-circle me-2"></i>QuickNotes AI
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="task.html">
+                            <i class="fas fa-tasks me-1"></i>Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="team.html">
+                            <i class="fas fa-users me-1"></i>Team
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Premium Banner -->
+    <div id="premiumBanner" class="premium-banner">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-crown me-2"></i>
+                <span class="fw-bold">Premium Features Active</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="me-3">Recurring Tasks • Voice Commands • Advanced Analytics</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mt-5 pt-5">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-tasks text-primary me-2"></i>
+                            Task Management
+                        </h1>
+                        <p class="text-muted mb-0">Create, organize, and track your tasks efficiently</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" onclick="window.location.href='dashboard.html'">
+                            <i class="fas fa-chart-line me-1"></i>Dashboard
+                        </button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
+                            <i class="fas fa-plus me-1"></i>New Task
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Form Section -->
+        <div class="task-form-container">
+            <form id="taskForm" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Task Title *
+                            </label>
+                            <input type="text" class="form-control" id="taskTitle" name="title" required>
+                            <div class="invalid-feedback">Please provide a task title.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="taskPriority" class="form-label">
+                                <i class="fas fa-flag me-1"></i>Priority
+                            </label>
+                            <select class="form-select" id="taskPriority" name="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">
+                                <i class="fas fa-align-left me-1"></i>Description
+                            </label>
+                            <textarea class="form-control" id="taskDescription" name="description" rows="3" placeholder="Describe your task..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="taskStatus" class="form-label">
+                                <i class="fas fa-info-circle me-1"></i>Status
+                            </label>
+                            <select class="form-select" id="taskStatus" name="status">
+                                <option value="pending" selected>Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="taskDueDate" class="form-label">
+                                <i class="fas fa-calendar me-1"></i>Due Date
+                            </label>
+                            <input type="datetime-local" class="form-control" id="taskDueDate" name="dueDate">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="taskRecurring" class="form-label">
+                                <i class="fas fa-redo me-1"></i>Recurring
+                            </label>
+                            <select class="form-select" id="taskRecurring" name="recurring">
+                                <option value="false" selected>No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="taskInputMethod" class="form-label">
+                                <i class="fas fa-keyboard me-1"></i>Input Method
+                            </label>
+                            <select class="form-select" id="taskInputMethod" name="inputMethod">
+                                <option value="auto" selected>Auto</option>
+                                <option value="manual">Manual</option>
+                                <option value="voice">Voice</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tags Section -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-tags me-1"></i>Tags
+                    </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tagInput" placeholder="Add a tag...">
+                        <button type="button" class="btn btn-outline-secondary" id="addTagBtn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="tagsContainer" class="mt-2"></div>
+                </div>
+
+                <!-- Hidden Fields -->
+                <input type="hidden" id="taskCreatedAt" name="createdAt">
+                <input type="hidden" id="currentDateTime" name="currentDateTime">
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <span class="me-3">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Input Method: <span id="inputMethodIndicator">Auto</span>
+                        </span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>Create Task
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Voice Recording Section -->
+        <div class="voice-section">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-microphone me-2"></i>Voice Task Creation
+                </h5>
+                <button class="btn btn-sm btn-outline-light" onclick="showVoiceInstructions()">
+                    <i class="fas fa-question-circle me-1"></i>Help
+                </button>
+            </div>
+            
+            <div class="voice-controls">
+                <button type="button" class="voice-btn" id="voiceRecordBtn">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button type="button" class="voice-btn" id="voiceStopBtn" style="display: none;">
+                    <i class="fas fa-stop"></i>
+                </button>
+                <div class="flex-grow-1">
+                    <div class="form-control bg-transparent border-light text-white" id="voiceTranscript" 
+                         style="min-height: 60px; resize: none;" placeholder="Your voice will appear here..."></div>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-light btn-sm" onclick="saveTranscriptAsTask()">
+                    <i class="fas fa-save me-1"></i>Save as Task
+                </button>
+                <button class="btn btn-outline-light btn-sm" onclick="clearTranscript()">
+                    <i class="fas fa-trash me-1"></i>Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Task Statistics -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Total Tasks</h6>
+                                <h3 id="totalTasks">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-tasks fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Pending</h6>
+                                <h3 id="pendingTasks">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">In Progress</h6>
+                                <h3 id="inProgressTasks">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-spinner fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Completed</h6>
+                                <h3 id="completedTasks">0</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">Priority</label>
+                        <select class="form-select" id="filterPriority">
+                            <option value="">All</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="filterStatus">
+                            <option value="">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Input Method</label>
+                        <select class="form-select" id="filterInputMethod">
+                            <option value="">All</option>
+                            <option value="manual">Manual</option>
+                            <option value="voice">Voice</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Search</label>
+                        <input type="text" class="form-control" id="filterSearch" placeholder="Search tasks...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Actions</label>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary" onclick="clearFilters()">
+                                <i class="fas fa-times me-1"></i>Clear
+                            </button>
+                            <button class="btn btn-primary" onclick="applyFilters()">
+                                <i class="fas fa-filter me-1"></i>Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Grid -->
+        <div id="taskGrid" class="task-grid">
+            <!-- Tasks will be dynamically loaded here -->
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Task pagination" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination will be dynamically generated -->
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/nav-utils.js"></script>
+    
+    <!-- Google Calendar Integration -->
+    <script src="js/google-config.js"></script>
+    <script src="js/gcal.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Task Management -->
+    <script src="js/task.js"></script>
+    <script src="js/team-tasks.js"></script>
+    <script src="js/task-ui.js"></script>
+</body>
+</html> 

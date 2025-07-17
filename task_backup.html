@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - QuickNotes AI</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/task.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+            background-color: var(--background-main, #f7f8fa);
+        }
+        :root {
+            --primary-color: #6366f1;
+            --accent-color: #00b894;
+            --background-main: #f7f8fa;
+            --background-card: #fff;
+            --text-primary: #23272f;
+            --text-secondary: #6c757d;
+            --border-color: #e5e7eb;
+            --shadow: 0 2px 16px 0 rgba(99,102,241,0.08);
+            --shadow-hover: 0 8px 32px 0 rgba(99,102,241,0.15);
+            --border-radius: 1.1rem;
+            --border-radius-sm: 0.7rem;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #00b894 100%);
+            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            --gradient-dark: linear-gradient(135deg, #23272f 0%, #1e2a2f 100%);
+        }
+        [data-bs-theme="dark"] {
+            --background-main: #181a20;
+            --background-card: #23272f;
+            --text-primary: #f3f4f6;
+            --text-secondary: #b0b3b8;
+            --border-color: #31343b;
+            --shadow: 0 2px 16px 0 rgba(99,102,241,0.12);
+            --shadow-hover: 0 8px 32px 0 rgba(99,102,241,0.25);
+            --gradient-card: linear-gradient(135deg, #23272f 0%, #1e2a2f 100%);
+        }
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+        }
+        
+        /* Enhanced Card Styling with 3D Effects */
+        .card, .card-header, .card-body {
+            background: var(--gradient-card) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--border-radius) !important;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0.8;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color) !important;
+        }
+        
+        .card-header {
+            border-bottom: 2px solid var(--border-color) !important;
+            background: transparent !important;
+            padding: 1.5rem 1.5rem 1rem 1.5rem !important;
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+        
+        .card-body {
+            padding: 1.5rem !important;
+        }
+        
+        /* Enhanced Section Titles */
+        .task-section-title, .task-list-title, .summary-title, .activity-title, .priority-title, .progression-title {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .task-section-title::after, .task-list-title::after, .summary-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+        }
+        
+        /* Enhanced Form Elements */
+        .form-label, .form-select, .form-control, .form-text, .input-group-text {
+            color: var(--text-primary) !important;
+            font-size: 1rem;
+        }
+        .form-control, .form-select {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--border-color);
+            background: var(--background-card);
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+            transform: translateY(-1px);
+        }
+        
+        /* Enhanced Buttons */
+        .btn-primary, .btn-warning, .btn-outline-secondary, .btn-google {
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 1.08rem;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 12px 0 rgba(99,102,241,0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px 0 rgba(99,102,241,0.3);
+        }
+        
+        .btn-outline-secondary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+        .btn-outline-secondary:hover, .btn-outline-secondary:focus {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced Task Summary Tiles */
+        .task-summary-tile {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .task-summary-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0.8;
+        }
+        
+        .task-summary-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+        
+        .task-summary-tile h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .task-summary-tile small {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Enhanced List Items */
+        .list-group-item {
+            border: none;
+            background: transparent;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .list-group-item:hover {
+            background: rgba(99,102,241,0.05);
+            transform: translateX(4px);
+        }
+        
+        .list-group-item h6 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Enhanced Borders */
+        .border {
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Enhanced Alerts */
+        .alert-info {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,184,148,0.1) 100%);
+            color: var(--primary-color) !important;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-sm);
+        }
+        
+        [data-bs-theme="dark"] .alert-info {
+            background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(0,184,148,0.2) 100%);
+            color: #00b894 !important;
+        }
+        
+        /* Enhanced Modal */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+        }
+        .modal-header {
+            border-bottom: 2px solid var(--border-color);
+            background: var(--gradient-card);
+        }
+        .modal-title {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        /* Enhanced Progress Bar */
+        .progress-bar {
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius-sm);
+        }
+        
+        /* Enhanced Footer */
+        footer.bg-dark {
+            background: var(--gradient-dark) !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color);
+        }
+        footer h5, footer h6 {
+            color: #fff !important;
+        }
+        footer a {
+            color: #b0b3b8 !important;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Enhanced Input Groups */
+        .input-group .form-control {
+            border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+        }
+        .input-group .btn {
+            border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+        }
+        
+        /* Enhanced Social Icons */
+        .fa-lg {
+            font-size: 1.5rem;
+        }
+        .d-flex.gap-3 a {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .d-flex.gap-3 a:hover {
+            opacity: 1;
+        }
+        
+        /* Optimized Section Spacing */
+        .container-fluid > .row.g-4, .row.g-4.mt-2 {
+            margin-bottom: 1.5rem;
+        }
+        .card.shadow-sm {
+            margin-bottom: 1rem;
+        }
+        
+        /* Compact Layout Optimizations */
+        .compact-card {
+            margin-bottom: 0.75rem;
+        }
+        
+        .compact-card .card-header {
+            padding: 0.75rem 1rem !important;
+        }
+        
+        .compact-card .card-body {
+            padding: 1rem !important;
+        }
+        
+        /* Optimized Task Summary Tiles */
+        .task-summary-tile {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .task-summary-tile h3 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .task-summary-tile small {
+            font-size: 0.8rem;
+        }
+        
+        /* Optimized Form Spacing */
+        .form-compact .mb-3 {
+            margin-bottom: 0.75rem !important;
+        }
+        
+        .form-compact .mb-4 {
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Optimized Voice Command Section */
+        .voice-command-compact {
+            padding: 1rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Optimized Analytics Cards */
+        .analytics-compact {
+            min-height: 300px;
+        }
+        
+        .analytics-compact .card-header {
+            padding: 0.75rem 1rem !important;
+        }
+        
+        .analytics-compact .card-body {
+            padding: 1rem !important;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 991.98px) {
+            .card {
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        /* Enhanced Chart Containers */
+        #priorityChart, #progressionChart {
+            margin-top: 1rem;
+            border-radius: var(--border-radius-sm);
+            background: var(--background-card);
+            padding: 1rem;
+        }
+        
+        /* Enhanced Premium Prompt */
+        #premiumPromptContainer .card {
+            border: 3px solid var(--primary-color);
+            background: var(--gradient-card);
+            position: relative;
+        }
+        
+        #premiumPromptContainer .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(99,102,241,0.1) 50%, transparent 70%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Enhanced Voice FAB */
+        #voiceCommandFab {
+            background: var(--gradient-primary);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px 0 rgba(99,102,241,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #voiceCommandFab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        #voiceCommandFab:hover::before {
+            opacity: 1;
+        }
+        
+        #voiceCommandFab.listening {
+            box-shadow: 0 0 0 6px rgba(99,102,241,0.3);
+            background: linear-gradient(135deg, #00b894 0%, #6366f1 100%);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Enhanced Task List */
+        #taskList .list-group-item {
+            background: var(--background-card);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 0.75rem;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.08);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #taskList .list-group-item:hover {
+            box-shadow: 0 8px 25px 0 rgba(99,102,241,0.15);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced Analytics Cards */
+        .card.h-100 {
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card.h-100 .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Optimized Chart Containers */
+        .chart-container {
+            padding: 0.75rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        /* Optimized Task Form Section */
+        .task-form-section {
+            padding: 1.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Optimized Calendar Integration Section */
+        .calendar-integration-section {
+            padding: 1.5rem !important;
+            margin-top: 1rem !important;
+        }
+        
+        /* Optimized Filter Section */
+        .filter-section {
+            padding: 1rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Optimized Recurring Task Section */
+        .recurring-task-section {
+            padding: 1rem !important;
+            margin-top: 0.75rem !important;
+        }
+        
+        /* Responsive Optimizations */
+        @media (max-width: 1200px) {
+            .task-summary-tile h3 {
+                font-size: 1.75rem;
+            }
+            
+            .analytics-compact {
+                min-height: 280px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .task-summary-tile h3 {
+                font-size: 1.5rem;
+            }
+            
+            .analytics-compact {
+                min-height: 250px;
+            }
+            
+            .compact-card .card-header {
+                padding: 0.5rem 0.75rem !important;
+            }
+            
+            .compact-card .card-body {
+                padding: 0.75rem !important;
+            }
+        }
+        
+        /* Enhanced Newsletter Input */
+        .input-group .form-control {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+        
+        /* Enhanced Utility Classes */
+        .fw-semibold {
+            font-weight: 600 !important;
+        }
+        .hover-opacity-100:hover {
+            opacity: 1 !important;
+        }
+        .transition-opacity {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Enhanced Theme Toggle */
+        .theme-toggle-btn {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+        
+        .theme-toggle-btn:hover {
+            border-color: var(--primary-color);
+            transform: rotate(180deg);
+        }
+        
+        /* Enhanced Badge Styling */
+        .badge {
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        /* Enhanced Pagination */
+        .pagination .page-link {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .pagination .page-link:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        
+        .pagination .page-item.active .page-link {
+            background: var(--gradient-primary);
+            border-color: var(--primary-color);
+        }
+        
+        /* Enhanced Filter Section */
+        .filter-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Enhanced Activity Items */
+        .activity-item {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            border-color: var(--primary-color);
+            transform: translateX(4px);
+        }
+        
+        /* Enhanced Loading States */
+        .spinner-border {
+            border-width: 0.2em;
+        }
+        
+        /* Enhanced Toast Container */
+        .toast-container {
+            z-index: 9999;
+        }
+        
+        .toast {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Enhanced Voice Feedback */
+        #voiceFeedback {
+            background: var(--gradient-card);
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+            box-shadow: var(--shadow-hover);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Enhanced Section Headers */
+        .section-header {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        /* Enhanced Chart Containers */
+        .chart-container {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Enhanced Task Form */
+        .task-form-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        /* Enhanced Recurring Task Section */
+        .recurring-task-section {
+            background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(0,184,148,0.05) 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        [data-bs-theme="dark"] .recurring-task-section {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,184,148,0.1) 100%);
+        }
+        
+        /* Enhanced Google Calendar Integration */
+        .calendar-integration-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .calendar-integration-section .card-header {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,184,148,0.1) 100%);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        /* Enhanced Debug Panel */
+        .debug-panel {
+            background: linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(220,53,69,0.1) 100%);
+            border: 2px solid #ffc107;
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        [data-bs-theme="dark"] .debug-panel {
+            background: linear-gradient(135deg, rgba(255,193,7,0.2) 0%, rgba(220,53,69,0.2) 100%);
+        }
+        
+        /* Enhanced Section Headers */
+        .section-header {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        /* Enhanced Chart Containers */
+        .chart-container {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Enhanced Task Form */
+        .task-form-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .task-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        /* Enhanced Recurring Task Section */
+        .recurring-task-section {
+            background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(0,184,148,0.05) 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        [data-bs-theme="dark"] .recurring-task-section {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,184,148,0.1) 100%);
+        }
+        
+        /* Enhanced Google Calendar Integration */
+        .calendar-integration-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 0;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendar-integration-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .calendar-integration-section .card-header {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,184,148,0.1) 100%);
+            border-bottom: 2px solid var(--primary-color);
+            padding: 1.5rem 2rem;
+            position: relative;
+        }
+        
+        .calendar-integration-section .card-header h5 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .calendar-integration-section .card-header h5::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 2rem;
+            right: 2rem;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+        }
+        
+        .calendar-integration-section .card-body {
+            padding: 2rem;
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+        
+        .calendar-integration-section .task-summary-tile {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+        }
+        
+        .calendar-integration-section .task-summary-tile:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        
+        .calendar-integration-section .task-summary-tile h6 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .calendar-integration-section .task-summary-tile p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        
+        .calendar-integration-section .btn-google {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px 0 rgba(66,133,244,0.3);
+        }
+        
+        .calendar-integration-section .btn-google:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px 0 rgba(66,133,244,0.4);
+            color: white;
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section {
+            background: var(--gradient-card);
+            border-color: var(--border-color);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section .card-header {
+            background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(0,184,148,0.2) 100%);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section .card-body {
+            background: var(--background-card);
+            color: var(--text-primary);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section .task-summary-tile {
+            background: var(--background-card);
+            border-color: var(--border-color);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section .task-summary-tile h6 {
+            color: var(--primary-color);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section .task-summary-tile p {
+            color: var(--text-secondary);
+        }
+        
+        /* Additional Google Calendar Integration Enhancements */
+        .calendar-integration-section {
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-integration-section .card-header {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .calendar-integration-section .card-header h5 {
+            display: flex;
+            align-items: center;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        
+        .calendar-integration-section .card-header h5 i {
+            font-size: 1.2em;
+            margin-right: 0.75rem;
+        }
+        
+        .calendar-integration-section .task-summary-tile {
+            margin-bottom: 0;
+            position: relative;
+        }
+        
+        .calendar-integration-section .task-summary-tile:last-child {
+            margin-bottom: 0;
+        }
+        
+        .calendar-integration-section .badge {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .calendar-integration-section #selected-task-display {
+            background: rgba(99,102,241,0.1);
+            border-radius: var(--border-radius-sm);
+            padding: 0.75rem;
+            border: 1px solid rgba(99,102,241,0.2);
+        }
+        
+        [data-bs-theme="dark"] .calendar-integration-section #selected-task-display {
+            background: rgba(99,102,241,0.2);
+            border-color: rgba(99,102,241,0.3);
+        }
+        
+        /* Enhanced Filter Section */
+        .filter-section {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Enhanced Activity Items */
+        .activity-item {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            border-color: var(--primary-color);
+            transform: translateX(4px);
+        }
+        
+        /* Enhanced Loading States */
+        .spinner-border {
+            border-width: 0.2em;
+        }
+        
+        /* Enhanced Toast Container */
+        .toast-container {
+            z-index: 9999;
+        }
+        
+        .toast {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Enhanced Voice Feedback */
+        #voiceFeedback {
+            background: var(--gradient-card);
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+            box-shadow: var(--shadow-hover);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Enhanced Pagination */
+        .pagination .page-link {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .pagination .page-link:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        
+        .pagination .page-item.active .page-link {
+            background: var(--gradient-primary);
+            border-color: var(--primary-color);
+        }
+        
+        /* Enhanced Badge Styling */
+        .badge {
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        /* Enhanced Theme Toggle */
+        .theme-toggle-btn {
+            background: var(--gradient-card);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+        
+        .theme-toggle-btn:hover {
+            border-color: var(--primary-color);
+            transform: rotate(180deg);
+        }
+        
+        /* Enhanced Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Enhanced Row Spacing */
+        .row.g-3 > [class*="col-"] {
+            margin-bottom: 1rem;
+        }
+        
+        /* Enhanced Card Spacing */
+        .card + .card {
+            margin-top: 2rem;
+        }
+        
+        /* Enhanced Button Groups */
+        .btn-group .btn {
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-group .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Enhanced Input Groups */
+        .input-group {
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+        }
+        
+        /* Enhanced Select Elements */
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236366f1' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
+        
+        /* Enhanced Textarea */
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Enhanced Checkbox and Radio */
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(99,102,241,0.25);
+        }
+        
+        /* Enhanced Alert Styling */
+        .alert {
+            border-radius: var(--border-radius-sm);
+            border: 2px solid;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            border-color: #00b894;
+            background: linear-gradient(135deg, rgba(0,184,148,0.1) 0%, rgba(0,184,148,0.05) 100%);
+        }
+        
+        .alert-warning {
+            border-color: #ffc107;
+            background: linear-gradient(135deg, rgba(255,193,7,0.1) 0%, rgba(255,193,7,0.05) 100%);
+        }
+        
+        .alert-danger {
+            border-color: #dc3545;
+            background: linear-gradient(135deg, rgba(220,53,69,0.1) 0%, rgba(220,53,69,0.05) 100%);
+        }
+        
+        /* Enhanced Modal Styling */
+        .modal-dialog {
+            border-radius: var(--border-radius);
+        }
+        
+        .modal-content {
+            border: none;
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .modal-footer {
+            border-top: 2px solid var(--border-color);
+            padding: 1.5rem;
+        }
+        
+        /* Enhanced Tooltip Styling */
+        .tooltip {
+            font-size: 0.875rem;
+        }
+        
+        .tooltip-inner {
+            background: var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            padding: 0.5rem 0.75rem;
+        }
+        
+        /* Enhanced Dropdown Styling */
+        .dropdown-menu {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow);
+            background: var(--background-card);
+        }
+        
+        .dropdown-item {
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(99,102,241,0.1);
+            color: var(--primary-color);
+        }
+        
+        /* Enhanced Navbar Styling */
+        .navbar {
+            box-shadow: 0 2px 20px 0 rgba(99,102,241,0.1);
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        /* Container Optimizations */
+        .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .container-fluid {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .container-fluid {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        /* Enhanced Filter Section Styling */
+        .filter-section .form-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .filter-section .form-select,
+        .filter-section .form-control {
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-section .form-select:focus,
+        .filter-section .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+            transform: translateY(-1px);
+        }
+        
+        #clearFiltersBtn {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+        }
+        
+        #clearFiltersBtn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        
+        /* Dark theme adjustments for filters */
+        [data-bs-theme="dark"] .filter-section .form-label {
+            color: var(--text-secondary);
+        }
+        
+        [data-bs-theme="dark"] .filter-section .form-select,
+        [data-bs-theme="dark"] .filter-section .form-control {
+            background: var(--background-card);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2 text-primary"></i>
+                <span class="fw-bold">QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="task.html">
+                            <i class="fas fa-tasks me-1"></i>Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="premium.html">
+                            <i class="fas fa-star me-1"></i>Premium
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-3">
+                        <button id="signOut" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+                        </button>
+                        <span id="userName" class="badge bg-primary text-white px-3 py-2" style="font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;"></span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="theme-toggle-btn ms-2" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid flex-grow-1" style="padding-top: 70px;">
+        <div class="row g-3">
+            <div class="col-12 col-lg-5 col-xl-4">
+                <div class="card shadow-sm task-form-section compact-card">
+                    <div class="card-header py-3">
+                        <h5 class="card-title task-section-title mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Add Task
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Voice Command Button (Professional, above Add Task) -->
+                        <div class="d-flex flex-column align-items-center mb-3 p-3 voice-command-compact" style="background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(0,184,148,0.05) 100%); border-radius: var(--border-radius-sm); border: 2px solid var(--border-color);">
+                            <div class="d-flex align-items-center mb-3">
+                                <button id="voiceCommandFab" class="voice-fab-static" aria-label="Voice Command" title="Voice Command" type="button">
+                                    <span class="voice-fab-glow"></span>
+                                    <i class="bi bi-mic-fill voice-fab-icon"></i>
+                                </button>
+                                <button class="btn btn-link ms-3 p-0 align-self-center" id="voiceCommandHelpBtn" tabindex="0" aria-label="Voice Command Instructions" title="Voice Command Instructions">
+                                    <i class="bi bi-info-circle text-primary fs-4"></i>
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <span class="fw-semibold text-primary" style="font-size:1.1rem; letter-spacing:0.2px;">
+                                    <i class="fas fa-microphone-alt me-2"></i>Tap the mic to add a task by voice
+                                </span>
+                            </div>
+                        </div>
+
+                        <form id="addTaskForm" class="needs-validation form-compact" novalidate>
+                            <div class="mb-3">
+                                <label for="taskTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="taskTitle" required 
+                                       placeholder="Enter task title">
+                                <div class="invalid-feedback">Please enter a task title</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="taskDescription" rows="2" 
+                                          placeholder="Enter task description"></textarea>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="currentDateTime" class="form-label">Current Date & Time</label>
+                                    <input type="datetime-local" class="form-control" id="currentDateTime" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="taskDueDate" class="form-label">Due Date</label>
+                                    <input type="datetime-local" class="form-control" id="taskDueDate" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="taskPriority" class="form-label">Priority</label>
+                                    <select class="form-select" id="taskPriority" required>
+                                        <option value="">Select priority</option>
+                                        <option value="high">High</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="low">Low</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a priority</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="taskStatus" class="form-label">Status</label>
+                                    <select class="form-select" id="taskStatus" required>
+                                        <option value="">Select status</option>
+                                        <option value="in-progress" selected>In Progress</option>
+                                        <option value="completed">Completed</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a status</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="taskInputMethod" class="form-label">Input Method</label>
+                                    <select class="form-select" id="taskInputMethod" required>
+                                        <option value="">Select input method</option>
+                                        <option value="manual" selected>Manual</option>
+                                        <option value="voice">Voice</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select an input method</div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-12">
+                                    <label for="taskTags" class="form-label">Tags</label>
+                                    <input type="text" class="form-control" id="taskTags" 
+                                           placeholder="Enter tags, comma separated">
+                                </div>
+                            </div>
+
+                            <!-- Recurring Task Options (Premium Only) -->
+                            <div id="recurringTaskSection" class="mb-3 d-none">
+                                <div class="recurring-task-section">
+                                    <div class="card-header bg-primary bg-opacity-10 py-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="makeRecurring">
+                                            <label class="form-check-label fw-semibold text-primary" for="makeRecurring">
+                                                <i class="bi bi-arrow-repeat me-2"></i>Make this task recurring
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="recurringOptions" style="display: none;">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="recurrenceType" class="form-label">Frequency</label>
+                                                <select class="form-select" id="recurrenceType">
+                                                    <option value="daily">Daily</option>
+                                                    <option value="weekly">Weekly</option>
+                                                    <option value="monthly">Monthly</option>
+                                                    <option value="custom">Every X Days</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6" id="customIntervalGroup" style="display: none;">
+                                                <label for="recurrenceInterval" class="form-label">Every X Days</label>
+                                                <input type="number" class="form-control" id="recurrenceInterval" 
+                                                       min="1" max="365" value="7" placeholder="Enter number of days">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="recurrenceTime" class="form-label">Repeat Time</label>
+                                                <input type="time" class="form-control" id="recurrenceTime" 
+                                                       value="09:00">
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="alert alert-info py-2 mb-0">
+                                                    <small>
+                                                        <i class="bi bi-info-circle me-1"></i>
+                                                        <strong>Next occurrence:</strong> <span id="nextOccurrenceDisplay">Not set</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sync Duration Modal -->
+                            <div class="modal fade" id="syncDurationModal" tabindex="-1" aria-labelledby="syncDurationModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="syncDurationModalLabel">
+                                                <i class="bi bi-calendar-plus me-2"></i>Sync Recurring Task to Google Calendar
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-semibold">Task:</label>
+                                                <p class="text-muted mb-2" id="syncTaskTitle">Loading...</p>
+                                                <label class="form-label fw-semibold">Recurrence:</label>
+                                                <p class="text-muted mb-3" id="syncTaskRecurrence">Loading...</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="syncDuration" class="form-label fw-semibold">Sync Duration:</label>
+                                                <select class="form-select" id="syncDuration" required>
+                                                    <option value="">Select duration</option>
+                                                    <option value="1week">1 Week</option>
+                                                    <option value="1month" selected>1 Month</option>
+                                                </select>
+                                                <div class="form-text">
+                                                    <i class="bi bi-info-circle me-1"></i>
+                                                    Calendar events will be created at the recurring time for the selected duration.
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info">
+                                                <small>
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    <strong>Note:</strong> Events will be created starting from the next occurrence at the recurring time, not the due date.
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="button" class="btn btn-primary" id="confirmSyncBtn">
+                                                <i class="bi bi-calendar-plus me-2"></i>Sync to Calendar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    Add Task
+                                </button>
+                            </div>
+                            
+
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Progression Chart Section -->
+                <!-- Removed duplicate Current Progression chart from left column. Only present in analytics row below. -->
+
+                <!-- Task Summary Section (moved below progression) -->
+                <div class="card shadow-sm mt-3 compact-card">
+                    <div class="card-header py-3">
+                        <h5 class="card-title summary-title mb-0">
+                            <i class="fas fa-chart-pie me-2"></i>Task Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="totalTasks">0</h3>
+                                    <small class="text-muted">Total Tasks</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="completedTasks">0</h3>
+                                    <small class="text-muted">Completed</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="inProgressTasks">0</h3>
+                                    <small class="text-muted">In Progress</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="overdueTasks">0</h3>
+                                    <small class="text-muted">Overdue</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="pendingTasks">0</h3>
+                                    <small class="text-muted">Pending</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="task-summary-tile">
+                                    <h3 id="upcomingTasks">0</h3>
+                                    <small class="text-muted">Upcoming</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task List Section -->
+            <div class="col-12 col-lg-7 col-xl-8">
+                <!-- Filters -->
+                <div class="card shadow-sm mb-3 filter-section compact-card">
+                    <div class="card-header py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-filter me-2"></i>Task Filters
+                            </h5>
+                            <button id="clearFiltersBtn" class="btn btn-outline-secondary btn-sm" onclick="clearAllFilters()" title="Clear All Filters">
+                                <i class="fas fa-times me-1"></i>Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <label for="filterPriority" class="form-label small fw-semibold">Priority</label>
+                                <select class="form-select" id="filterPriority">
+                                    <option value="">All Priorities</option>
+                                    <option value="high">High Priority</option>
+                                    <option value="medium">Medium Priority</option>
+                                    <option value="low">Low Priority</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filterStatus" class="form-label small fw-semibold">Status</label>
+                                <select class="form-select" id="filterStatus">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filterInputMethod" class="form-label small fw-semibold">Input Method</label>
+                                <select class="form-select" id="filterInputMethod">
+                                    <option value="">All Methods</option>
+                                    <option value="voice">Voice</option>
+                                    <option value="manual">Manual</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filterDate" class="form-label small fw-semibold">Date Range</label>
+                                <select class="form-select" id="filterDate">
+                                    <option value="">All Dates</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filterTitle" class="form-label small fw-semibold">Search</label>
+                                <input type="text" class="form-control" id="filterTitle" placeholder="Search by title...">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="filterRecurring" class="form-label small fw-semibold">Type</label>
+                                <select class="form-select" id="filterRecurring">
+                                    <option value="">All Tasks</option>
+                                    <option value="recurring">Recurring Only</option>
+                                    <option value="non-recurring">Non-Recurring</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- Tasks List -->
+                <div class="card shadow-sm">
+                    <div class="card-header py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title task-list-title mb-0">
+                                <i class="fas fa-tasks me-2"></i>My Tasks
+                            </h5>
+                                                        <div class="d-flex align-items-center">
+                                <button id="refreshTaskBtn" class="btn btn-outline-primary btn-sm me-2" onclick="refreshTaskPage()" title="Refresh Task Data">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm active" data-view="list">
+                                        <i class="bi bi-list-ul"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" data-view="grid">
+                                        <i class="bi bi-grid"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="taskList" class="list-group list-group-flush">
+                            <!-- Tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add pagination container below the task list -->
+                <div id="taskPagination" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="row g-3 mt-2">
+            <!-- Recent Activity -->
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 d-flex flex-column analytics-compact">
+                    <div class="card-header py-3">
+                        <h5 class="card-title activity-title mb-0">
+                            <i class="fas fa-clock me-2"></i>Recent Activity
+                        </h5>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center p-3">
+                        <div id="recentActivityList" class="w-100">
+                            <!-- Activity items will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Priority Distribution -->
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 analytics-compact">
+                    <div class="card-header py-3">
+                        <h5 class="card-title priority-title mb-0">
+                            <i class="fas fa-chart-donut me-2"></i>Priority Distribution
+                        </h5>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Progression Chart (was User Insights) -->
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 analytics-compact">
+                    <div class="card-header py-3">
+                        <h5 class="card-title progression-title mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Current Progression
+                        </h5>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="progressionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Upgrade Prompt -->
+        <div id="premiumPromptContainer" class="card shadow-sm mt-3 d-none compact-card">
+            <div class="card-body text-center p-3">
+                <div class="mb-3">
+                    <i class="bi bi-google display-5 text-primary"></i>
+                </div>
+                <h5 class="card-title fw-bold mb-2">Google Calendar Integration</h5>
+                <p class="card-text text-muted mb-3">Connect your tasks to Google Calendar and never miss a deadline again.</p>
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <div class="p-3 border rounded task-summary-tile">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <small class="fw-semibold">Auto-sync tasks</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 border rounded task-summary-tile">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <small class="fw-semibold">Meeting invites</small>
+                        </div>
+                    </div>
+                </div>
+                <a href="premium.html" class="btn btn-warning btn-lg">
+                    <i class="bi bi-star-fill me-2"></i>Upgrade to Premium
+                </a>
+            </div>
+        </div>
+        
+        <!-- Google Calendar Integration Section -->
+        <div class="card shadow-sm calendar-integration-section">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="bi bi-google me-2"></i>Google Calendar Integration
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Step 1: Connect to Google Calendar -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between task-summary-tile">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-link me-2"></i>Step 1: Connect to Google Calendar
+                                </h6>
+                                <p class="mb-0">Sign in to your Google account to enable calendar sync</p>
+                            </div>
+                            <div class="text-end ms-3">
+                                <div id="connection-status" class="mb-3">
+                                    <span class="badge bg-secondary">Not Connected</span>
+                                </div>
+                                <button id="connect-google-calendar" class="btn btn-google">
+                                    <i class="bi bi-google me-2"></i>Connect to Google Calendar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Sync Task to Google Calendar -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between task-summary-tile">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-sync-alt me-2"></i>Step 2: Sync Task to Google Calendar
+                                </h6>
+                                <p class="mb-0">Select a task from "My Tasks" and create a calendar event</p>
+                                <div id="selected-task-display" class="mt-3">
+                                    <span class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>No task selected
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-end ms-3">
+                                <button id="sync-to-google-calendar" class="btn btn-primary" disabled>
+                                    <i class="bi bi-calendar-plus me-2"></i>Sync Task to Google Calendar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>QuickNotesAI
+                    </h5>
+                    <p class="text-light opacity-75 mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity p-2 rounded" style="background: rgba(255,255,255,0.1);">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity p-2 rounded" style="background: rgba(255,255,255,0.1);">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity p-2 rounded" style="background: rgba(255,255,255,0.1);">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="legal.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Legal</a></li>
+                        <li class="mb-2"><a href="privacy-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Terms of Service</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Newsletter</h6>
+                    <p class="text-light opacity-75">Stay updated with our latest features and productivity tips.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-light opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">&copy; 2025 QuickNotesAI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+            <span class="text-light opacity-75 small">Last updated: July 2025</span>
+        </div>
+    </footer>
+
+    <!-- Voice Commands Modal -->
+    <div class="modal fade" id="voiceCommandsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Voice Commands</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Add new task"</h6>
+                            <small class="text-muted">Start creating a new task</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Set title to [title]"</h6>
+                            <small class="text-muted">Set the task title</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Set description to [description]"</h6>
+                            <small class="text-muted">Set the task description</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Set priority to [high/medium/low]"</h6>
+                            <small class="text-muted">Set the task priority</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Set due date to [date/time]"</h6>
+                            <small class="text-muted">Set the task due date</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Save task"</h6>
+                            <small class="text-muted">Save the current task</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Mark task [ID] as completed"</h6>
+                            <small class="text-muted">Complete a task</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Delete task [ID]"</h6>
+                            <small class="text-muted">Delete a task</small>
+                        </div>
+                        <div class="list-group-item">
+                            <h6 class="mb-1">"Show [all/completed/pending] tasks"</h6>
+                            <small class="text-muted">Filter tasks by status</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>    <!-- Voice Feedback UI -->
+    <div id="voiceFeedback" class="position-fixed top-50 start-50 translate-middle d-none">
+        <div class="p-4 rounded-circle shadow-lg text-center">
+            <i class="bi bi-mic-fill display-1"></i>
+            <div id="voiceText" class="mt-2">Listening...</div>
+            <div id="voiceTranscript" class="mt-2 text-secondary small" style="min-height:1.5em;"></div>
+        </div>
+    </div>    <!-- Base Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+      <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Utility Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme manager and ensure theme toggle works
+    if (window.themeManager) {
+        window.themeManager.updateThemeIcon();
+        
+        // Ensure theme toggle button works
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                window.themeManager.toggleTheme();
+            });
+        }
+    }
+    
+    // Force brand link to always go to index.html (defensive against cache/JS overrides)
+    var brandLink = document.getElementById('brandHomeLink');
+    if (brandLink) {
+        brandLink.setAttribute('href', 'index.html');
+        brandLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    }
+});
+</script>
+    
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    
+    <!-- Google Configuration -->
+    <script src="js/google-config.js"></script>
+    
+    <!-- Google Calendar Integration -->
+    <script src="js/gcal.js"></script>
+    
+    <!-- Google API Scripts -->
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    
+    <!-- Application Logic -->
+    <script src="js/task.js"></script>
+    <!-- Voice Command FAB logic -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var fab = document.getElementById('voiceCommandFab');
+      var modal = new bootstrap.Modal(document.getElementById('voiceCommandsModal'));
+      var isListening = false;
+      if (fab) {
+        fab.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (window.startVoiceCommand && typeof window.startVoiceCommand === 'function') {
+            // Toggle listening state
+            if (!isListening) {
+              fab.classList.add('listening');
+              isListening = true;
+              window.startVoiceCommand({
+                onStop: function() {
+                  fab.classList.remove('listening');
+                  isListening = false;
+                },
+                onError: function() {
+                  fab.classList.remove('listening');
+                  isListening = false;
+                }
+              });
+            } else {
+              if (window.stopVoiceCommand && typeof window.stopVoiceCommand === 'function') {
+                window.stopVoiceCommand();
+              }
+              fab.classList.remove('listening');
+              isListening = false;
+            }
+          } else {
+            // Fallback: show instructions modal
+            modal.show();
+          }
+        });
+        // Right-click or long-press opens instructions
+        fab.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          modal.show();
+        });
+        fab.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            fab.click();
+          } else if (e.key === 'i' || e.key === 'I') {
+            modal.show();
+          }
+        });
+      }
+    });
+    </script>
+    <!-- Voice Command Static Button logic (above Add Task) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var fab = document.getElementById('voiceCommandFab');
+      var helpBtn = document.getElementById('voiceCommandHelpBtn');
+      var modal = new bootstrap.Modal(document.getElementById('voiceCommandsModal'));
+      var isListening = false;
+      if (fab) {
+        fab.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (window.startVoiceCommand && typeof window.startVoiceCommand === 'function') {
+            if (!isListening) {
+              fab.classList.add('listening');
+              isListening = true;
+              window.startVoiceCommand({
+                onStop: function() {
+                  fab.classList.remove('listening');
+                  isListening = false;
+                },
+                onError: function() {
+                  fab.classList.remove('listening');
+                  isListening = false;
+                }
+              });
+            } else {
+              if (window.stopVoiceCommand && typeof window.stopVoiceCommand === 'function') {
+                window.stopVoiceCommand();
+              }
+              fab.classList.remove('listening');
+              isListening = false;
+            }
+          } else {
+            modal.show();
+          }
+        });
+        fab.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            fab.click();
+          } else if (e.key === 'i' || e.key === 'I') {
+            modal.show();
+          }
+        });
+      }
+      if (helpBtn) {
+        helpBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          modal.show();
+        });
+        helpBtn.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            modal.show();
+          }
+        });
+      }
+    });
+    </script>
+    
+    <!-- Clear Filters Function -->
+    <script>
+    function clearAllFilters() {
+        // Show loading state on the clear button
+        const clearBtn = document.getElementById('clearFiltersBtn');
+        const originalText = clearBtn.innerHTML;
+        clearBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Clearing...';
+        clearBtn.disabled = true;
+        
+        // Clear all filter inputs
+        document.getElementById('filterPriority').value = '';
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterInputMethod').value = '';
+        document.getElementById('filterDate').value = '';
+        document.getElementById('filterTitle').value = '';
+        document.getElementById('filterRecurring').value = '';
+        
+        // Reset the taskState filters object
+        if (window.taskState && window.taskState.filters) {
+            window.taskState.filters.priority = '';
+            window.taskState.filters.status = '';
+            window.taskState.filters.inputMethod = '';
+            window.taskState.filters.date = '';
+            window.taskState.filters.title = '';
+            window.taskState.filters.recurring = '';
+        }
+        
+        // Call renderTasks to refresh the task list with cleared filters
+        if (window.renderTasks && typeof window.renderTasks === 'function') {
+            window.renderTasks(1);
+        }
+        
+        // Show success message
+        showToast('All filters cleared successfully!', 'success');
+        
+        // Restore button state after a short delay
+        setTimeout(() => {
+            clearBtn.innerHTML = originalText;
+            clearBtn.disabled = false;
+        }, 500);
+    }
+    
+    function showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toastId = 'toast-' + Date.now();
+        
+        const toastHTML = `
+            <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <i class="bi bi-info-circle me-2 text-${type}"></i>
+                    <strong class="me-auto">QuickNotes AI</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        
+        // Remove toast element after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+    }
+    </script>
+</body>
+</html>

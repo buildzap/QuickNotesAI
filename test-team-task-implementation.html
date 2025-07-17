@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Task Label Implementation Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --accent-color: #8b5cf6;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .task-tile {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .task-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .task-tile-recurring {
+            position: absolute;
+            top: 0.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+            z-index: 2;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
+        .task-tile-team-label {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem; /* Position on the bottom-right */
+            font-size: 0.55rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            z-index: 2;
+        }
+
+        .task-tile-input-method {
+            position: absolute;
+            top: 0.4rem;
+            left: 0.4rem;
+            font-size: 0.55rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .task-tile-input-method.voice {
+            color: #ffffff;
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+
+        .task-tile-input-method.manual {
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .task-tile-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            margin-bottom: 0.4rem;
+        }
+
+        .task-tile-title-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .task-tile-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .task-tile-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-tile-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem;
+            background: var(--background-main);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .task-date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .task-date-item i {
+            font-size: 0.7rem;
+            width: 14px;
+            text-align: center;
+        }
+
+        .task-date-label {
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        .task-date-value {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .task-tile-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Team name display in task tile footer */
+        .task-tile-team-name {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-right: auto;
+        }
+
+        .task-tile-team-name i {
+            font-size: 0.7rem;
+            color: var(--primary-color);
+        }
+
+        .task-tile-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            background: var(--background-main);
+        }
+
+        .task-tile-actions {
+            display: flex;
+            gap: 0.2rem;
+            justify-content: flex-end;
+        }
+
+        .task-tile-action-btn {
+            padding: 0.15rem 0.3rem;
+            font-size: 0.65rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .task-tile-action-btn:hover {
+            background: var(--background-main);
+            color: var(--primary-color);
+        }
+
+        .priority-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .status-pending {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .status-in-progress {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .completed .task-tile-title,
+        .completed .task-tile-description {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Team Task Label Implementation Test</h2>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i> Toggle Theme
+                        </button>
+                        <button class="btn btn-outline-success" onclick="createSampleTasks()">
+                            <i class="fas fa-plus"></i> Create Sample Tasks
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle me-2"></i>Implementation Features</h5>
+                    <ul class="mb-0">
+                        <li><strong>Team Task Label:</strong> Positioned adjacent to input method badge (right side)</li>
+                        <li><strong>Team Name Display:</strong> Shows actual team name instead of "Code Ninja" at bottom left of task tiles</li>
+                        <li><strong>Clean Layout:</strong> Organized and responsive design</li>
+                        <li><strong>Theme Support:</strong> Works with both light and dark themes</li>
+                    </ul>
+                </div>
+
+                <div class="task-grid" id="taskGrid">
+                    <!-- Sample tasks will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isDarkTheme = false;
+
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.documentElement.setAttribute('data-bs-theme', isDarkTheme ? 'dark' : 'light');
+        }
+
+        function createSampleTasks() {
+            const sampleTasks = [
+                {
+                    id: '1',
+                    title: 'Design System Implementation',
+                    description: 'Create and implement a comprehensive design system for the new product features',
+                    priority: 'high',
+                    status: 'in-progress',
+                    inputMethod: 'manual',
+                    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+                    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                    teamAssignment: {
+                        assignedToTeam: true,
+                        teamName: 'Development Team'
+                    }
+                },
+                {
+                    id: '2',
+                    title: 'Marketing Campaign Planning',
+                    description: 'Plan and execute the Q4 marketing campaign across all channels',
+                    priority: 'medium',
+                    status: 'pending',
+                    inputMethod: 'voice',
+                    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                    dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+                    teamAssignment: {
+                        assignedToTeam: true,
+                        teamName: 'Marketing Team'
+                    }
+                },
+                {
+                    id: '3',
+                    title: 'User Research Analysis',
+                    description: 'Analyze user research data and create actionable insights for product improvements',
+                    priority: 'low',
+                    status: 'completed',
+                    inputMethod: 'manual',
+                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+                    dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                    recurring: 'weekly'
+                },
+                {
+                    id: '4',
+                    title: 'Database Optimization',
+                    description: 'Optimize database queries and improve performance for better user experience',
+                    priority: 'high',
+                    status: 'in-progress',
+                    inputMethod: 'manual',
+                    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+                    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                    teamAssignment: {
+                        assignedToTeam: true,
+                        teamName: 'Backend Team'
+                    }
+                },
+                {
+                    id: '5',
+                    title: 'Content Calendar Creation',
+                    description: 'Create a comprehensive content calendar for the next quarter',
+                    priority: 'medium',
+                    status: 'pending',
+                    inputMethod: 'voice',
+                    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                    dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
+                }
+            ];
+
+            renderTasks(sampleTasks);
+        }
+
+        function renderTasks(tasks) {
+            const taskGrid = document.getElementById('taskGrid');
+            let tasksHTML = '';
+
+            tasks.forEach(task => {
+                const statusClass = task.status === 'completed' ? 'completed' : 
+                                   task.status === 'in-progress' ? 'in-progress' : 'pending';
+                
+                // Format dates
+                const createdDate = formatDetailedDate(task.createdAt);
+                const dueDate = formatDetailedDate(task.dueDate);
+                
+                // Get input method
+                const inputMethod = task.inputMethod || 'manual';
+                const inputMethodIcon = getInputMethodIcon(inputMethod);
+                const inputMethodBadge = `<div class="task-tile-input-method ${inputMethod}">
+                    <i class="fas ${inputMethodIcon}"></i>
+                    <span>${inputMethod}</span>
+                </div>`;
+
+                // Check if this is a team task and create team task label
+                let teamTaskLabel = '';
+                let teamName = '';
+                let isTeamTask = false;
+                
+                if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
+                    isTeamTask = true;
+                    teamTaskLabel = `<div class="task-tile-team-label">
+                        <i class="fas fa-users"></i>
+                        <span>👥 Team Task</span>
+                    </div>`;
+                    teamName = task.teamAssignment.teamName || 'Unknown Team';
+                } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
+                    isTeamTask = true;
+                    teamTaskLabel = `<div class="task-tile-team-label">
+                        <i class="fas fa-users"></i>
+                        <span>👥 Team Task</span>
+                    </div>`;
+                    teamName = task.teamName || 'Unknown Team';
+                }
+
+                const isCompleted = task.status === 'completed';
+                
+                // Check if task is recurring - handle different data types
+                let isRecurring = false;
+                let recurringType = '';
+                
+                if (task.recurring) {
+                    if (typeof task.recurring === 'string' && task.recurring !== 'none') {
+                        isRecurring = true;
+                        recurringType = task.recurring;
+                    } else if (typeof task.recurring === 'boolean' && task.recurring === true) {
+                        isRecurring = true;
+                        recurringType = 'recurring';
+                    } else if (typeof task.recurring === 'object' && task.recurring.recurring === true) {
+                        isRecurring = true;
+                        recurringType = task.recurring.recurrence?.type || 'recurring';
+                    }
+                }
+                
+                            // Function to format recurring frequency text
+            const formatRecurringText = (type) => {
+                switch (type) {
+                    case 'daily':
+                        return '🔄 Daily';
+                    case 'weekly':
+                        return '🔄 Weekly';
+                    case 'monthly':
+                        return '🔄 Monthly';
+                    case 'yearly':
+                        return '🔄 Yearly';
+                    case 'custom':
+                        // For custom, we need to get the interval from the task data
+                        if (task.recurring && typeof task.recurring === 'object' && task.recurring.recurrence) {
+                            const interval = task.recurring.recurring.recurrence.interval || 7;
+                            return `🔄 Every ${interval} Days`;
+                        }
+                        return '🔄 Every X Days';
+                    case 'recurring':
+                        return '🔄 Recurring';
+                    default:
+                        return `🔄 ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                }
+            };
+            
+            const recurringBadge = isRecurring ?
+                `<div class="task-tile-recurring">
+                    <i class="bi bi-arrow-repeat"></i>
+                    <span>${formatRecurringText(recurringType)}</span>
+                </div>` : '';
+
+                tasksHTML += `
+                    <div class="task-tile ${statusClass}" data-task-id="${task.id}">
+                        ${recurringBadge}
+                        ${teamTaskLabel}
+                        ${inputMethodBadge}
+                        <div class="task-tile-header">
+                            <div class="task-tile-priority priority-${task.priority}">${task.priority}</div>
+                        </div>
+                        <div class="task-tile-title-section">
+                            <h6 class="task-tile-title ${isCompleted ? 'completed' : ''}">${task.title}</h6>
+                        </div>
+                        <div class="task-tile-description ${isCompleted ? 'completed' : ''}">${task.description}</div>
+                        <div class="task-tile-dates">
+                            <div class="task-date-item">
+                                <i class="fas fa-calendar-alt text-warning"></i>
+                                <span class="task-date-label">Due:</span>
+                                <span class="task-date-value">${dueDate}</span>
+                            </div>
+                            <div class="task-date-item">
+                                <i class="fas fa-calendar-plus text-primary"></i>
+                                <span class="task-date-label">Created:</span>
+                                <span class="task-date-value">${createdDate}</span>
+                            </div>
+                        </div>
+                        <div class="task-tile-meta">
+                            ${isTeamTask ? `<div class="task-tile-team-name">
+                                <i class="fas fa-users"></i>
+                                <span>${teamName}</span>
+                            </div>` : ''}
+                            <span class="task-tile-status status-${task.status}">${task.status}</span>
+                        </div>
+                        <div class="task-tile-actions">
+                            <button class="task-tile-action-btn" onclick="editTask('${task.id}')" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="task-tile-action-btn" onclick="toggleTaskStatus('${task.id}')" title="Toggle Status">
+                                <i class="bi ${isCompleted ? 'bi-check-circle-fill' : 'bi-check-circle'}"></i>
+                            </button>
+                            <button class="task-tile-action-btn" onclick="deleteTask('${task.id}')" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            taskGrid.innerHTML = tasksHTML;
+        }
+
+        function formatDetailedDate(dateString) {
+            if (!dateString) return 'Not set';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = now - date;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Format the date
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            // Add relative time for recent dates
+            if (diffDays === 0) {
+                return `${formattedDate} (Today)`;
+            } else if (diffDays === 1) {
+                return `${formattedDate} (Yesterday)`;
+            } else if (diffDays < 7) {
+                return `${formattedDate} (${diffDays} days ago)`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${formattedDate} (${weeks} week${weeks > 1 ? 's' : ''} ago)`;
+            } else {
+                return formattedDate;
+            }
+        }
+
+        function getInputMethodIcon(inputMethod) {
+            switch (inputMethod) {
+                case 'voice': return 'fa-microphone';
+                case 'manual': return 'fa-keyboard';
+                case 'import': return 'fa-upload';
+                case 'template': return 'fa-file-alt';
+                default: return 'fa-keyboard';
+            }
+        }
+
+        function editTask(taskId) {
+            console.log('Edit task:', taskId);
+            alert(`Edit task ${taskId} - This would open the edit form`);
+        }
+
+        function toggleTaskStatus(taskId) {
+            console.log('Toggle status for task:', taskId);
+            alert(`Toggle status for task ${taskId} - This would update the task status`);
+        }
+
+        function deleteTask(taskId) {
+            console.log('Delete task:', taskId);
+            if (confirm('Are you sure you want to delete this task?')) {
+                alert(`Delete task ${taskId} - This would remove the task`);
+            }
+        }
+
+        // Initialize with sample tasks
+        document.addEventListener('DOMContentLoaded', function() {
+            createSampleTasks();
+        });
+    </script>
+</body>
+</html> 

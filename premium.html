@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade to Premium - QuickNotes AI</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/premium-excel.js"></script>
+    <style>
+        .premium-title { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 700; color: #0d3cd8; letter-spacing: 0.5px; }
+        .premium-subtitle { color: #0d3cd8; font-weight: 500; }
+        .plan-card { border-radius: 1rem; box-shadow: 0 2px 16px rgba(99,102,241,0.08); }
+        .plan-card.premium { background: linear-gradient(135deg, #6366f1 0%, #0d3cd8 100%); color: #fff; }
+        .plan-card .h3, .plan-card .h4 { font-weight: 700; }
+        .plan-features li { margin-bottom: 1rem; }
+        .btn-premium { background: #fff; color: #0d3cd8; border: 2px solid #fff; font-weight: 600; border-radius: 0.5rem; transition: all 0.2s; }
+        .btn-premium:hover { background: #0d3cd8; color: #fff; border: 2px solid #fff; }
+    
+        /* Theme-aware button styles */
+        .theme-aware-btn {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .theme-aware-btn:hover,
+        .theme-aware-btn:focus,
+        .theme-aware-btn:active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        [data-bs-theme="dark"] .theme-aware-btn {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        [data-bs-theme="dark"] .theme-aware-btn:hover,
+        [data-bs-theme="dark"] .theme-aware-btn:focus,
+        [data-bs-theme="dark"] .theme-aware-btn:active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }</style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    </head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2 text-primary"></i>
+                <span class="fw-bold">QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="premium.html">Premium</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-2">
+                        <button id="signOut" class="btn btn-light me-2">Sign Out</button>
+                        <span id="userName" class="badge bg-primary text-white px-3 py-2" style="font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;"></span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="theme-toggle-btn ms-2" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5 flex-grow-1">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h1 class="mb-4 premium-title">Upgrade to Premium</h1>
+                <p class="lead mb-4 premium-subtitle">Unlock powerful features to boost your productivity</p>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-5 mb-4">
+                <div class="card plan-card h-100">
+                    <div class="card-body">
+                        <h3 class="h4 mb-3">Free Plan</h3>
+                        <ul class="plan-features list-unstyled mb-4">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Voice-to-text task creation</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Daily task view</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Basic task management</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Simple dashboard</li>
+                        </ul>
+                        <div class="mb-2"><span class="h3">₹0</span> <span class="text-muted">/month</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4">
+                <div class="card plan-card premium h-100">
+                    <div class="card-body">
+                        <h3 class="h4 mb-3">Premium Plan</h3>
+                        <ul class="plan-features list-unstyled mb-4">
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Everything in Free, plus:</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Weekly & Monthly views</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>AI task suggestions</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Advanced analytics</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Google Calendar integration</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Export to CSV/PDF</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i>Sentiment analysis</li>
+                            <li><i class="bi bi-check-circle-fill me-2"></i><strong>Smart Daily Digest</strong> - AI-powered productivity insights</li>
+                        </ul>
+                        <div class="mb-2"><span class="h3">₹499</span> <span>/month</span></div>
+                        <button id="subscribeBtn" class="btn btn-premium btn-lg w-100 mt-3">Subscribe Now</button>
+                        <button id="exportCsvBtn" class="btn btn-outline-primary d-none mb-3 w-100">
+                            Export to CSV
+                        </button>
+                        <button id="exportExcelBtn" class="btn btn-outline-success d-none mb-3 w-100">
+                            Export to Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h3 class="mb-4">Frequently Asked Questions</h3>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Can I cancel my subscription anytime?</button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Yes, you can cancel your subscription at any time. You'll continue to have premium access until the end of your billing period.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">What payment methods do you accept?</button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">We accept all major credit/debit cards, UPI, and net banking through our secure payment gateway.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">How do I access premium features?</button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Premium features are automatically unlocked immediately after your payment is processed. Just refresh the page to start using them.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>QuickNotesAI
+                    </h5>
+                    <p class="text-light opacity-75">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="legal.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Legal</a></li>
+                        <li class="mb-2"><a href="privacy-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Terms of Service</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Newsletter</h6>
+                    <p class="text-light opacity-75">Stay updated with our latest features and productivity tips.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-light opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">&copy; 2025 QuickNotesAI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/utils.js"></script>
+        <script src="js/theme.js"></script>
+<script src="js/premium.js"></script>
+    <script>
+    // Theme toggle and sign out
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize theme manager and ensure theme toggle works
+        if (window.themeManager) {
+            window.themeManager.updateThemeIcon();
+            
+            // Ensure theme toggle button works
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    window.themeManager.toggleTheme();
+                });
+            }
+        }
+        
+        var brandLink = document.getElementById('brandHomeLink');
+        if (brandLink) {
+            brandLink.setAttribute('href', 'index.html');
+            brandLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'index.html';
+            });
+        }
+        var signOutBtn = document.getElementById('signOut');
+        if (signOutBtn) {
+            signOutBtn.disabled = true;
+            window.firebaseInitialized.then(() => {
+                signOutBtn.disabled = false;
+                signOutBtn.addEventListener('click', async function() {
+                    try {
+                        if (window.firebaseAuth && typeof window.firebaseAuth.signOut === 'function') {
+                            await window.firebaseAuth.signOut();
+                        } else if (window.firebase && window.firebase.auth) {
+                            await window.firebase.auth().signOut();
+                        } else {
+                            throw new Error('Firebase Auth not available');
+                        }
+                    } catch (err) {
+                        console.error('Sign out failed:', err);
+                        alert('Sign out failed. Please try again.');
+                    } finally {
+                        window.location.href = 'login.html';
+                    }
+                });
+            });
+        }
+
+        // Enable Subscribe Now button for free users only
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        // Always enable for free users after DOMContentLoaded, as a fallback
+        if (subscribeBtn) {
+            setTimeout(() => {
+                subscribeBtn.disabled = false;
+                subscribeBtn.style.display = '';
+                subscribeBtn.removeAttribute('aria-hidden');
+                subscribeBtn.textContent = 'Subscribe Now';
+            }, 500);
+        }
+        function showPremiumExperience() {
+            const title = document.querySelector('.premium-title');
+            if (title) title.textContent = 'You are a Premium User!';
+            const subtitle = document.querySelector('.premium-subtitle');
+            if (subtitle) subtitle.textContent = 'Thank you for supporting QuickNotes AI. Enjoy all premium features!';
+            if (subscribeBtn) subscribeBtn.style.display = 'none';
+            const premiumCard = document.querySelector('.plan-card.premium');
+            if (premiumCard) {
+                premiumCard.classList.add('border', 'border-success', 'shadow-lg');
+                premiumCard.style.boxShadow = '0 0 0 4px #19875433, 0 2px 16px rgba(99,102,241,0.18)';
+            }
+            let badge = document.getElementById('premiumBadge');
+            if (!badge) {
+                badge = document.createElement('div');
+                badge.id = 'premiumBadge';
+                badge.className = 'alert alert-success mt-4';
+                badge.innerHTML = '<strong>Premium Unlocked!</strong> You now have access to all advanced features.';
+                const cardBody = document.querySelector('.plan-card.premium .card-body');
+                if (cardBody) cardBody.appendChild(badge);
+            } else {
+                badge.style.display = '';
+            }
+            document.body.classList.add('premium-user');
+            const exportBtn = document.getElementById('exportCsvBtn');
+            if (exportBtn) {
+                exportBtn.classList.remove('d-none');
+                exportBtn.classList.add('d-block');
+            }
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            if (exportExcelBtn) {
+                exportExcelBtn.classList.remove('d-none');
+                exportExcelBtn.classList.add('d-block');
+            }
+        }
+        function showFreeExperience() {
+            if (subscribeBtn) {
+                setTimeout(() => {
+                    subscribeBtn.style.display = '';
+                    subscribeBtn.disabled = false;
+                    subscribeBtn.removeAttribute('aria-hidden');
+                    subscribeBtn.textContent = 'Subscribe Now';
+                }, 500);
+            }
+            const title = document.querySelector('.premium-title');
+            if (title) title.textContent = 'Upgrade to Premium';
+            const subtitle = document.querySelector('.premium-subtitle');
+            if (subtitle) subtitle.textContent = 'Unlock powerful features to boost your productivity';
+            const premiumCard = document.querySelector('.plan-card.premium');
+            if (premiumCard) premiumCard.classList.remove('border', 'border-warning', 'shadow-lg');
+            let badge = document.getElementById('premiumBadge');
+            if (badge) badge.remove();
+            document.body.classList.remove('premium-user');
+            const exportBtn = document.getElementById('exportCsvBtn');
+            if (exportBtn) {
+                exportBtn.classList.add('d-none');
+                exportBtn.classList.remove('d-block');
+            }
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            if (exportExcelBtn) {
+                exportExcelBtn.classList.add('d-none');
+                exportExcelBtn.classList.remove('d-block');
+            }
+        }
+        // Wait for Firebase to initialize (robust)
+        function waitForFirebaseInitialized(callback) {
+            let attempts = 0;
+            function check() {
+                attempts++;
+                if (window.firebaseInitialized && typeof window.firebaseInitialized.then === 'function') {
+                    callback();
+                } else if (attempts < 40) { // Wait up to 2 seconds
+                    setTimeout(check, 50);
+                } else {
+                    console.error('[Premium] Firebase not initialized after waiting.');
+                    alert('Firebase failed to initialize. Please refresh the page or contact support.');
+                }
+            }
+            check();
+        }
+        waitForFirebaseInitialized(function() {
+            window.firebaseInitialized.then(() => {
+                const auth = window.firebaseAuth;
+                const db = window.firebaseDb;
+                if (!auth || !db) return;
+                let unsubscribe = null;
+                auth.onAuthStateChanged(async (user) => {
+                    if (!user) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    // Real-time Firestore listener for user role
+                    if (unsubscribe) unsubscribe();
+                    unsubscribe = db.collection('users').doc(user.uid).onSnapshot(doc => {
+                        const role = doc.data()?.role || 'free';
+                        if (role === 'premium') {
+                            showPremiumExperience();
+                        } else {
+                            showFreeExperience();
+                        }
+                    }, err => {
+                        showFreeExperience();
+                    });
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

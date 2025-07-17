@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Task Label Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --accent-color: #8b5cf6;
+            --primary-dark: #4f46e5;
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .task-tile {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .task-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .task-tile:hover::before {
+            transform: scaleX(1);
+        }
+
+        .task-tile.completed {
+            opacity: 0.9;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .task-tile.completed::before {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            transform: scaleX(1);
+        }
+
+        .task-tile.pending {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .task-tile.pending::before {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            transform: scaleX(1);
+        }
+
+        .task-tile.in-progress {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .task-tile.in-progress::before {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            transform: scaleX(1);
+        }
+
+        .task-tile-team-label {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem; /* Position on the bottom-right */
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            z-index: 2;
+        }
+
+        .task-tile-input-method {
+            position: absolute;
+            top: 0.4rem;
+            left: 0.4rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.15rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+
+
+        .task-tile-input-method.voice {
+            color: #ffffff;
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+
+        .task-tile-input-method.manual {
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .task-tile-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            margin-bottom: 0.4rem;
+        }
+
+        .task-tile-title-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .task-tile-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.2;
+            padding: 0.25rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .task-tile-title.completed {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .task-tile-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .task-tile-description.completed {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .task-tile-priority {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .task-tile-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem;
+            background: var(--background-main);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .task-date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .task-date-item i {
+            font-size: 0.7rem;
+            width: 14px;
+            text-align: center;
+        }
+
+        .task-date-label {
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        .task-date-value {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .task-tile-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .task-tile-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            background: var(--background-main);
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-pending {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-in-progress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        /* Team name display in task tile footer */
+        .task-tile-team-name {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-right: auto;
+        }
+
+        .task-tile-team-name i {
+            font-size: 0.7rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mt-4 mb-4">Team Task Label Test</h2>
+                <p class="text-muted mb-4">This page demonstrates the 'Team Task' label functionality in task tiles.</p>
+                
+                <div class="task-grid" id="taskGrid">
+                    <!-- Task tiles will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample task data for testing
+        const sampleTasks = [
+            {
+                id: '1',
+                title: 'Regular Personal Task',
+                description: 'This is a regular personal task without team assignment.',
+                status: 'pending',
+                priority: 'high',
+                inputMethod: 'manual',
+                createdAt: new Date('2024-01-15'),
+                dueDate: new Date('2024-01-20'),
+                updatedAt: new Date('2024-01-15')
+            },
+            {
+                id: '2',
+                title: 'Team Task with New Structure',
+                description: 'This is a team task using the new teamAssignment structure.',
+                status: 'in-progress',
+                priority: 'medium',
+                inputMethod: 'voice',
+                createdAt: new Date('2024-01-16'),
+                dueDate: new Date('2024-01-25'),
+                updatedAt: new Date('2024-01-17'),
+                teamAssignment: {
+                    assignedToTeam: true,
+                    teamId: 'team123',
+                    teamName: 'Code Ninja Team',
+                    memberId: 'user456',
+                    memberName: 'John Doe',
+                    assignedAt: new Date('2024-01-16'),
+                    assignedBy: 'user789'
+                }
+            },
+            {
+                id: '3',
+                title: 'Team Task with Legacy Structure',
+                description: 'This is a team task using the legacy taskType structure.',
+                status: 'completed',
+                priority: 'low',
+                inputMethod: 'import',
+                createdAt: new Date('2024-01-14'),
+                dueDate: new Date('2024-01-18'),
+                updatedAt: new Date('2024-01-18'),
+                taskType: 'team',
+                teamId: 'team123',
+                assignedTo: 'user456'
+            },
+            {
+                id: '4',
+                title: 'Another Personal Task',
+                description: 'This is another regular personal task.',
+                status: 'pending',
+                priority: 'medium',
+                inputMethod: 'manual',
+                createdAt: new Date('2024-01-18'),
+                dueDate: new Date('2024-01-22'),
+                updatedAt: new Date('2024-01-18')
+            }
+        ];
+
+        function formatDetailedDate(dateString) {
+            if (!dateString) return 'Not set';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = now - date;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            const formattedDate = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            if (diffDays === 0) {
+                return `${formattedDate} (Today)`;
+            } else if (diffDays === 1) {
+                return `${formattedDate} (Yesterday)`;
+            } else if (diffDays < 7) {
+                return `${formattedDate} (${diffDays} days ago)`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${formattedDate} (${weeks} week${weeks > 1 ? 's' : ''} ago)`;
+            } else {
+                return formattedDate;
+            }
+        }
+
+        function getInputMethodIcon(inputMethod) {
+            switch (inputMethod) {
+                case 'voice': return 'fa-microphone';
+                case 'import': return 'fa-file-import';
+                case 'template': return 'fa-layer-group';
+                case 'manual':
+                default: return 'fa-edit';
+            }
+        }
+
+        function createTaskTile(task) {
+            console.log('Creating task tile for:', task.title, 'Status:', task.status, 'Priority:', task.priority);
+            
+            // Get input method
+            const inputMethod = task.inputMethod || 'manual';
+            const inputMethodIcon = getInputMethodIcon(inputMethod);
+            const inputMethodBadge = `<div class="task-tile-input-method ${inputMethod}">
+                <i class="fas ${inputMethodIcon}"></i>
+                <span>${inputMethod}</span>
+            </div>`;
+
+            // Check if this is a team task and create team task label
+            let teamTaskLabel = '';
+            let teamName = '';
+            let isTeamTask = false;
+            
+                            if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
+                    isTeamTask = true;
+                    teamTaskLabel = `<div class="task-tile-team-label">
+                        <i class="fas fa-users"></i>
+                        <span>👥 Team Task</span>
+                    </div>`;
+                    teamName = task.teamAssignment.teamName || 'Unknown Team';
+                } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
+                    isTeamTask = true;
+                    teamTaskLabel = `<div class="task-tile-team-label">
+                        <i class="fas fa-users"></i>
+                        <span>👥 Team Task</span>
+                    </div>`;
+                    teamName = task.teamName || 'Unknown Team';
+                }
+
+            // Format dates
+            const createdDate = formatDetailedDate(task.createdAt);
+            const dueDate = formatDetailedDate(task.dueDate);
+
+            const isCompleted = task.status === 'completed';
+            const isPending = task.status === 'pending';
+            const isInProgress = task.status === 'in-progress';
+            
+            let statusClass = '';
+            if (isCompleted) statusClass = 'completed';
+            else if (isPending) statusClass = 'pending';
+            else if (isInProgress) statusClass = 'in-progress';
+            
+            const taskHTML = `
+                <div class="task-tile ${statusClass}" data-task-id="${task.id}">
+                    ${teamTaskLabel}
+                    ${inputMethodBadge}
+                    <div class="task-tile-header">
+                        <div class="task-tile-priority priority-${task.priority}">${task.priority}</div>
+                    </div>
+                    <div class="task-tile-title-section">
+                        <h6 class="task-tile-title ${isCompleted ? 'completed' : ''}">${task.title}</h6>
+                    </div>
+                    <div class="task-tile-description ${isCompleted ? 'completed' : ''}">${task.description}</div>
+                    <div class="task-tile-dates">
+                        <div class="task-date-item">
+                            <i class="fas fa-calendar-alt text-warning"></i>
+                            <span class="task-date-label">Due:</span>
+                            <span class="task-date-value">${dueDate}</span>
+                        </div>
+                        <div class="task-date-item">
+                            <i class="fas fa-calendar-plus text-primary"></i>
+                            <span class="task-date-label">Created:</span>
+                            <span class="task-date-value">${createdDate}</span>
+                        </div>
+                    </div>
+                    <div class="task-tile-meta">
+                        ${isTeamTask ? `<div class="task-tile-team-name">
+                            <i class="fas fa-users"></i>
+                            <span>${teamName}</span>
+                        </div>` : ''}
+                        <span class="task-tile-status status-${task.status}">${task.status}</span>
+                    </div>
+                </div>
+            `;
+            
+            return taskHTML;
+        }
+
+        function renderTaskGrid() {
+            const taskGrid = document.getElementById('taskGrid');
+            if (!taskGrid) return;
+
+            const taskHTML = sampleTasks.map(task => createTaskTile(task)).join('');
+            taskGrid.innerHTML = taskHTML;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, rendering task grid...');
+            renderTaskGrid();
+        });
+    </script>
+</body>
+</html> 

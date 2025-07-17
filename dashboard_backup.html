@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - QuickNotes AI</title>
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+    <!-- Utility Scripts (if needed) -->
+    <script src="js/utils.js"></script>
+    <!-- Firebase Services -->
+    <script src="js/firebase.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script>
+    // Patch for jsPDF global (for dashboard-pdf.js compatibility)
+    if (window.jspdf && window.jspdf.jsPDF) {
+        window.jsPDF = window.jspdf.jsPDF;
+    }
+    </script>
+    <script src="js/dashboard-pdf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/dashboard-excel.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent-color: #00b894;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-main: #f8fafc;
+            --background-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        [data-bs-theme="dark"] {
+            --background-main: #0f172a;
+            --background-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+        body {
+            background: var(--background-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Enhanced Background with Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* Enhanced Navigation */
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        [data-bs-theme="dark"] .navbar {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+        .nav-link:hover {
+            color: var(--primary-color, #6366f1) !important;
+            transform: translateY(-1px);
+        }
+        .nav-link.active {
+            color: var(--primary-color, #6366f1) !important;
+            font-weight: 600;
+            position: relative;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #6366f1 0%, #00b894 100%);
+            border-radius: 1px;
+        }
+        .navbar .btn {
+            border-radius: 0.7rem;
+            font-weight: 600;
+            font-size: 1.08rem;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 12px 0 rgba(99,102,241,0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .navbar .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px 0 rgba(99,102,241,0.3);
+        }
+        .navbar .container {
+            max-width: 1200px;
+        }
+        /* Body and Typography - Matching Task Page */
+        html, body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+            background-color: var(--background-main);
+        }
+        body, .card, .card-title, .card-body, .footer, .nav-link, h1, h2, h3, h4, h5, h6, p, span, label, input, select, button {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+            color: var(--text-primary) !important;
+        }
+        [data-bs-theme="dark"] body, [data-bs-theme="dark"] .card, [data-bs-theme="dark"] .card-title, [data-bs-theme="dark"] .card-body, [data-bs-theme="dark"] .footer, [data-bs-theme="dark"] .nav-link, [data-bs-theme="dark"] h1, [data-bs-theme="dark"] h2, [data-bs-theme="dark"] h3, [data-bs-theme="dark"] h4, [data-bs-theme="dark"] h5, [data-bs-theme="dark"] h6, [data-bs-theme="dark"] p, [data-bs-theme="dark"] span, [data-bs-theme="dark"] label, [data-bs-theme="dark"] input, [data-bs-theme="dark"] select, [data-bs-theme="dark"] button {
+            color: var(--text-primary) !important;
+        }
+        .card {
+            background: var(--background-card);
+        }
+        .footer, .footer span, .footer a {
+            color: var(--text-secondary) !important;
+        }
+        .card-title {
+            font-weight: 600;
+        }
+        .btn, .btn-outline-primary {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif !important;
+        }
+        .dashboard-title {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            letter-spacing: 0.5px;
+            font-size: 1.35rem;
+            position: relative;
+            display: inline-block;
+        }
+        .dashboard-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
+                <i class="bi bi-check2-square me-2 text-primary"></i>
+                <span class="fw-bold">QuickNotes AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="task.html">
+                            <i class="fas fa-tasks me-1"></i>Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="premium.html">
+                            <i class="fas fa-star me-1"></i>Premium
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item d-flex align-items-center me-3">
+                        <button id="signOut" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+                        </button>
+                        <span id="userName" class="badge bg-primary text-white px-3 py-2" style="font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;"></span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="theme-toggle-btn ms-2" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid flex-grow-1" style="padding-top: 70px;">
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h2 class="dashboard-title">Analytics Dashboard</h2>
+                    </div>
+                    <div class="col-md-6 text-md-end" id="exportButtons">
+                        <button id="exportCsvBtn" class="btn btn-outline-primary d-none">
+                            Export to CSV
+                        </button>
+                        
+                        <button id="exportPdfBtn" class="btn btn-outline-danger d-none">
+                            Export to PDF
+                        </button>
+                        <button id="upgradePremiumBtn" class="btn btn-warning ms-2 d-none">Upgrade to Premium</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card border-2 border-primary border-opacity-25 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="text-muted mb-2">Total Tasks</h5>
+                        <h2 id="totalTasks" class="text-primary mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-2 border-success border-opacity-25 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="text-muted mb-2">Completed</h5>
+                        <h2 id="completedTasks" class="text-success mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-2 border-info border-opacity-25 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="text-muted mb-2">Voice Notes</h5>
+                        <h2 id="voiceNotes" class="text-info mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-2 border-warning border-opacity-25 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="text-muted mb-2">Completion Rate</h5>
+                        <h2 id="completionRate" class="text-warning mb-0">0%</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Daily Digest (Premium Feature) -->
+        <div class="row mb-4" id="smartDigestSection">
+            <div class="col-12">
+                <div class="card border-2 border-primary border-opacity-25 shadow-lg position-relative overflow-hidden">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3" style="z-index:2;">
+                        <i class="fas fa-crown me-1"></i>Premium
+                    </span>
+                    
+                    <!-- Smart Summary Animated Background -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index:1; opacity:0.08;">
+                        <div class="smart-summary-bg">
+                            <div class="data-point data-point-1"></div>
+                            <div class="data-point data-point-2"></div>
+                            <div class="data-point data-point-3"></div>
+                            <div class="data-point data-point-4"></div>
+                            <div class="data-point data-point-5"></div>
+                            <div class="connection-line line-1"></div>
+                            <div class="connection-line line-2"></div>
+                            <div class="connection-line line-3"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4 position-relative" style="z-index:2;">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="card-title mb-3">
+                                    <i class="fas fa-brain text-primary me-2"></i>
+                                    Smart Daily Digest
+                                </h4>
+                                <p class="text-muted mb-3">
+                                    Get AI-powered insights about your productivity patterns and accomplishments.
+                                </p>
+                                
+                                <!-- Digest Type Toggle -->
+                                <div class="digest-controls mb-4">
+                                    <div class="btn-group mb-3" role="group" aria-label="Digest type">
+                                        <input type="radio" class="btn-check" name="digestType" id="dailyDigest" value="daily" checked>
+                                        <label class="btn btn-outline-primary" for="dailyDigest">
+                                            <i class="fas fa-calendar-day me-2"></i>Daily
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="digestType" id="weeklyDigest" value="weekly">
+                                        <label class="btn btn-outline-primary" for="weeklyDigest">
+                                            <i class="fas fa-calendar-week me-2"></i>Weekly
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="action-buttons">
+                                        <button id="generateDigestBtn" class="btn btn-primary btn-lg me-3">
+                                            <i class="fas fa-magic me-2"></i>
+                                            Generate Smart Digest
+                                        </button>
+                                        
+                                        <button id="viewHistoryBtn" class="btn btn-outline-secondary btn-lg">
+                                            <i class="fas fa-history me-2"></i>
+                                            View History
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="digest-icon-container">
+                                    <div class="ai-productivity-3d">
+                                        <div class="cube-container">
+                                            <div class="cube">
+                                                <div class="face front">
+                                                    <i class="fas fa-brain"></i>
+                                                </div>
+                                                <div class="face back">
+                                                    <i class="fas fa-chart-line"></i>
+                                                </div>
+                                                <div class="face right">
+                                                    <i class="fas fa-tasks"></i>
+                                                </div>
+                                                <div class="face left">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                                <div class="face top">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="face bottom">
+                                                    <i class="fas fa-trophy"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="floating-elements">
+                                            <div class="element element-1">📊</div>
+                                            <div class="element element-2">📈</div>
+                                            <div class="element element-3">🎯</div>
+                                            <div class="element element-4">⚡</div>
+                                            <div class="element element-5">🏆</div>
+                                        </div>
+                                        <div class="particle-system">
+                                            <div class="particle"></div>
+                                            <div class="particle"></div>
+                                            <div class="particle"></div>
+                                            <div class="particle"></div>
+                                            <div class="particle"></div>
+                                            <div class="particle"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div id="digestLoading" class="text-center py-4 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating digest...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Analyzing your productivity patterns...</p>
+                        </div>
+                        
+                        <!-- Digest Content -->
+                        <div id="digestContent" class="mt-4 d-none">
+                            <div class="alert alert-info border-2 border-info border-opacity-25">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-lightbulb text-info me-2 mt-1"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-2">Your AI Productivity Summary</h6>
+                                        <div id="digestText" class="mb-2"></div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>
+                                            Generated on <span id="digestGeneratedAt"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Task Summary -->
+                            <div id="taskSummary" class="mt-3 d-none">
+                                <h6 class="mb-2">Tasks Analyzed:</h6>
+                                <div id="taskList" class="row"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Error State -->
+                        <div id="digestError" class="alert alert-danger border-2 border-danger border-opacity-25 mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+                        
+                        <!-- Upgrade Prompt for Free Users -->
+                        <div id="upgradePrompt" class="mt-3 d-none">
+                            <div class="alert alert-warning border-2 border-warning border-opacity-25">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-lock text-warning me-2"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1">Premium Feature</h6>
+                                        <p class="mb-2">Unlock AI-powered productivity insights with our Smart Daily Digest feature.</p>
+                                        <a href="premium.html" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Upgrade to Premium
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row">
+            <!-- Task Completion Trend -->
+            <div class="col-md-8 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column" style="min-height:340px;">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-chart-line me-2"></i>Task Completion Trend
+                        </h5>
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center">
+                            <canvas id="completionTrendChart" style="max-height:260px; width:100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Type Distribution -->
+            <div class="col-md-4 mb-4">
+                <div class="card border-2 border-success border-opacity-25 h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center" style="min-height:340px;">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-keyboard me-2"></i>Input Methods
+                        </h5>
+                        <div class="flex-grow-1 d-flex align-items-center justify-content-center w-100">
+                            <canvas id="inputMethodChart" style="max-height:220px; width:100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Features (Pro Charts) -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2" style="z-index:2;">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-info">
+                            <i class="fas fa-clock me-2"></i>Most Productive Hours
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="productiveHoursChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2" style="z-index:2;">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">
+                            <i class="fas fa-tags me-2"></i>Task Categories
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="taskCategoriesChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Pro Analytics Row -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-calendar-day me-2"></i>Daily Task Completion Trend
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proDailyCompletionChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-fire me-2"></i>Weekly Productivity Heatmap
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proWeeklyHeatmapChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-info">
+                            <i class="fas fa-microphone me-2"></i>Voice vs Manual Entry (Extended)
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proVoiceManualChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">
+                            <i class="fas fa-chart-pie me-2"></i>Task Type Breakdown
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proTaskTypeChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-search me-2"></i>Most Common Keywords
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proKeywordsChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-clock me-2"></i>Time of Day Task Creation
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proTimeOfDayChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-info border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-info">
+                            <i class="fas fa-percentage me-2"></i>Task Completion Rate
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proCompletionRateChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-warning border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">
+                            <i class="fas fa-calendar-alt me-2"></i>Monthly Progress Summary
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proMonthlyProgressChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-primary border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">
+                            <i class="fas fa-microphone-alt me-2"></i>Note Duration Stats (Voice Notes)
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proNoteDurationChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-2 border-success border-opacity-25 position-relative pro-chart-card shadow-sm">
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Pro</span>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-heart me-2"></i>Sentiment Over Time
+                        </h5>
+                        <div class="chart-content">
+                            <canvas id="proSentimentChart"></canvas>
+                        </div>
+                        <div class="upgrade-prompt text-center py-4" style="display: none;">
+                            <i class="fas fa-lock fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted mb-2">Premium Feature</h6>
+                            <p class="text-muted small mb-3">Unlock advanced analytics and insights with Premium</p>
+                            <a href="premium.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-crown me-1"></i>Upgrade to Premium
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 text-white fw-bold">
+                        <i class="fas fa-sticky-note me-2 text-primary"></i>QuickNotesAI
+                    </h5>
+                    <p class="text-light opacity-75">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity"><i class="fab fa-github fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="legal.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Legal</a></li>
+                        <li class="mb-2"><a href="privacy-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Terms of Service</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="text-light opacity-75 text-decoration-none hover-opacity-100 transition-opacity">Press</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h6 class="mb-3 text-white fw-semibold">Newsletter</h6>
+                    <p class="text-light opacity-75">Stay updated with our latest features and productivity tips.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-light opacity-25">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light opacity-75">&copy; 2024 QuickNotesAI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-light btn-sm" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Dashboard Logic -->
+    <script src="js/dashboard.js"></script>
+    <script>
+    // Sign out functionality for dashboard
+    if (window.firebase && window.firebase.auth) {
+        document.addEventListener('DOMContentLoaded', function() {
+            var signOutBtn = document.getElementById('signOut');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', function() {
+                    window.firebase.auth().signOut().then(function() {
+                        window.location.href = 'login.html';
+                    });
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        window.utils && window.utils.theme && window.utils.theme.initialize();
+        // Optionally update icon on toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        function updateIcon() {
+            const theme = document.documentElement.getAttribute('data-bs-theme');
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+            }
+        }
+        updateIcon();
+        themeToggle && themeToggle.addEventListener('change', updateIcon);
+        window.addEventListener('themeChanged', updateIcon);
+
+        // Force brand link to always go to index.html (defensive against cache/JS overrides)
+        var brandLink = document.getElementById('brandHomeLink');
+        if (brandLink) {
+            brandLink.setAttribute('href', 'index.html');
+            brandLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'index.html';
+            });
+        }
+
+        // Theme toggle click handler for dashboard page
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                if (window.utils && window.utils.theme && window.utils.theme.toggle) {
+                    window.utils.theme.toggle();
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>

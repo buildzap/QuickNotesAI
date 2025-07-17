@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Key Test</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Razorpay Key Test</h1>
+    
+    <div class="test-section info">
+        <h3>Current Configuration</h3>
+        <p><strong>Key ID:</strong> <code id="keyId">rzp_test_joQDkSFqA4rIId</code></p>
+        <p><strong>Environment:</strong> <span id="environment">Test</span></p>
+        <p><strong>Amount:</strong> ₹499 (49900 paise)</p>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 1: Basic Payment Modal</h3>
+        <p>This will open a basic Razorpay payment modal with minimal configuration.</p>
+        <button onclick="testBasicPayment()">Test Basic Payment</button>
+        <div id="basicResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 2: Enhanced Payment Modal</h3>
+        <p>This will open a payment modal with all the configuration from your app.</p>
+        <button onclick="testEnhancedPayment()">Test Enhanced Payment</button>
+        <div id="enhancedResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 3: Key Validation</h3>
+        <p>This will test if the Razorpay key is valid by attempting to create a minimal payment.</p>
+        <button onclick="testKeyValidation()">Test Key Validation</button>
+        <div id="validationResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Console Logs</h3>
+        <p>Check the browser console (F12) for detailed logs.</p>
+        <button onclick="clearLogs()">Clear Console</button>
+    </div>
+
+    <script>
+        const RAZORPAY_KEY_ID = 'rzp_test_joQDkSFqA4rIId';
+        const PREMIUM_AMOUNT = 49900;
+
+        function log(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            const timestamp = new Date().toLocaleTimeString();
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="${type}"><strong>${type.toUpperCase()}:</strong> ${message}</div>`;
+        }
+
+        function testBasicPayment() {
+            log('Testing basic payment modal...');
+            
+            const options = {
+                key: RAZORPAY_KEY_ID,
+                amount: PREMIUM_AMOUNT,
+                currency: "INR",
+                name: "Test Payment",
+                description: "Basic test payment",
+                handler: function (response) {
+                    log('Payment successful: ' + JSON.stringify(response), 'success');
+                    showResult('basicResult', `Payment successful! Payment ID: ${response.razorpay_payment_id}`, 'success');
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function (response) {
+                    log('Payment failed: ' + JSON.stringify(response.error), 'error');
+                    showResult('basicResult', `Payment failed: ${response.error.description}`, 'error');
+                });
+
+                rzp.open();
+                showResult('basicResult', 'Payment modal opened successfully', 'success');
+            } catch (error) {
+                log('Error creating Razorpay instance: ' + error.message, 'error');
+                showResult('basicResult', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        function testEnhancedPayment() {
+            log('Testing enhanced payment modal...');
+            
+            const options = {
+                key: RAZORPAY_KEY_ID,
+                amount: PREMIUM_AMOUNT,
+                currency: "INR",
+                name: "QuickNotes AI",
+                description: "Premium Subscription",
+                order_id: `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                prefill: {
+                    email: "test@example.com",
+                    contact: "",
+                    name: "Test User"
+                },
+                config: {
+                    display: {
+                        blocks: {
+                            banks: {
+                                name: "Pay using UPI",
+                                instruments: [
+                                    { method: "card" },
+                                    { method: "netbanking" },
+                                    { method: "wallet" }
+                                ]
+                            }
+                        },
+                        sequence: ["block.banks"],
+                        preferences: {
+                            show_default_blocks: false
+                        }
+                    }
+                },
+                handler: function (response) {
+                    log('Enhanced payment successful: ' + JSON.stringify(response), 'success');
+                    showResult('enhancedResult', `Payment successful! Payment ID: ${response.razorpay_payment_id}`, 'success');
+                },
+                modal: {
+                    ondismiss: function() {
+                        log('Payment modal dismissed', 'info');
+                    },
+                    escape: false,
+                    handleback: true
+                },
+                notes: {
+                    address: "Test mode - Use test cards only",
+                    user_id: "test_user"
+                },
+                theme: {
+                    color: "#6366f1"
+                }
+            };
+
+            try {
+                const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function (response) {
+                    log('Enhanced payment failed: ' + JSON.stringify(response.error), 'error');
+                    showResult('enhancedResult', `Payment failed: ${response.error.description}`, 'error');
+                });
+
+                rzp.on('payment.cancelled', function (response) {
+                    log('Payment cancelled: ' + JSON.stringify(response), 'info');
+                    showResult('enhancedResult', 'Payment was cancelled by user', 'info');
+                });
+
+                rzp.open();
+                showResult('enhancedResult', 'Enhanced payment modal opened successfully', 'success');
+            } catch (error) {
+                log('Error creating enhanced Razorpay instance: ' + error.message, 'error');
+                showResult('enhancedResult', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        function testKeyValidation() {
+            log('Testing key validation...');
+            
+            // Test if Razorpay object is available
+            if (typeof Razorpay === 'undefined') {
+                showResult('validationResult', 'Razorpay script not loaded', 'error');
+                return;
+            }
+
+            // Test if key format is correct
+            if (!RAZORPAY_KEY_ID.startsWith('rzp_')) {
+                showResult('validationResult', 'Invalid key format. Should start with "rzp_"', 'error');
+                return;
+            }
+
+            // Test if it's a test key
+            if (!RAZORPAY_KEY_ID.includes('test')) {
+                showResult('validationResult', 'Warning: This appears to be a production key', 'error');
+                return;
+            }
+
+            // Try to create a minimal Razorpay instance
+            try {
+                const testOptions = {
+                    key: RAZORPAY_KEY_ID,
+                    amount: 100, // ₹1
+                    currency: "INR",
+                    name: "Key Test",
+                    description: "Testing key validity"
+                };
+
+                const rzp = new Razorpay(testOptions);
+                showResult('validationResult', '✅ Key appears to be valid. Razorpay instance created successfully.', 'success');
+                
+                // Don't open the modal for validation test
+                log('Key validation successful', 'success');
+            } catch (error) {
+                showResult('validationResult', `❌ Key validation failed: ${error.message}`, 'error');
+                log('Key validation failed: ' + error.message, 'error');
+            }
+        }
+
+        function clearLogs() {
+            console.clear();
+            log('Console cleared');
+        }
+
+        // Auto-run key validation on page load
+        window.addEventListener('load', function() {
+            log('Page loaded, running initial tests...');
+            testKeyValidation();
+        });
+    </script>
+</body>
+</html> 
