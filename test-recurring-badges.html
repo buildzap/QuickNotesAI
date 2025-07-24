@@ -51,9 +51,8 @@
 
         .task-tile-recurring {
             position: absolute;
-            top: 0.4rem;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0.5rem;
+            left: 0.5rem;
             font-size: 0.55rem;
             color: #ffffff;
             background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -351,24 +350,24 @@
             const formatRecurringText = (type) => {
                 switch (type) {
                     case 'daily':
-                        return '🔄 Daily';
+                        return 'Daily';
                     case 'weekly':
-                        return '🔄 Weekly';
+                        return 'Weekly';
                     case 'monthly':
-                        return '🔄 Monthly';
+                        return 'Monthly';
                     case 'yearly':
-                        return '🔄 Yearly';
+                        return 'Yearly';
                     case 'custom':
                         // For custom, we need to get the interval from the task data
                         if (task.recurring && typeof task.recurring === 'object' && task.recurring.recurrence) {
                             const interval = task.recurring.recurrence.interval || 7;
-                            return `🔄 Every ${interval} Days`;
+                            return `Every ${interval} Days`;
                         }
-                        return '🔄 Every X Days';
+                        return 'Every X Days';
                     case 'recurring':
-                        return '🔄 Recurring';
+                        return 'Recurring';
                     default:
-                        return `🔄 ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                        return `${type.charAt(0).toUpperCase() + type.slice(1)}`;
                 }
             };
             

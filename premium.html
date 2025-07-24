@@ -56,30 +56,31 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm py-2">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
-                <i class="bi bi-check2-square me-2 text-primary"></i>
-                <span class="fw-bold">QuickNotes AI</span>
+            <a class="navbar-brand" href="index.html" id="brandHomeLink">
+                <i class="fas fa-check-double"></i>
+                <span>QuickNotes AI</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
-                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
                     <li class="nav-item"><a class="nav-link active" href="premium.html">Premium</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item d-flex align-items-center me-2">
-                        <button id="signOut" class="btn btn-light me-2">Sign Out</button>
-                        <span id="userName" class="badge bg-primary text-white px-3 py-2" style="font-size: 0.85rem; font-weight: 500; letter-spacing: 0.3px;"></span>
+                    <li class="nav-item user-section">
+                        <button id="signOut" class="btn btn-outline-danger sign-out-btn">Sign Out</button>
+                        <span class="user-welcome" id="userName">User</span>
                     </li>
                     <li class="nav-item">
-                        <button id="themeToggle" class="theme-toggle-btn ms-2" title="Toggle theme">
-                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        <button id="themeToggle" class="btn btn-outline-primary theme-toggle-btn" title="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
                         </button>
                     </li>
                 </ul>

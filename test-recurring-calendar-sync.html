@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Recurring Calendar Sync</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-main: #f8f9fa;
+            --background-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-color: #6366f1;
+            --accent-color: #8b5cf6;
+        }
+
+        body {
+            background: var(--background-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .task-summary-tile {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .form-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .alert {
+            border-radius: 6px;
+            border: none;
+        }
+
+        .alert-info {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+
+        /* Test Results */
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-result {
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        /* Sample Task Display */
+        .sample-task {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .sample-task-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .sample-task-details {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .sample-task-recurring {
+            font-size: 0.75rem;
+            color: #f59e0b;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Test Recurring Calendar Sync</h1>
+        
+        <div class="test-section">
+            <h5>Test Results</h5>
+            <div id="testResults"></div>
+        </div>
+
+        <!-- Sample Recurring Tasks -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h5>Sample Recurring Tasks</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="sample-task">
+                            <div class="sample-task-title">Daily Standup Meeting</div>
+                            <div class="sample-task-details">Due: Today | Priority: High</div>
+                            <div class="sample-task-recurring">
+                                <i class="bi bi-arrow-repeat me-1"></i>Daily at 09:00
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="sample-task">
+                            <div class="sample-task-title">Weekly Team Review</div>
+                            <div class="sample-task-details">Due: This Week | Priority: Medium</div>
+                            <div class="sample-task-recurring">
+                                <i class="bi bi-arrow-repeat me-1"></i>Weekly at 14:00
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="sample-task">
+                            <div class="sample-task-title">Monthly Report</div>
+                            <div class="sample-task-details">Due: This Month | Priority: Low</div>
+                            <div class="sample-task-recurring">
+                                <i class="bi bi-arrow-repeat me-1"></i>Monthly at 10:00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Sync Task to Google Calendar -->
+        <div class="row">
+            <div class="col-12">
+                <div class="task-summary-tile">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="mb-0">
+                            <i class="bi bi-arrow-repeat me-2"></i>Step 2: Sync Task to Google Calendar
+                        </h6>
+                        <button id="sync-to-google-calendar" class="btn btn-primary btn-sm" disabled>
+                            <i class="bi bi-calendar-plus me-1"></i>Sync Task
+                        </button>
+                    </div>
+                    <p class="mb-2 small">Select a task from "Task History" and create a calendar event</p>
+                    
+                    <!-- Selected Task Display -->
+                    <div id="selected-task-display" class="mb-3">
+                        <span class="text-muted small">
+                            <i class="bi bi-info-circle me-1"></i>No task selected
+                        </span>
+                    </div>
+                    
+                    <!-- Recurring Time Field -->
+                    <div id="recurring-time-section" class="mb-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="recurringTime" class="form-label small fw-semibold">
+                                <i class="bi bi-clock me-1"></i>Recurring Time
+                            </label>
+                            <div class="input-group">
+                                <input type="time" class="form-control form-control-sm" id="recurringTime" 
+                                       value="09:00" style="max-width: 150px;">
+                                <span class="input-group-text small text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>From task recurrence settings
+                                </span>
+                            </div>
+                            <div class="form-text small">
+                                <i class="bi bi-lightbulb me-1"></i>
+                                <strong>Daily:</strong> One meeting at this time | 
+                                <strong>Weekly:</strong> Weekly meeting at this time
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Duplicate Prevention Info -->
+                    <div id="duplicate-prevention-info" class="alert alert-info py-2 mb-0" style="display: none;">
+                        <small>
+                            <i class="bi bi-shield-check me-1"></i>
+                            <strong>Duplicate Prevention:</strong> System will check for existing meetings at the same time to avoid duplicates.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Test Controls</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="selectTask('daily')">
+                                    Select Daily Task
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="selectTask('weekly')">
+                                    Select Weekly Task
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="selectTask('monthly')">
+                                    Select Monthly Task
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-outline-secondary btn-sm w-100 mb-2" onclick="selectTask('non-recurring')">
+                                    Select Non-Recurring Task
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-outline-danger btn-sm w-100 mb-2" onclick="clearSelection()">
+                                    Clear Selection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample tasks for testing
+        const sampleTasks = {
+            'daily': {
+                id: 'daily-1',
+                title: 'Daily Standup Meeting',
+                description: 'Daily team standup meeting',
+                dueDate: new Date(),
+                priority: 'high',
+                status: 'pending',
+                recurring: {
+                    recurring: true,
+                    recurrence: {
+                        type: 'daily',
+                        time: '09:00',
+                        nextDue: new Date().toISOString()
+                    }
+                }
+            },
+            'weekly': {
+                id: 'weekly-1',
+                title: 'Weekly Team Review',
+                description: 'Weekly project review and planning session',
+                dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                priority: 'medium',
+                status: 'pending',
+                recurring: {
+                    recurring: true,
+                    recurrence: {
+                        type: 'weekly',
+                        time: '14:00',
+                        nextDue: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                    }
+                }
+            },
+            'monthly': {
+                id: 'monthly-1',
+                title: 'Monthly Report',
+                description: 'Monthly performance and analytics report',
+                dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                priority: 'low',
+                status: 'pending',
+                recurring: {
+                    recurring: true,
+                    recurrence: {
+                        type: 'monthly',
+                        time: '10:00',
+                        nextDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                    }
+                }
+            },
+            'non-recurring': {
+                id: 'non-recurring-1',
+                title: 'One-time Meeting',
+                description: 'Single meeting for project discussion',
+                dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                priority: 'medium',
+                status: 'pending',
+                recurring: null
+            }
+        };
+
+        let selectedTask = null;
+
+        // Format recurring text function
+        function formatRecurringText(type) {
+            switch (type) {
+                case 'daily': return 'Daily';
+                case 'weekly': return 'Weekly';
+                case 'monthly': return 'Monthly';
+                case 'yearly': return 'Yearly';
+                case 'custom': return 'Custom';
+                case 'recurring': return 'Recurring';
+                default: return `${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            }
+        }
+
+        // Format date function
+        function formatDate(date) {
+            if (!date) return 'No date';
+            const d = new Date(date);
+            return d.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Escape HTML function
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Update selected task display
+        function updateSelectedTaskDisplay() {
+            const selectedTaskDisplay = document.getElementById('selected-task-display');
+            const recurringTimeSection = document.getElementById('recurring-time-section');
+            const duplicatePreventionInfo = document.getElementById('duplicate-prevention-info');
+            const recurringTimeInput = document.getElementById('recurringTime');
+            const syncBtn = document.getElementById('sync-to-google-calendar');
+            
+            if (!selectedTaskDisplay) {
+                console.log('Selected task display element not found');
+                return;
+            }
+            
+            if (!selectedTask) {
+                selectedTaskDisplay.innerHTML = `
+                    <span class="text-muted small">
+                        <i class="bi bi-info-circle me-1"></i>No task selected
+                    </span>
+                `;
+                recurringTimeSection.style.display = 'none';
+                duplicatePreventionInfo.style.display = 'none';
+                syncBtn.disabled = true;
+                return;
+            }
+            
+            const dueDate = selectedTask.dueDate ? formatDate(selectedTask.dueDate) : 'No due date';
+            const priority = selectedTask.priority || 'Medium';
+            
+            // Check if task is recurring
+            let isRecurring = false;
+            let recurringType = '';
+            let recurringTime = '09:00';
+            
+            if (selectedTask.recurring) {
+                if (typeof selectedTask.recurring === 'string' && selectedTask.recurring !== 'none') {
+                    isRecurring = true;
+                    recurringType = selectedTask.recurring;
+                } else if (typeof selectedTask.recurring === 'boolean' && selectedTask.recurring === true) {
+                    isRecurring = true;
+                    recurringType = 'recurring';
+                } else if (typeof selectedTask.recurring === 'object') {
+                    if (selectedTask.recurring.recurring === true && selectedTask.recurring.recurrence) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.recurrence.type || 'recurring';
+                        recurringTime = selectedTask.recurring.recurrence.time || '09:00';
+                    } else if (selectedTask.recurring.type) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.type;
+                        recurringTime = selectedTask.recurring.time || '09:00';
+                    } else if (selectedTask.recurring.recurrence && selectedTask.recurring.recurrence.type) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.recurrence.type;
+                        recurringTime = selectedTask.recurring.recurrence.time || '09:00';
+                    }
+                }
+            }
+            
+            // Update recurring time input
+            if (recurringTimeInput) {
+                recurringTimeInput.value = recurringTime;
+            }
+            
+            // Show/hide recurring time section
+            if (recurringTimeSection) {
+                if (isRecurring) {
+                    recurringTimeSection.style.display = 'block';
+                    duplicatePreventionInfo.style.display = 'block';
+                } else {
+                    recurringTimeSection.style.display = 'none';
+                    duplicatePreventionInfo.style.display = 'none';
+                }
+            }
+            
+            // Build task display HTML
+            let taskDisplayHTML = `
+                <div class="fw-bold text-primary">${escapeHtml(selectedTask.title)}</div>
+                <div class="small text-muted">Due: ${dueDate}</div>
+                <div class="small text-muted">Priority: ${priority}</div>
+            `;
+            
+            // Add recurring info if applicable
+            if (isRecurring) {
+                const recurringText = formatRecurringText(recurringType);
+                taskDisplayHTML += `
+                    <div class="small text-warning">
+                        <i class="bi bi-arrow-repeat me-1"></i>${recurringText} at ${recurringTime}
+                    </div>
+                `;
+            }
+            
+            selectedTaskDisplay.innerHTML = taskDisplayHTML;
+            syncBtn.disabled = false;
+        }
+
+        // Select task function
+        function selectTask(taskType) {
+            selectedTask = sampleTasks[taskType];
+            updateSelectedTaskDisplay();
+            addTestResult('success', `Selected ${taskType} task: "${selectedTask.title}"`);
+        }
+
+        // Clear selection function
+        function clearSelection() {
+            selectedTask = null;
+            updateSelectedTaskDisplay();
+            addTestResult('warning', 'Task selection cleared');
+        }
+
+        // Add test result
+        function addTestResult(type, message) {
+            const resultsContainer = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${type}`;
+            resultDiv.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            resultsContainer.appendChild(resultDiv);
+            
+            // Keep only last 10 results
+            const results = resultsContainer.querySelectorAll('.test-result');
+            if (results.length > 10) {
+                results[0].remove();
+            }
+        }
+
+        // Simulate sync function
+        document.getElementById('sync-to-google-calendar').addEventListener('click', function() {
+            if (!selectedTask) {
+                addTestResult('error', 'No task selected for sync');
+                return;
+            }
+
+            const recurringTimeInput = document.getElementById('recurringTime');
+            const recurringTime = recurringTimeInput ? recurringTimeInput.value : '09:00';
+            
+            // Check if task is recurring
+            let isRecurring = false;
+            let recurringType = '';
+            
+            if (selectedTask.recurring) {
+                if (typeof selectedTask.recurring === 'string' && selectedTask.recurring !== 'none') {
+                    isRecurring = true;
+                    recurringType = selectedTask.recurring;
+                } else if (typeof selectedTask.recurring === 'boolean' && selectedTask.recurring === true) {
+                    isRecurring = true;
+                    recurringType = 'recurring';
+                } else if (typeof selectedTask.recurring === 'object') {
+                    if (selectedTask.recurring.recurring === true && selectedTask.recurring.recurrence) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.recurrence.type || 'recurring';
+                    } else if (selectedTask.recurring.type) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.type;
+                    } else if (selectedTask.recurring.recurrence && selectedTask.recurring.recurrence.type) {
+                        isRecurring = true;
+                        recurringType = selectedTask.recurring.recurrence.type;
+                    }
+                }
+            }
+
+            const successMessage = isRecurring ? 
+                `Recurring task "${selectedTask.title}" synced to Google Calendar successfully! (${formatRecurringText(recurringType)} at ${recurringTime})` :
+                `Task "${selectedTask.title}" synced to Google Calendar successfully!`;
+            
+            addTestResult('success', successMessage);
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSelectedTaskDisplay();
+            addTestResult('success', 'Test page initialized. Select a task to test recurring calendar sync functionality.');
+        });
+    </script>
+</body>
+</html> 

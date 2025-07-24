@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scroll Bar Removal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-main: #f8f9fa;
+            --background-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-color: #6366f1;
+            --accent-color: #8b5cf6;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #4f46e5);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: var(--background-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Dashboard Card Styles */
+        .dashboard-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .dashboard-card-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .dashboard-card-body {
+            padding: 1rem;
+        }
+
+        /* Task Progress Overview - NO SCROLL */
+        .task-progress-card {
+            background: linear-gradient(135deg, var(--background-card) 0%, rgba(99, 102, 241, 0.02) 100%);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .task-progress-card .dashboard-card-body {
+            padding: 1rem;
+            overflow: visible;
+        }
+
+        .progress-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Overall Progress Section */
+        .overall-progress-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 8px;
+            padding: 0.6rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .progress-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        /* Progress Metrics */
+        .progress-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .metric-item {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.3rem;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .metric-icon.completed {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .metric-icon.in-progress {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .metric-icon.pending {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.1rem;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* Time Progress Section */
+        .time-progress-section {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%);
+            border-radius: 8px;
+            padding: 0.6rem;
+            border: 1px solid rgba(245, 158, 11, 0.1);
+        }
+
+        .time-progress-item {
+            margin-bottom: 0.4rem;
+        }
+
+        .time-progress-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .time-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.2rem;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .time-percentage {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .time-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .time-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .time-progress-fill.today {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .time-progress-fill.week {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .time-progress-fill.month {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+        }
+
+        /* Productivity Score */
+        .productivity-score {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.05) 0%, rgba(0, 184, 148, 0.02) 100%);
+            border-radius: 8px;
+            padding: 0.6rem;
+            border: 1px solid rgba(0, 184, 148, 0.1);
+            text-align: center;
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .score-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .score-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .score-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.1rem;
+        }
+
+        .score-stars i {
+            color: #fbbf24;
+            font-size: 0.8rem;
+        }
+
+        /* Recent Activity - NO SCROLL */
+        .activity-list {
+            overflow: visible;
+        }
+        
+        .activity-list .activity-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-list .activity-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .activity-item {
+            background: var(--background-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .activity-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(5px);
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-color);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            margin-right: 0.75rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-details {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .priority-badge {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .priority-badge.high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .priority-badge.medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .priority-badge.low {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .due-date-info {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-tags {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .tag-badge {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.25rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 3px;
+        }
+
+        /* Priority Chart */
+        .priority-chart {
+            background: var(--background-card);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .priority-chart:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .priority-chart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        }
+
+        /* Test Results */
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-result {
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .progress-metrics {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .metric-item {
+                padding: 0.5rem;
+            }
+            
+            .metric-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .metric-value {
+                font-size: 1.1rem;
+            }
+            
+            .progress-overview {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Test Scroll Bar Removal</h1>
+        
+        <div class="test-section">
+            <h5>Test Results</h5>
+            <div id="testResults"></div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="row g-3">
+            <!-- Left Column: Task Progress Overview -->
+            <div class="col-12 col-md-6">
+                <div class="dashboard-card mb-3 task-progress-card">
+                    <div class="dashboard-card-header py-2">
+                        <h6 class="dashboard-card-title mb-0">
+                            <i class="bi bi-speedometer2 me-2"></i>Task Progress Overview
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body py-2">
+                        <div class="progress-overview">
+                            <!-- Overall Progress -->
+                            <div class="overall-progress-section">
+                                <div class="progress-header">
+                                    <span class="progress-title">Overall Completion</span>
+                                    <span class="progress-percentage" id="overallProgress">75%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Progress Metrics -->
+                            <div class="progress-metrics">
+                                <div class="metric-item">
+                                    <div class="metric-icon completed">
+                                        <i class="bi bi-check-circle"></i>
+                                    </div>
+                                    <div class="metric-value" id="completedCount">15</div>
+                                    <div class="metric-label">Completed</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-icon in-progress">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </div>
+                                    <div class="metric-value" id="inProgressCount">8</div>
+                                    <div class="metric-label">In Progress</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-icon pending">
+                                        <i class="bi bi-clock"></i>
+                                    </div>
+                                    <div class="metric-value" id="pendingCount">5</div>
+                                    <div class="metric-label">Pending</div>
+                                </div>
+                            </div>
+
+                            <!-- Time Progress -->
+                            <div class="time-progress-section">
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">Today's Goal</span>
+                                        <span class="time-percentage" id="todayPercentage">80%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill today" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">This Week</span>
+                                        <span class="time-percentage" id="weekPercentage">65%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill week" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">This Month</span>
+                                        <span class="time-percentage" id="monthPercentage">90%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill month" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Productivity Score -->
+                            <div class="productivity-score">
+                                <div class="score-header">
+                                    <span class="score-title">Productivity Score</span>
+                                    <span class="score-value" id="productivityScore">8.5</span>
+                                </div>
+                                <div class="score-stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <i class="bi bi-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Recent Activity -->
+            <div class="col-12 col-md-6">
+                <div class="dashboard-card mb-3">
+                    <div class="dashboard-card-header py-2">
+                        <h6 class="dashboard-card-title mb-0">
+                            <i class="bi bi-activity me-2"></i>Recent Activity
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body py-2">
+                        <div class="activity-list" id="recentActivityList" style="font-size: 0.85rem;">
+                            <!-- Sample Activity Items -->
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Task "Complete Project Documentation" marked as completed</div>
+                                    <div class="activity-details">
+                                        <span class="priority-badge high">High</span>
+                                        <span class="due-date-info">Due: Jan 20, 2024</span>
+                                    </div>
+                                    <div class="activity-tags">
+                                        <span class="tag-badge">Documentation</span>
+                                        <span class="tag-badge">Project</span>
+                                    </div>
+                                    <div class="activity-time">2 hours ago</div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Task "Marketing Campaign" status changed to In Progress</div>
+                                    <div class="activity-details">
+                                        <span class="priority-badge medium">Medium</span>
+                                        <span class="due-date-info">Due: Jan 18, 2024</span>
+                                    </div>
+                                    <div class="activity-time">4 hours ago</div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-plus-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">New task "Data Migration" created via import</div>
+                                    <div class="activity-details">
+                                        <span class="priority-badge low">Low</span>
+                                        <span class="due-date-info">Due: Jan 12, 2024</span>
+                                    </div>
+                                    <div class="activity-tags">
+                                        <span class="tag-badge">Data</span>
+                                        <span class="tag-badge">Migration</span>
+                                    </div>
+                                    <div class="activity-time">1 day ago</div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Task "Weekly Review" created from template</div>
+                                    <div class="activity-details">
+                                        <span class="priority-badge medium">Medium</span>
+                                        <span class="due-date-info">Due: Jan 19, 2024</span>
+                                    </div>
+                                    <div class="activity-time">2 days ago</div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-mic"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Voice task "Team Meeting Notes" transcribed and created</div>
+                                    <div class="activity-details">
+                                        <span class="priority-badge high">High</span>
+                                        <span class="due-date-info">Due: Jan 15, 2024</span>
+                                    </div>
+                                    <div class="activity-tags">
+                                        <span class="tag-badge">Meeting</span>
+                                        <span class="tag-badge">Notes</span>
+                                    </div>
+                                    <div class="activity-time">3 days ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priority Distribution -->
+                <div class="dashboard-card mb-3">
+                    <div class="dashboard-card-header py-2">
+                        <h6 class="dashboard-card-title mb-0">
+                            <i class="bi bi-pie-chart me-2"></i>Priority Distribution
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body py-2">
+                        <div class="priority-chart" id="priorityChart">
+                            <div class="text-center">
+                                <h6>Priority Distribution Chart</h6>
+                                <p class="text-muted">Chart visualization would appear here</p>
+                                <div class="d-flex justify-content-around mt-3">
+                                    <div class="text-center">
+                                        <div class="badge bg-danger">High: 40%</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="badge bg-warning">Medium: 35%</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="badge bg-success">Low: 25%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function runTests() {
+            const results = [];
+            
+            // Test 1: Check if Task Progress Overview has no scroll
+            const taskProgressCard = document.querySelector('.task-progress-card');
+            if (taskProgressCard) {
+                const computedStyle = window.getComputedStyle(taskProgressCard);
+                const maxHeight = computedStyle.maxHeight;
+                const overflow = computedStyle.overflow;
+                
+                if (maxHeight === 'none' && overflow === 'hidden') {
+                    results.push({
+                        test: 'Task Progress Overview - No max-height restriction',
+                        status: 'success',
+                        message: 'Task Progress Overview has no max-height and overflow is hidden'
+                    });
+                } else {
+                    results.push({
+                        test: 'Task Progress Overview - No max-height restriction',
+                        status: 'error',
+                        message: `Task Progress Overview has max-height: ${maxHeight}, overflow: ${overflow}`
+                    });
+                }
+            }
+            
+            // Test 2: Check if Task Progress Overview body has no scroll
+            const taskProgressBody = document.querySelector('.task-progress-card .dashboard-card-body');
+            if (taskProgressBody) {
+                const computedStyle = window.getComputedStyle(taskProgressBody);
+                const maxHeight = computedStyle.maxHeight;
+                const overflow = computedStyle.overflow;
+                
+                if (maxHeight === 'none' && overflow === 'visible') {
+                    results.push({
+                        test: 'Task Progress Overview Body - No scroll',
+                        status: 'success',
+                        message: 'Task Progress Overview body has no max-height and overflow is visible'
+                    });
+                } else {
+                    results.push({
+                        test: 'Task Progress Overview Body - No scroll',
+                        status: 'error',
+                        message: `Task Progress Overview body has max-height: ${maxHeight}, overflow: ${overflow}`
+                    });
+                }
+            }
+            
+            // Test 3: Check if Recent Activity has no scroll
+            const recentActivityCard = document.querySelector('.dashboard-card:has(.activity-list)');
+            if (recentActivityCard) {
+                const computedStyle = window.getComputedStyle(recentActivityCard);
+                const height = computedStyle.height;
+                
+                if (height === 'auto') {
+                    results.push({
+                        test: 'Recent Activity - No fixed height',
+                        status: 'success',
+                        message: 'Recent Activity card has auto height (no fixed height)'
+                    });
+                } else {
+                    results.push({
+                        test: 'Recent Activity - No fixed height',
+                        status: 'error',
+                        message: `Recent Activity card has height: ${height}`
+                    });
+                }
+            }
+            
+            // Test 4: Check if Recent Activity body has no scroll
+            const recentActivityBody = document.querySelector('.dashboard-card:has(.activity-list) .dashboard-card-body');
+            if (recentActivityBody) {
+                const computedStyle = window.getComputedStyle(recentActivityBody);
+                const height = computedStyle.height;
+                const overflow = computedStyle.overflow;
+                
+                if (height === 'auto' && overflow === 'visible') {
+                    results.push({
+                        test: 'Recent Activity Body - No scroll',
+                        status: 'success',
+                        message: 'Recent Activity body has auto height and overflow is visible'
+                    });
+                } else {
+                    results.push({
+                        test: 'Recent Activity Body - No scroll',
+                        status: 'error',
+                        message: `Recent Activity body has height: ${height}, overflow: ${overflow}`
+                    });
+                }
+            }
+            
+            // Test 5: Check if activity list has no scroll
+            const activityList = document.querySelector('.activity-list');
+            if (activityList) {
+                const computedStyle = window.getComputedStyle(activityList);
+                const overflow = computedStyle.overflow;
+                
+                if (overflow === 'visible') {
+                    results.push({
+                        test: 'Activity List - No scroll',
+                        status: 'success',
+                        message: 'Activity list has overflow visible (no scroll)'
+                    });
+                } else {
+                    results.push({
+                        test: 'Activity List - No scroll',
+                        status: 'error',
+                        message: `Activity list has overflow: ${overflow}`
+                    });
+                }
+            }
+            
+            // Display results
+            const resultsContainer = document.getElementById('testResults');
+            resultsContainer.innerHTML = results.map(result => `
+                <div class="test-result ${result.status}">
+                    <strong>${result.test}:</strong> ${result.message}
+                </div>
+            `).join('');
+            
+            // Summary
+            const successCount = results.filter(r => r.status === 'success').length;
+            const totalCount = results.length;
+            
+            const summary = document.createElement('div');
+            summary.className = `test-result ${successCount === totalCount ? 'success' : 'error'}`;
+            summary.innerHTML = `<strong>Summary:</strong> ${successCount}/${totalCount} tests passed`;
+            resultsContainer.appendChild(summary);
+            
+            console.log('Test Results:', results);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Run tests after a short delay to ensure DOM is ready
+            setTimeout(runTests, 100);
+        });
+    </script>
+</body>
+</html> 

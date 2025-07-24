@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Team Member Management - QuickNotes AI</title>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/task.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+    
+    <style>
+        .test-section {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .test-button {
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">
+                    <i class="fas fa-users-cog me-2"></i>Test Team Member Management
+                </h2>
+                
+                <!-- Test Controls -->
+                <div class="test-section">
+                    <h5>Test Controls</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-primary test-button" onclick="testTeamMemberManagement()">
+                            <i class="fas fa-bug me-1"></i>Test Team Member Management
+                        </button>
+                        <button class="btn btn-success test-button" onclick="showTeamMemberManagement()">
+                            <i class="fas fa-eye me-1"></i>Show Team Member Management
+                        </button>
+                        <button class="btn btn-info test-button" onclick="checkAdminStatus()">
+                            <i class="fas fa-user-shield me-1"></i>Check Admin Status
+                        </button>
+                        <button class="btn btn-warning test-button" onclick="loadTeams()">
+                            <i class="fas fa-sync me-1"></i>Load Teams
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Team Assignment Section -->
+                <div class="test-section">
+                    <h5>Team Assignment Section</h5>
+                    <div id="teamAssignmentSection" class="form-section team-assignment-section">
+                        <div class="team-assignment-header">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="assignToTeam">
+                                <label class="form-check-label fw-semibold text-primary" for="assignToTeam">
+                                    <i class="fas fa-users me-2"></i>Assign to Team
+                                </label>
+                            </div>
+                        </div>
+                        <div class="team-assignment-body" id="teamAssignmentOptions" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teamSelect" class="form-label">Select Team</label>
+                                    <select class="form-control" id="teamSelect" name="teamId">
+                                        <option value="">Select a team...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="memberSelect" class="form-label">Assign to Member</label>
+                                    <select class="form-control" id="memberSelect" name="assignedTo" disabled>
+                                        <option value="">Select a team first...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="taskType" name="taskType" value="individual">
+                        </div>
+                        
+                        <!-- Team Member Management Section -->
+                        <div class="team-member-management" id="teamMemberManagement" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                            <div class="team-member-header">
+                                <h6 class="fw-semibold text-primary mb-2">
+                                    <i class="fas fa-users-cog me-2"></i>Team Members
+                                </h6>
+                                <small class="text-muted d-block mb-2">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Manage team members (Admin only)
+                                </small>
+                            </div>
+                            <div class="team-member-list" id="teamMemberList">
+                                <!-- Team members will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Debug Information -->
+                <div class="test-section">
+                    <h5>Debug Information</h5>
+                    <div id="debugInfo" class="small">
+                        <p>Click "Test Team Member Management" to see debug information here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/task.js"></script>
+    
+    <script>
+        // Initialize Firebase and task manager
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('[Test] Page loaded, initializing...');
+            
+            // Wait for Firebase to initialize
+            await new Promise(resolve => {
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    resolve();
+                } else {
+                    const checkFirebase = setInterval(() => {
+                        if (typeof firebase !== 'undefined' && firebase.auth) {
+                            clearInterval(checkFirebase);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            });
+            
+            // Initialize task manager
+            if (typeof initTaskManager === 'function') {
+                initTaskManager();
+                console.log('[Test] Task manager initialized');
+            } else {
+                console.error('[Test] initTaskManager function not found');
+            }
+        });
+        
+        // Enhanced test function
+        async function testTeamMemberManagement() {
+            const debugInfo = document.getElementById('debugInfo');
+            let debugHTML = '<h6>Debug Information:</h6>';
+            
+            try {
+                // Check if team assignment manager exists
+                if (typeof teamAssignmentManager === 'undefined') {
+                    debugHTML += '<p class="text-danger">❌ Team assignment manager not initialized</p>';
+                    debugInfo.innerHTML = debugHTML;
+                    return;
+                }
+                
+                debugHTML += '<p class="text-success">✅ Team assignment manager found</p>';
+                
+                // Check admin status
+                debugHTML += `<p>👤 Is Admin: ${teamAssignmentManager.isAdmin ? 'Yes' : 'No'}</p>`;
+                
+                // Check selected team
+                debugHTML += `<p>🏢 Selected Team: ${teamAssignmentManager.selectedTeam || 'None'}</p>`;
+                
+                // Check checkbox status
+                const assignToTeamCheckbox = document.getElementById('assignToTeam');
+                debugHTML += `<p>☑️ Checkbox Checked: ${assignToTeamCheckbox ? assignToTeamCheckbox.checked : 'Checkbox not found'}</p>`;
+                
+                // Check team member management element
+                const memberManagement = document.getElementById('teamMemberManagement');
+                debugHTML += `<p>📋 Member Management Element: ${memberManagement ? 'Found' : 'Not found'}</p>`;
+                
+                // Check user teams
+                debugHTML += `<p>👥 User Teams: ${teamAssignmentManager.userTeams ? teamAssignmentManager.userTeams.length : 0}</p>`;
+                
+                // Try to load team members
+                if (teamAssignmentManager.selectedTeam) {
+                    debugHTML += '<p>🔄 Loading team members...</p>';
+                    await teamAssignmentManager.loadTeamMembers();
+                    debugHTML += '<p class="text-success">✅ Team members loaded</p>';
+                } else {
+                    debugHTML += '<p class="text-warning">⚠️ No team selected</p>';
+                }
+                
+            } catch (error) {
+                debugHTML += `<p class="text-danger">❌ Error: ${error.message}</p>`;
+                console.error('[Test] Error in test function:', error);
+            }
+            
+            debugInfo.innerHTML = debugHTML;
+        }
+        
+        // Function to check admin status
+        async function checkAdminStatus() {
+            if (teamAssignmentManager) {
+                console.log('[Test] Admin status:', teamAssignmentManager.isAdmin);
+                console.log('[Test] User teams:', teamAssignmentManager.userTeams);
+                alert(`Admin Status: ${teamAssignmentManager.isAdmin ? 'Yes' : 'No'}\nUser Teams: ${teamAssignmentManager.userTeams ? teamAssignmentManager.userTeams.length : 0}`);
+            } else {
+                alert('Team assignment manager not initialized');
+            }
+        }
+        
+        // Function to load teams
+        async function loadTeams() {
+            if (teamAssignmentManager) {
+                await teamAssignmentManager.checkAdminStatus();
+                await teamAssignmentManager.populateTeamDropdown();
+                alert('Teams loaded. Check the dropdown above.');
+            } else {
+                alert('Team assignment manager not initialized');
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -514,7 +514,7 @@
         .task-tile-team-label {
             position: absolute;
             bottom: 0.5rem;
-            right: 0.5rem; /* Position on the bottom-right */
+            left: 6rem; /* Position next to the recurring badge */
             font-size: 0.6rem;
             font-weight: 600;
             padding: 0.1rem 0.3rem;
@@ -526,7 +526,7 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             color: #ffffff;
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             z-index: 2;
         }
 
@@ -1697,8 +1697,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
-                <i class="fas fa-check-double me-2"></i>
+            <a class="navbar-brand" href="index.html" id="brandHomeLink">
+                <i class="fas fa-check-double"></i>
                 <span>QuickNotes AI</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -1706,23 +1706,24 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
-                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link active" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
                     <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link active" href="team-dashboard.html">Team-Dashboard</a></li>
                 </ul>
                 <ul class="navbar-nav">
                     <!-- User Welcome and Sign Out -->
-                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
-                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                    <li class="nav-item user-section" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger sign-out-btn" title="Sign Out">
                             <i class="fas fa-sign-out-alt me-1"></i>Sign Out
                         </button>
-                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                        <span class="user-welcome" id="userWelcome">Welcome User</span>
                     </li>
                     <li class="nav-item">
-                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                        <button id="themeToggle" class="btn btn-outline-primary theme-toggle-btn" title="Toggle theme">
                             <i class="fas fa-moon" id="themeIcon"></i>
                         </button>
                     </li>
@@ -1733,6 +1734,50 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Quick Actions Section -->
+        <section class="quick-actions-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h5 class="chart-title">
+                                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                                </h5>
+                                <div class="chart-actions">
+                                    <button class="btn btn-outline-secondary btn-sm me-2" onclick="manualRefresh()" title="Refresh Data">
+                                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="task.html?mode=team" class="btn btn-primary w-100 mb-2">
+                                        <i class="fas fa-plus-circle me-1"></i>Add Team Task
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="task.html?mode=team" class="btn btn-outline-primary w-100 mb-2">
+                                        <i class="fas fa-tasks me-1"></i>View Team Tasks
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="team.html" class="btn btn-outline-success w-100 mb-2">
+                                        <i class="fas fa-users me-1"></i>Team Management
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-info w-100 mb-2" onclick="generateTeamDigest()">
+                                        <i class="fas fa-file-alt me-1"></i>Team Digest
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Team Dashboard Hero Section -->
         <section class="team-dashboard-hero">
             <div class="container">
@@ -1840,7 +1885,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <h6>Team Members:</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Team Members:</h6>
+                            <button class="btn btn-outline-danger btn-sm" onclick="manageTeamMembers()" id="manageMembersBtn" style="display: none;">
+                                <i class="fas fa-user-cog me-1"></i>Manage Members
+                            </button>
+                        </div>
                         <ul class="member-list" id="teamMembersList">
                             <!-- Team members will be loaded here -->
                         </ul>
@@ -1849,43 +1899,6 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h5 class="chart-title">
-                                <i class="fas fa-bolt me-2"></i>Quick Actions
-                            </h5>
-                            <div class="chart-actions">
-                                <button class="btn btn-outline-secondary btn-sm me-2" onclick="manualRefresh()" title="Refresh Data">
-                                    <i class="fas fa-sync-alt me-1"></i>Refresh
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a href="task.html?mode=team" class="btn btn-primary w-100 mb-2">
-                                    <i class="fas fa-plus-circle me-1"></i>Add Team Task
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="task.html?mode=team" class="btn btn-outline-primary w-100 mb-2">
-                                    <i class="fas fa-tasks me-1"></i>View Team Tasks
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="team.html" class="btn btn-outline-success w-100 mb-2">
-                                    <i class="fas fa-users me-1"></i>Team Management
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-outline-info w-100 mb-2" onclick="generateTeamDigest()">
-                                    <i class="fas fa-file-alt me-1"></i>Team Digest
-                                </button>
-                            </div>
-                        </div>
-                        
                         <!-- My Team Task Section -->
                         <div class="mt-4">
                             <div class="chart-header">
@@ -1893,9 +1906,6 @@
                                     <i class="fas fa-tasks me-2"></i>My Team Task
                                 </h6>
                                 <div class="chart-actions">
-                                    <span id="teamTasksStatus" class="badge bg-secondary me-2">
-                                        <i class="fas fa-hourglass-half me-1"></i>Loading...
-                                    </span>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-outline-secondary" onclick="previousPage()" id="prevPageBtn" disabled>
                                             <i class="fas fa-chevron-left"></i>
@@ -2561,6 +2571,42 @@
     <script src="js/utils.js"></script>
     <script src="js/theme.js"></script>
     
+    <!-- Team Member Management Modal -->
+    <div class="modal fade" id="teamMemberManagementModal" tabindex="-1" aria-labelledby="teamMemberManagementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="teamMemberManagementModalLabel">
+                        <i class="fas fa-users me-2"></i>Manage Team Members
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-info-circle me-2"></i>Team Information</h6>
+                            <div id="teamInfoForManagement">
+                                <!-- Team info will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-users me-2"></i>Team Members</h6>
+                            <div id="teamMembersForManagement">
+                                <!-- Team members will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addMemberBtn">
+                        <i class="fas fa-user-plus me-1"></i>Add Member
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Team Dashboard Scripts -->
     <script src="js/team-dashboard.js"></script>
     <script src="js/task-loader.js"></script>

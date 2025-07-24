@@ -822,19 +822,19 @@
 
         .dashboard-card-header {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border-color);
         }
 
         .dashboard-card-title {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-primary);
             margin: 0;
         }
 
         .dashboard-card-body {
-            padding: 1.25rem;
+            padding: 1rem;
         }
 
         /* Enhanced Google Calendar Integration - Compact */
@@ -987,7 +987,7 @@
 
         /* Recent Activity */
         .activity-list {
-            overflow-y: visible;
+            overflow: visible;
         }
         
         .activity-list .activity-item {
@@ -1119,20 +1119,19 @@
         .task-progress-card {
             background: linear-gradient(135deg, var(--background-card) 0%, rgba(99, 102, 241, 0.02) 100%);
             border: 1px solid var(--border-color);
-            max-height: 500px;
             overflow: hidden;
+            max-height: 400px;
         }
 
         .task-progress-card .dashboard-card-body {
-            padding: 1rem;
-            max-height: 450px;
-            overflow-y: auto;
+            padding: 0.75rem;
+            overflow: visible;
         }
 
         .progress-overview {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
         }
 
         /* Overall Progress Section */
@@ -1837,33 +1836,33 @@
             top: 0.4rem;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.55rem;
+            font-size: 0.45rem;
             color: #ffffff;
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            padding: 0.15rem 0.4rem;
-            border-radius: 5px;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
             font-weight: 600;
-            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
             z-index: 2;
             text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 0.15rem;
+            gap: 0.1rem;
         }
 
         .task-tile-input-method {
             position: absolute;
             top: 0.4rem;
             left: 0.4rem;
-            font-size: 0.55rem;
+            font-size: 0.45rem;
             font-weight: 600;
-            padding: 0.15rem 0.4rem;
-            border-radius: 5px;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
             text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 0.15rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            gap: 0.1rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
@@ -3480,12 +3479,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="task.html">Tasks</a></li>
-                    <li class="nav-item" id="teamNavItem" style="display: none;"><a class="nav-link" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem" style="display: none;"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
                     <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
+                    <li class="nav-item" id="teamNavItem" style="display: none;"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item" id="teamDashboardNavItem" style="display: none;"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
                 </ul>
                 <ul class="navbar-nav">
                     <!-- User Welcome and Sign Out -->
@@ -4014,37 +4014,17 @@
                     <option value="recurring">Recurring Only</option>
                     <option value="non-recurring">Non-Recurring</option>
                 </select>
+                <select class="filter-select" id="filterTaskType">
+                    <option value="">All Task Types</option>
+                    <option value="individual">Individual Tasks</option>
+                    <option value="team">Team Tasks</option>
+                </select>
                 <button class="btn btn-sm btn-outline-secondary" id="clearFiltersBtn">Clear</button>
                 <button class="btn btn-sm btn-outline-primary" id="refreshDataBtn" title="Refresh Task Data">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger" id="clearAllDataBtn" title="Clear All Tasks">
                     <i class="bi bi-trash"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-info" id="checkSampleTasksBtn" title="Check Firebase Data">
-                    <i class="bi bi-database"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-warning" id="forceLiveDataBtn" title="Force Load Live Data Only">
-                    <i class="bi bi-lightning"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" id="clearCacheBtn" title="Clear Cache & Reload">
-                    <i class="bi bi-arrow-clockwise"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-dark" id="clearFirebaseBtn" title="Clear Firebase & Start Fresh">
-                    <i class="bi bi-trash3"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-secondary" id="forceRenderBtn" title="Force Render Current Data">
-                    <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-info" id="resetListenersBtn" title="Reset Event Listeners">
-                    <i class="bi bi-arrow-repeat"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-success" id="syncTaskLoaderBtn" title="Sync Task Loader Data">
-                    <i class="bi bi-arrow-clockwise"></i>Sync Loader
-                </button>
-
-                <button class="btn btn-sm btn-outline-primary" id="reloadTasksBtn" title="Reload Tasks">
-                    <i class="bi bi-arrow-clockwise"></i>Reload
                 </button>
 
             </div>
@@ -4221,22 +4201,51 @@
                     <!-- Step 2: Sync Task to Google Calendar -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex align-items-center justify-content-between task-summary-tile">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1">
+                            <div class="task-summary-tile">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h6 class="mb-0">
                                         <i class="bi bi-arrow-repeat me-2"></i>Step 2: Sync Task to Google Calendar
                                     </h6>
-                                    <p class="mb-0 small">Select a task from "Task History" and create a calendar event</p>
-                                    <div id="selected-task-display" class="mt-1">
-                                        <span class="text-muted small">
-                                            <i class="bi bi-info-circle me-1"></i>No task selected
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="text-end ms-2">
                                     <button id="sync-to-google-calendar" class="btn btn-primary btn-sm" disabled>
                                         <i class="bi bi-calendar-plus me-1"></i>Sync Task
                                     </button>
+                                </div>
+                                <p class="mb-2 small">Select a task from "Task History" and create a calendar event</p>
+                                
+                                <!-- Selected Task Display -->
+                                <div id="selected-task-display" class="mb-3">
+                                    <span class="text-muted small">
+                                        <i class="bi bi-info-circle me-1"></i>No task selected
+                                    </span>
+                                </div>
+                                
+                                <!-- Recurring Time Field -->
+                                <div id="recurring-time-section" class="mb-3" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="recurringTime" class="form-label small fw-semibold">
+                                            <i class="bi bi-clock me-1"></i>Recurring Time
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="time" class="form-control form-control-sm" id="recurringTime" 
+                                                   value="09:00" style="max-width: 150px;">
+                                            <span class="input-group-text small text-muted">
+                                                <i class="bi bi-info-circle me-1"></i>From task recurrence settings
+                                            </span>
+                                        </div>
+                                        <div class="form-text small">
+                                            <i class="bi bi-lightbulb me-1"></i>
+                                            <strong>Daily:</strong> One meeting at this time | 
+                                            <strong>Weekly:</strong> Weekly meeting at this time
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Duplicate Prevention Info -->
+                                <div id="duplicate-prevention-info" class="alert alert-info py-2 mb-0" style="display: none;">
+                                    <small>
+                                        <i class="bi bi-shield-check me-1"></i>
+                                        <strong>Duplicate Prevention:</strong> System will check for existing meetings at the same time to avoid duplicates.
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -4249,25 +4258,25 @@
         <!-- Right Column: Recent Activity, Priority Distribution & Telegram Integration -->
         <div class="col-12 col-md-6">
             <!-- Recent Activity -->
-            <div class="dashboard-card mb-3" style="height: 280px;">
+            <div class="dashboard-card mb-3">
                 <div class="dashboard-card-header py-2">
                     <h6 class="dashboard-card-title mb-0">
                         <i class="bi bi-activity me-2"></i>Recent Activity
                     </h6>
                 </div>
-                <div class="dashboard-card-body py-2" style="height: 220px; overflow-y: auto;">
+                <div class="dashboard-card-body py-2">
                     <div class="activity-list" id="recentActivityList" style="font-size: 0.85rem;"></div>
                 </div>
             </div>
 
             <!-- Priority Distribution -->
-            <div class="dashboard-card mb-3" style="height: 200px;">
+            <div class="dashboard-card mb-3">
                 <div class="dashboard-card-header py-2">
                     <h6 class="dashboard-card-title mb-0">
                         <i class="bi bi-pie-chart me-2"></i>Priority Distribution
                     </h6>
                 </div>
-                <div class="dashboard-card-body py-2" style="height: 140px;">
+                <div class="dashboard-card-body py-2">
                     <div class="priority-chart" id="priorityChart"></div>
                 </div>
             </div>
@@ -7356,6 +7365,23 @@
                 });
             }
 
+            if (window.taskState.filters.taskType) {
+                filtered = filtered.filter(t => {
+                    // Check if task is a team task
+                    const isTeamTask = t.teamAssignment && t.teamAssignment.assignedToTeam || 
+                                      t.taskType === 'team' || 
+                                      t.teamId || 
+                                      (t.assignedTo && t.assignedTo !== currentUser?.email);
+                    
+                    if (window.taskState.filters.taskType === 'team') {
+                        return isTeamTask;
+                    } else if (window.taskState.filters.taskType === 'individual') {
+                        return !isTeamTask;
+                    }
+                    return true;
+                });
+            }
+
             console.log('Filtered Tasks:', filtered.length, 'from total:', window.taskState.tasks.length, 'Filters:', window.taskState.filters);
             return filtered.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
         }
@@ -7374,9 +7400,22 @@
                 } else if (typeof task.recurring === 'boolean' && task.recurring === true) {
                     isRecurring = true;
                     recurringType = 'recurring';
-                } else if (typeof task.recurring === 'object' && task.recurring.recurring === true) {
-                    isRecurring = true;
-                    recurringType = task.recurring.recurrence?.type || 'recurring';
+                } else if (typeof task.recurring === 'object') {
+                    // Check for the new data structure: { recurring: true, recurrence: { type: 'daily', ... } }
+                    if (task.recurring.recurring === true && task.recurring.recurrence) {
+                        isRecurring = true;
+                        recurringType = task.recurring.recurrence.type || 'recurring';
+                    }
+                    // Check for the old data structure: { type: 'daily', ... }
+                    else if (task.recurring.type) {
+                        isRecurring = true;
+                        recurringType = task.recurring.type;
+                    }
+                    // Check for direct recurrence object
+                    else if (task.recurring.recurrence && task.recurring.recurrence.type) {
+                        isRecurring = true;
+                        recurringType = task.recurring.recurrence.type;
+                    }
                 }
             }
             
@@ -7393,11 +7432,19 @@
                         return 'Yearly';
                     case 'custom':
                         // For custom, we need to get the interval from the task data
-                        if (task.recurring && typeof task.recurring === 'object' && task.recurring.recurrence) {
-                            const interval = task.recurring.recurrence.interval || 7;
+                        if (task.recurring && typeof task.recurring === 'object') {
+                            let interval = 7;
+                            // Check new data structure first
+                            if (task.recurring.recurrence && task.recurring.recurrence.interval) {
+                                interval = task.recurring.recurrence.interval;
+                            }
+                            // Check old data structure
+                            else if (task.recurring.interval) {
+                                interval = task.recurring.interval;
+                            }
                             return `Every ${interval} Days`;
                         }
-                        return 'Custom';
+                        return 'Every X Days';
                     case 'recurring':
                         return 'Recurring';
                     default:
@@ -7781,6 +7828,16 @@
                 });
             }
 
+            const filterTaskType = document.getElementById('filterTaskType');
+            if (filterTaskType) {
+                filterTaskType.addEventListener('change', function() {
+                    window.taskState.filters.taskType = this.value;
+                    window.taskState.currentPage = 1;
+                    console.log('Task Type filter changed to:', this.value);
+                    renderTaskGrid();
+                });
+            }
+
             // Clear filters button
             const clearFiltersBtn = document.getElementById('clearFiltersBtn');
             if (clearFiltersBtn) {
@@ -7805,92 +7862,7 @@
                 });
             }
 
-            // Check sample tasks button
-            const checkSampleTasksBtn = document.getElementById('checkSampleTasksBtn');
-            if (checkSampleTasksBtn) {
-                checkSampleTasksBtn.addEventListener('click', function() {
-                    console.log('Check Firebase data button clicked');
-                    window.checkAndCreateSampleTasks();
-                });
-            }
 
-            // Force live data button
-            const forceLiveDataBtn = document.getElementById('forceLiveDataBtn');
-            if (forceLiveDataBtn) {
-                forceLiveDataBtn.addEventListener('click', function() {
-                    console.log('Force live data button clicked');
-                    window.forceLiveDataOnly();
-                });
-            }
-
-            // Clear cache button
-            const clearCacheBtn = document.getElementById('clearCacheBtn');
-            if (clearCacheBtn) {
-                clearCacheBtn.addEventListener('click', function() {
-                    console.log('Clear cache button clicked');
-                    if (confirm('This will clear all cached data and reload the page. Continue?')) {
-                        window.clearCacheAndReload();
-                    }
-                });
-            }
-
-            // Clear Firebase button
-            const clearFirebaseBtn = document.getElementById('clearFirebaseBtn');
-            if (clearFirebaseBtn) {
-                clearFirebaseBtn.addEventListener('click', function() {
-                    console.log('Clear Firebase button clicked');
-                    window.clearFirebaseAndStartFresh();
-                });
-            }
-
-            // Force Render button
-            const forceRenderBtn = document.getElementById('forceRenderBtn');
-            if (forceRenderBtn) {
-                forceRenderBtn.addEventListener('click', function() {
-                    console.log('Force Render button clicked');
-                    window.forceRenderCurrentData();
-                });
-            }
-
-            // Reset Event Listeners button
-            const resetListenersBtn = document.getElementById('resetListenersBtn');
-            if (resetListenersBtn) {
-                resetListenersBtn.addEventListener('click', function() {
-                    console.log('Reset Event Listeners button clicked');
-                    window.resetEventListeners();
-                    showToast('Event listeners reset successfully!', 'success');
-                });
-            }
-
-            // Sync task loader button
-            const syncTaskLoaderBtn = document.getElementById('syncTaskLoaderBtn');
-            if (syncTaskLoaderBtn) {
-                syncTaskLoaderBtn.addEventListener('click', function() {
-                    console.log('Syncing task loader data...');
-                    if (typeof window.taskLoader !== 'undefined' && window.taskLoader.syncTasks) {
-                        window.taskLoader.syncTasks();
-                        showToast('Task loader data synced successfully', 'success');
-                    } else {
-                        showToast('Task loader not available', 'warning');
-                    }
-                });
-            }
-
-
-
-            // Reload tasks button
-            const reloadTasksBtn = document.getElementById('reloadTasksBtn');
-            if (reloadTasksBtn) {
-                reloadTasksBtn.addEventListener('click', function() {
-                    console.log('Reloading tasks...');
-                    if (typeof window.reloadTasksForDebug === 'function') {
-                        window.reloadTasksForDebug();
-                        showToast('Tasks reloaded successfully', 'success');
-                    } else {
-                        showToast('Reload function not available', 'warning');
-                    }
-                });
-            }
 
 
             
@@ -8327,17 +8299,20 @@
             const filterStatus = document.getElementById('filterStatus');
             const filterInputMethod = document.getElementById('filterInputMethod');
             const filterRecurring = document.getElementById('filterRecurring');
+            const filterTaskType = document.getElementById('filterTaskType');
             
             if (filterPriority) filterPriority.value = '';
             if (filterStatus) filterStatus.value = '';
             if (filterInputMethod) filterInputMethod.value = '';
             if (filterRecurring) filterRecurring.value = '';
+            if (filterTaskType) filterTaskType.value = '';
             
             // Clear filter state
             window.taskState.filters.priority = '';
             window.taskState.filters.status = '';
             window.taskState.filters.inputMethod = '';
             window.taskState.filters.recurring = '';
+            window.taskState.filters.taskType = '';
             window.taskState.currentPage = 1;
             
             console.log('Filters cleared:', window.taskState.filters);

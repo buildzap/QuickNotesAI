@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .task-flex-row {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: flex-start !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            gap: 2.5rem !important;
+            position: relative !important;
+            min-height: 100vh !important;
+            padding: 0 2rem !important;
+            border: 3px solid red;
+        }
+        
+        .left-col {
+            flex: 0 0 65% !important;
+            max-width: 65% !important;
+            min-width: 0 !important;
+            width: 65% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            position: relative !important;
+            background-color: lightgreen;
+            padding: 20px;
+            border: 2px solid green;
+        }
+        
+        .right-col {
+            flex: 0 0 35% !important;
+            max-width: 35% !important;
+            min-width: 0 !important;
+            width: 35% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.5rem !important;
+            position: sticky !important;
+            top: 120px !important;
+            height: fit-content !important;
+            background-color: lightblue;
+            padding: 20px;
+            border: 2px solid blue;
+        }
+        
+        .voice-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
+            padding: 2rem 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid purple;
+        }
+        
+        .test-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Layout Test - Voice Sections Should Be on the Right</h1>
+    
+    <div class="task-flex-row">
+        <!-- Left Column: Add Task Section -->
+        <div class="left-col">
+            <div class="test-content">
+                <h2>LEFT COLUMN - Add Task Section (65% width)</h2>
+                <p>This should be on the left side taking 65% of the width.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="test-content">
+                <h3>More Content</h3>
+                <p>Additional content to make the left column taller.</p>
+                <p>This should push the right column down and show the sticky positioning.</p>
+            </div>
+        </div>
+        
+        <!-- Right Column: Voice Sections -->
+        <div class="right-col">
+            <div class="voice-section">
+                <h3>English Voice-to-Task</h3>
+                <p>This should be on the right side taking 35% of the width.</p>
+                <p>This section should be sticky and stay visible while scrolling.</p>
+            </div>
+            
+            <div class="voice-section">
+                <h3>Multilingual Voice-to-Task</h3>
+                <p>This should also be on the right side below the English section.</p>
+                <p>Both voice sections should be visible and properly positioned.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Layout test loaded');
+        console.log('Left column width:', document.querySelector('.left-col').offsetWidth);
+        console.log('Right column width:', document.querySelector('.right-col').offsetWidth);
+        console.log('Total width:', document.querySelector('.task-flex-row').offsetWidth);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Layout Compact</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-main: #f8f9fa;
+            --background-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-color: #6366f1;
+            --accent-color: #8b5cf6;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #4f46e5);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: var(--background-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Dashboard Card Styles - COMPACT */
+        .dashboard-card {
+            background: var(--background-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-card-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dashboard-card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .dashboard-card-body {
+            padding: 1rem;
+        }
+
+        /* Task Progress Overview - COMPACT */
+        .task-progress-card {
+            background: linear-gradient(135deg, var(--background-card) 0%, rgba(99, 102, 241, 0.02) 100%);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            max-height: 400px;
+        }
+
+        .task-progress-card .dashboard-card-body {
+            padding: 0.75rem;
+            overflow: visible;
+        }
+
+        .progress-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .overall-progress-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 6px;
+            padding: 0.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--background-main);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.3rem;
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem;
+            background: var(--background-main);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .metric-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .metric-icon.completed {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .metric-icon.in-progress {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .metric-icon.pending {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        .metric-content {
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-top: 0.05rem;
+        }
+
+        /* Time-based Progress - COMPACT */
+        .time-progress-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .time-progress-item {
+            background: var(--background-main);
+            border-radius: 5px;
+            padding: 0.4rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .time-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .time-percentage {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .time-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .time-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .time-progress-fill.today {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .time-progress-fill.week {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .time-progress-fill.month {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+        }
+
+        /* Productivity Score - COMPACT */
+        .productivity-score {
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.05) 0%, rgba(0, 184, 148, 0.02) 100%);
+            border-radius: 6px;
+            padding: 0.5rem;
+            border: 1px solid rgba(0, 184, 148, 0.1);
+            text-align: center;
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .score-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .score-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #00b894;
+        }
+
+        .score-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.2rem;
+            color: #fbbf24;
+            font-size: 0.8rem;
+        }
+
+        /* Recent Activity - COMPACT */
+        .activity-list {
+            overflow: visible;
+            max-height: 300px;
+        }
+        
+        .activity-list .activity-item {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.2rem;
+        }
+        
+        .activity-list .activity-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Priority Distribution - COMPACT */
+        .priority-chart {
+            padding: 0.4rem 0;
+            max-height: 200px;
+        }
+
+        .priority-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .priority-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .priority-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--background-main);
+            border-radius: 4px;
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+
+        .priority-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .priority-fill.high {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        .priority-fill.medium {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .priority-fill.low {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+        }
+
+        .priority-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 70px;
+        }
+
+        /* Test Results */
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-result {
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            color: white;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Test Layout Compact</h1>
+        
+        <div class="test-section">
+            <h5>Test Results</h5>
+            <div id="testResults"></div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="row g-3">
+            <!-- Left Column: Task Progress Overview -->
+            <div class="col-12 col-md-6">
+                <div class="dashboard-card task-progress-card">
+                    <div class="dashboard-card-header">
+                        <h6 class="dashboard-card-title">
+                            <i class="bi bi-speedometer2 me-2"></i>Task Progress Overview
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="progress-overview">
+                            <!-- Overall Progress -->
+                            <div class="overall-progress-section">
+                                <div class="progress-header">
+                                    <span class="progress-title">Overall Completion</span>
+                                    <span class="progress-percentage">75%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Progress Metrics -->
+                            <div class="progress-metrics">
+                                <div class="metric-item">
+                                    <div class="metric-icon completed">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-value">15</div>
+                                        <div class="metric-label">Completed</div>
+                                    </div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-icon in-progress">
+                                        <i class="bi bi-clock-fill"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-value">8</div>
+                                        <div class="metric-label">In Progress</div>
+                                    </div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-icon pending">
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-value">12</div>
+                                        <div class="metric-label">Pending</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Time-based Progress -->
+                            <div class="time-progress-section">
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">Today's Goal</span>
+                                        <span class="time-percentage">80%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill today" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">This Week</span>
+                                        <span class="time-percentage">65%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill week" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="time-progress-item">
+                                    <div class="time-progress-header">
+                                        <span class="time-label">This Month</span>
+                                        <span class="time-percentage">90%</span>
+                                    </div>
+                                    <div class="time-progress-bar">
+                                        <div class="time-progress-fill month" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Productivity Score -->
+                            <div class="productivity-score">
+                                <div class="score-header">
+                                    <span class="score-title">Productivity Score</span>
+                                    <span class="score-value">8.5</span>
+                                </div>
+                                <div class="score-stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Recent Activity & Priority Distribution -->
+            <div class="col-12 col-md-6">
+                <!-- Recent Activity -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h6 class="dashboard-card-title">
+                            <i class="bi bi-activity me-2"></i>Recent Activity
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Task "Complete Project Report" marked as completed</div>
+                                    <div class="activity-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-plus-circle text-primary"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">New task "Review Code Changes" created</div>
+                                    <div class="activity-time">4 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-clock text-warning"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Task "Team Meeting" status changed to In Progress</div>
+                                    <div class="activity-time">6 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-calendar text-info"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Recurring task "Daily Standup" scheduled</div>
+                                    <div class="activity-time">1 day ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priority Distribution -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h6 class="dashboard-card-title">
+                            <i class="bi bi-pie-chart me-2"></i>Priority Distribution
+                        </h6>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="priority-chart">
+                            <div class="priority-item">
+                                <div class="priority-bar">
+                                    <div class="priority-fill high" style="width: 40%"></div>
+                                </div>
+                                <div class="priority-label">High (40%)</div>
+                            </div>
+                            <div class="priority-item">
+                                <div class="priority-bar">
+                                    <div class="priority-fill medium" style="width: 35%"></div>
+                                </div>
+                                <div class="priority-label">Medium (35%)</div>
+                            </div>
+                            <div class="priority-item">
+                                <div class="priority-bar">
+                                    <div class="priority-fill low" style="width: 25%"></div>
+                                </div>
+                                <div class="priority-label">Low (25%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>© 2024 QuickNotesAI. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function runTests() {
+            const results = [];
+            
+            // Test 1: Check if Task Progress Overview has max-height
+            const taskProgressCard = document.querySelector('.task-progress-card');
+            if (taskProgressCard) {
+                const computedStyle = window.getComputedStyle(taskProgressCard);
+                const maxHeight = computedStyle.maxHeight;
+                
+                if (maxHeight === '400px') {
+                    results.push({
+                        test: 'Task Progress Overview max-height',
+                        status: 'success',
+                        message: `Task Progress Overview correctly limited to ${maxHeight}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Task Progress Overview max-height',
+                        status: 'error',
+                        message: `Task Progress Overview max-height incorrect. Expected 400px, got: ${maxHeight}`
+                    });
+                }
+            }
+            
+            // Test 2: Check if Recent Activity has max-height
+            const activityList = document.querySelector('.activity-list');
+            if (activityList) {
+                const computedStyle = window.getComputedStyle(activityList);
+                const maxHeight = computedStyle.maxHeight;
+                
+                if (maxHeight === '300px') {
+                    results.push({
+                        test: 'Recent Activity max-height',
+                        status: 'success',
+                        message: `Recent Activity correctly limited to ${maxHeight}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Recent Activity max-height',
+                        status: 'error',
+                        message: `Recent Activity max-height incorrect. Expected 300px, got: ${maxHeight}`
+                    });
+                }
+            }
+            
+            // Test 3: Check if Priority Distribution has max-height
+            const priorityChart = document.querySelector('.priority-chart');
+            if (priorityChart) {
+                const computedStyle = window.getComputedStyle(priorityChart);
+                const maxHeight = computedStyle.maxHeight;
+                
+                if (maxHeight === '200px') {
+                    results.push({
+                        test: 'Priority Distribution max-height',
+                        status: 'success',
+                        message: `Priority Distribution correctly limited to ${maxHeight}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Priority Distribution max-height',
+                        status: 'error',
+                        message: `Priority Distribution max-height incorrect. Expected 200px, got: ${maxHeight}`
+                    });
+                }
+            }
+            
+            // Test 4: Check if dashboard card headers are compact
+            const dashboardCardHeader = document.querySelector('.dashboard-card-header');
+            if (dashboardCardHeader) {
+                const computedStyle = window.getComputedStyle(dashboardCardHeader);
+                const padding = computedStyle.padding;
+                
+                if (padding === '0.75rem 1rem') {
+                    results.push({
+                        test: 'Dashboard card header padding',
+                        status: 'success',
+                        message: `Dashboard card header padding correctly reduced to ${padding}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Dashboard card header padding',
+                        status: 'error',
+                        message: `Dashboard card header padding incorrect. Expected 0.75rem 1rem, got: ${padding}`
+                    });
+                }
+            }
+            
+            // Test 5: Check if dashboard card titles are smaller
+            const dashboardCardTitle = document.querySelector('.dashboard-card-title');
+            if (dashboardCardTitle) {
+                const computedStyle = window.getComputedStyle(dashboardCardTitle);
+                const fontSize = computedStyle.fontSize;
+                
+                if (fontSize === '0.9rem') {
+                    results.push({
+                        test: 'Dashboard card title font size',
+                        status: 'success',
+                        message: `Dashboard card title font size correctly reduced to ${fontSize}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Dashboard card title font size',
+                        status: 'error',
+                        message: `Dashboard card title font size incorrect. Expected 0.9rem, got: ${fontSize}`
+                    });
+                }
+            }
+            
+            // Test 6: Check if footer has proper margin
+            const footer = document.querySelector('.footer');
+            if (footer) {
+                const computedStyle = window.getComputedStyle(footer);
+                const marginTop = computedStyle.marginTop;
+                
+                if (marginTop === '3rem') {
+                    results.push({
+                        test: 'Footer margin top',
+                        status: 'success',
+                        message: `Footer margin top correctly set to ${marginTop}`
+                    });
+                } else {
+                    results.push({
+                        test: 'Footer margin top',
+                        status: 'error',
+                        message: `Footer margin top incorrect. Expected 3rem, got: ${marginTop}`
+                    });
+                }
+            }
+            
+            // Display results
+            const resultsContainer = document.getElementById('testResults');
+            resultsContainer.innerHTML = results.map(result => `
+                <div class="test-result ${result.status}">
+                    <strong>${result.test}:</strong> ${result.message}
+                </div>
+            `).join('');
+            
+            // Summary
+            const successCount = results.filter(r => r.status === 'success').length;
+            const totalCount = results.length;
+            
+            const summary = document.createElement('div');
+            summary.className = `test-result ${successCount === totalCount ? 'success' : 'error'}`;
+            summary.innerHTML = `<strong>Summary:</strong> ${successCount}/${totalCount} tests passed`;
+            resultsContainer.appendChild(summary);
+            
+            console.log('Test Results:', results);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Run tests after a short delay to ensure DOM is ready
+            setTimeout(runTests, 100);
+        });
+    </script>
+</body>
+</html> 

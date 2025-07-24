@@ -59,9 +59,8 @@
 
         .task-tile-recurring {
             position: absolute;
-            top: 0.4rem;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0.5rem;
+            left: 0.5rem;
             font-size: 0.55rem;
             color: #ffffff;
             background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -76,24 +75,7 @@
             gap: 0.15rem;
         }
 
-        .task-tile-team-label {
-            position: absolute;
-            bottom: 0.5rem;
-            right: 0.5rem; /* Position on the bottom-right */
-            font-size: 0.55rem;
-            font-weight: 600;
-            padding: 0.15rem 0.4rem;
-            border-radius: 5px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 0.15rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            color: #ffffff;
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            z-index: 2;
-        }
+
 
         .task-tile-input-method {
             position: absolute;
@@ -403,26 +385,29 @@
                     <span>${inputMethod}</span>
                 </div>`;
 
-                // Check if this is a team task and create team task label
-                let teamTaskLabel = '';
-                let teamName = '';
-                let isTeamTask = false;
-                
-                if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
-                    isTeamTask = true;
-                    teamTaskLabel = `<div class="task-tile-team-label">
-                        <i class="fas fa-users"></i>
-                        <span>👥 Team Task</span>
-                    </div>`;
-                    teamName = task.teamAssignment.teamName || 'Unknown Team';
-                } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
-                    isTeamTask = true;
-                    teamTaskLabel = `<div class="task-tile-team-label">
-                        <i class="fas fa-users"></i>
-                        <span>👥 Team Task</span>
-                    </div>`;
-                    teamName = task.teamName || 'Unknown Team';
-                }
+                            // Check if this is a team task and create team task label
+            let teamTaskLabel = '';
+            let teamName = '';
+            let teamMemberName = '';
+            let isTeamTask = false;
+            
+            if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
+                isTeamTask = true;
+                teamTaskLabel = `<div class="task-tile-team-label">
+                    <i class="fas fa-users"></i>
+                    <span>TEAM</span>
+                </div>`;
+                teamName = task.teamAssignment.teamName || 'Unknown Team';
+                teamMemberName = task.assignedTo || 'Unassigned';
+            } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
+                isTeamTask = true;
+                teamTaskLabel = `<div class="task-tile-team-label">
+                    <i class="fas fa-users"></i>
+                    <span>TEAM</span>
+                </div>`;
+                teamName = task.teamName || 'Unknown Team';
+                teamMemberName = task.assignedTo || 'Unassigned';
+            }
 
                 const isCompleted = task.status === 'completed';
                 
@@ -447,24 +432,24 @@
             const formatRecurringText = (type) => {
                 switch (type) {
                     case 'daily':
-                        return '🔄 Daily';
+                        return 'Daily';
                     case 'weekly':
-                        return '🔄 Weekly';
+                        return 'Weekly';
                     case 'monthly':
-                        return '🔄 Monthly';
+                        return 'Monthly';
                     case 'yearly':
-                        return '🔄 Yearly';
+                        return 'Yearly';
                     case 'custom':
                         // For custom, we need to get the interval from the task data
                         if (task.recurring && typeof task.recurring === 'object' && task.recurring.recurrence) {
                             const interval = task.recurring.recurring.recurrence.interval || 7;
-                            return `🔄 Every ${interval} Days`;
+                            return `Every ${interval} Days`;
                         }
-                        return '🔄 Every X Days';
+                        return 'Every X Days';
                     case 'recurring':
-                        return '🔄 Recurring';
+                        return 'Recurring';
                     default:
-                        return `🔄 ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                        return `${type.charAt(0).toUpperCase() + type.slice(1)}`;
                 }
             };
             
@@ -497,12 +482,20 @@
                                 <span class="task-date-label">Created:</span>
                                 <span class="task-date-value">${createdDate}</span>
                             </div>
+                            ${isTeamTask ? `
+                            <div class="task-date-item">
+                                <i class="fas fa-users text-info"></i>
+                                <span class="task-date-label">Team:</span>
+                                <span class="task-date-value">${teamName}</span>
+                            </div>
+                            <div class="task-date-item">
+                                <i class="fas fa-user text-secondary"></i>
+                                <span class="task-date-label">Member:</span>
+                                <span class="task-date-value">${teamMemberName}</span>
+                            </div>
+                            ` : ''}
                         </div>
                         <div class="task-tile-meta">
-                            ${isTeamTask ? `<div class="task-tile-team-name">
-                                <i class="fas fa-users"></i>
-                                <span>${teamName}</span>
-                            </div>` : ''}
                             <span class="task-tile-status status-${task.status}">${task.status}</span>
                         </div>
                         <div class="task-tile-actions">
