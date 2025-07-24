@@ -289,9 +289,6 @@ async function displayUserTeams() {
                                         <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyInvitationCode('${team.code}', '${team.name}')" title="Copy invitation code">
                                             <i class="fas fa-copy me-1"></i>Copy
                                         </button>
-                                        <button class="btn btn-sm btn-outline-warning ms-1" onclick="regenerateInvitationCode('${team.id}', '${team.name}')" title="Generate new invitation code">
-                                            <i class="fas fa-sync-alt me-1"></i>Regenerate
-                                        </button>
                                     ` : ''}
                                 ` : `
                                     <span class="text-warning">No code generated</span>
@@ -307,20 +304,27 @@ async function displayUserTeams() {
                             <small class="text-muted">
                                 <i class="fas fa-users me-1"></i>Members: ${memberNames}
                             </small>
+                            ${isOwner ? `
+                                <div class="mt-2">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="showTeamDetails('${team.id}')" title="Manage team members">
+                                        <i class="fas fa-user-cog me-1"></i>Manage Members
+                                    </button>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                     <div class="team-item-actions">
                         <button class="btn btn-outline-info btn-sm" onclick="goToTeamDashboard('${team.id}')" title="Go to team dashboard">
                             <i class="fas fa-chart-bar me-1"></i>Dashboard
                         </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="showTeamDetails('${team.id}')" title="View team details">
+                            <i class="fas fa-eye me-1"></i>Details
+                        </button>
                         ${isOwner ? `
                             <button class="btn btn-outline-danger btn-sm" onclick="deleteTeam('${team.id}', '${team.name}')" title="Delete team and all associated data">
                                 <i class="fas fa-trash-alt me-1"></i>Delete
                             </button>
                         ` : ''}
-                        <button class="btn btn-outline-warning btn-sm" onclick="leaveTeam('${team.id}')" title="Leave this team">
-                            <i class="fas fa-sign-out-alt me-1"></i>Leave
-                        </button>
                     </div>
                 </div>
             </div>
@@ -382,9 +386,9 @@ async function getTeamMemberNames(memberIds) {
 }
 
 // Generate member list HTML
-async function generateMemberList(memberIds) {
+async function generateMemberList(memberIds, teamId = null, isTeamOwner = false, teamCreatorId = null) {
     try {
-        console.log('Generating member list for IDs:', memberIds);
+        console.log('Generating member list for IDs:', memberIds, 'Team ID:', teamId, 'Is Owner:', isTeamOwner, 'Team Creator:', teamCreatorId);
         let memberHTML = '';
         
         if (!memberIds || memberIds.length === 0) {
@@ -400,21 +404,48 @@ async function generateMemberList(memberIds) {
                 
                 if (userDoc.exists) {
                     const userData = userDoc.data();
-                    const isOwner = memberId === teamCurrentUser.uid;
-                    const isAdmin = userData.isAdmin || userData.role === 'admin' || userData.isTeamAdmin;
+                    const isCurrentUser = memberId === teamCurrentUser.uid;
+                    const isTeamCreator = memberId === teamCreatorId;
+                    const displayName = userData.displayName || userData.email.split('@')[0];
+                    
+                    // Determine role badge - only team creator is admin, rest are members
+                    let roleBadge = '';
+                    if (isTeamCreator) {
+                        roleBadge = '<span class="badge bg-primary"><i class="fas fa-crown me-1"></i>Admin</span>';
+                    } else {
+                        roleBadge = '<span class="badge bg-secondary">Member</span>';
+                    }
+                    
+                    // Add remove button for team owners (but not for themselves)
+                    let removeButton = '';
+                    if (isTeamOwner && !isCurrentUser && teamId) {
+                        removeButton = `
+                            <button class="btn btn-sm btn-outline-danger ms-2" 
+                                    onclick="removeUserFromTeam('${teamId}', '${memberId}', '${displayName}')" 
+                                    title="Remove ${displayName} from team">
+                                <i class="fas fa-user-minus"></i> Remove
+                            </button>
+                        `;
+                    }
                     
                     memberHTML += `
-                        <li class="member-item">
-                            <div class="member-info">
-                                <div class="member-avatar">
-                                    ${userData.displayName ? userData.displayName.charAt(0).toUpperCase() : userData.email.charAt(0).toUpperCase()}
+                        <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                    ${displayName.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">${userData.displayName || userData.email}</div>
-                                    <small class="text-muted">${userData.email}</small>
+                                    <div class="fw-semibold" style="font-size: 0.9rem;">
+                                        ${displayName}
+                                        ${isCurrentUser ? '<span class="badge bg-info ms-1" style="font-size: 0.7rem;">You</span>' : ''}
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.8rem;">${userData.email}</small>
                                 </div>
                             </div>
-                            <span class="member-role">${isOwner ? 'Owner' : (isAdmin ? 'Admin' : 'Member')}</span>
+                            <div class="d-flex align-items-center">
+                                ${roleBadge}
+                                ${removeButton}
+                            </div>
                         </li>
                     `;
                     console.log('Added member to list:', userData.email);
@@ -422,15 +453,17 @@ async function generateMemberList(memberIds) {
                     console.log('User document not found for ID:', memberId);
                     // Add placeholder for missing user
                     memberHTML += `
-                        <li class="member-item">
-                            <div class="member-info">
-                                <div class="member-avatar">?</div>
+                        <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                    ?
+                                </div>
                                 <div>
-                                    <div class="fw-semibold">Unknown User</div>
-                                    <small class="text-muted">User ID: ${memberId}</small>
+                                    <div class="fw-semibold" style="font-size: 0.9rem;">Unknown User</div>
+                                    <small class="text-muted" style="font-size: 0.8rem;">User ID: ${memberId}</small>
                                 </div>
                             </div>
-                            <span class="member-role">Member</span>
+                            <span class="badge bg-secondary">Member</span>
                         </li>
                     `;
                 }
@@ -438,15 +471,17 @@ async function generateMemberList(memberIds) {
                 console.error('Error loading member:', memberId, memberError);
                 // Add error placeholder
                 memberHTML += `
-                    <li class="member-item">
-                        <div class="member-info">
-                            <div class="member-avatar">!</div>
-                            <div>
-                                <div class="fw-semibold">Error Loading</div>
-                                <small class="text-muted">User ID: ${memberId}</small>
+                    <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--danger-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                !
                             </div>
-                        </div>
-                        <span class="member-role">Member</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size: 0.9rem;">Error Loading</div>
+                                <small class="text-muted" style="font-size: 0.8rem;">User ID: ${memberId}</small>
+                            </div>
+                            </div>
+                        <span class="badge bg-secondary">Member</span>
                     </li>
                 `;
             }
@@ -756,8 +791,10 @@ async function declineInvitation(invitationId) {
     }
 }
 
-// Leave team
-async function leaveTeam(teamId) {
+
+
+// Remove user from team (admin only)
+async function removeUserFromTeam(teamId, userId, userName) {
     try {
         const teamDoc = await firebase.firestore()
             .collection('teams')
@@ -765,35 +802,44 @@ async function leaveTeam(teamId) {
             .get();
         
         if (!teamDoc.exists) {
-            showAlert('Team not found.', 'warning');
+            showAlert('Team not found.', 'danger');
             return;
         }
         
         const teamData = teamDoc.data();
+        const isOwner = teamData.createdBy === teamCurrentUser.uid;
         
-        // Check if user is the owner
-        if (teamData.createdBy === teamCurrentUser.uid) {
-            showAlert('Team owners cannot leave their team. Please transfer ownership or delete the team.', 'warning');
+        if (!isOwner) {
+            showAlert('Only team owners can remove members.', 'danger');
             return;
         }
         
-        // Remove user from team
+        // Prevent removing the owner
+        if (userId === teamData.createdBy) {
+            showAlert('Cannot remove the team owner.', 'warning');
+            return;
+        }
+        
+        const confirmed = confirm(`Are you sure you want to remove "${userName}" from the team "${teamData.name}"?`);
+        if (!confirmed) return;
+        
+        // Remove user from team members
         await firebase.firestore()
             .collection('teams')
             .doc(teamId)
             .update({
-                members: firebase.firestore.FieldValue.arrayRemove(teamCurrentUser.uid),
+                members: firebase.firestore.FieldValue.arrayRemove(userId),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         
-        showAlert('Successfully left the team.', 'success');
+        showAlert(`Successfully removed "${userName}" from team "${teamData.name}"`, 'success');
         
         // Reload teams
         await loadUserTeams();
         
     } catch (error) {
-        console.error('Error leaving team:', error);
-        showAlert('Error leaving team. Please try again.', 'danger');
+        console.error('Error removing user from team:', error);
+        showAlert('Error removing user from team. Please try again.', 'danger');
     }
 }
 
@@ -912,16 +958,97 @@ async function deleteTeam(teamId, teamName) {
     }
 }
 
+// Show team details modal
+async function showTeamDetails(teamId) {
+    try {
+        console.log('Showing team details for:', teamId);
+        
+        const team = userTeams.find(t => t.id === teamId);
+        if (!team) {
+            showAlert('Team not found.', 'danger');
+            return;
+        }
+        
+        const isOwner = team.createdBy === teamCurrentUser.uid;
+        
+        // Update modal title
+        document.getElementById('teamDetailsModalLabel').innerHTML = `
+            <i class="fas fa-users me-2"></i>${team.name}
+            ${isOwner ? '<span class="badge bg-warning text-dark ms-2"><i class="fas fa-crown me-1"></i>Owner</span>' : ''}
+        `;
+        
+        // Load team information
+        const teamInfoHTML = `
+            <div class="mb-3">
+                <strong>Name:</strong> ${team.name}
+            </div>
+            <div class="mb-3">
+                <strong>Description:</strong> ${team.description || 'No description'}
+            </div>
+            <div class="mb-3">
+                <strong>Type:</strong> <span class="badge bg-primary">${team.type || 'General'}</span>
+            </div>
+            <div class="mb-3">
+                <strong>Created:</strong> ${team.createdAt ? team.createdAt.toLocaleDateString() : 'Unknown'}
+            </div>
+            <div class="mb-3">
+                <strong>Members:</strong> ${team.members ? team.members.length : 0} members
+            </div>
+            ${team.code ? `
+                <div class="mb-3">
+                    <strong>Invitation Code:</strong> 
+                    <span class="badge bg-secondary">${team.code}</span>
+                    ${isOwner ? `
+                        <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyInvitationCode('${team.code}', '${team.name}')">
+                            <i class="fas fa-copy me-1"></i>Copy
+                        </button>
+                    ` : ''}
+                </div>
+            ` : ''}
+        `;
+        
+        document.getElementById('teamInfoDetails').innerHTML = teamInfoHTML;
+        
+        // Load team members with remove functionality
+        const membersHTML = await generateMemberList(team.members || [], team.id, isOwner, team.createdBy);
+        document.getElementById('teamMembersDetails').innerHTML = `
+            <ul class="list-unstyled">
+                ${membersHTML}
+            </ul>
+        `;
+        
+        // Show/hide manage button based on ownership
+        const manageBtn = document.getElementById('manageTeamBtn');
+        if (isOwner) {
+            manageBtn.style.display = 'inline-block';
+            manageBtn.onclick = () => {
+                // Close modal and go to team dashboard for management
+                const modal = bootstrap.Modal.getInstance(document.getElementById('teamDetailsModal'));
+                modal.hide();
+                goToTeamDashboard(teamId);
+            };
+        } else {
+            manageBtn.style.display = 'none';
+        }
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('teamDetailsModal'));
+        modal.show();
+        
+    } catch (error) {
+        console.error('Error showing team details:', error);
+        showAlert('Error loading team details. Please try again.', 'danger');
+    }
+}
+
 // View team details
 function viewTeamDetails(teamId) {
-    // Navigate to team dashboard
-    window.location.href = `team-dashboard.html?teamId=${teamId}`;
+    showTeamDetails(teamId);
 }
 
 // Manage team (for team owners)
 function manageTeam(teamId) {
-    // Navigate to team management page
-    window.location.href = `team-dashboard.html?teamId=${teamId}&mode=manage`;
+    goToTeamDashboard(teamId);
 }
 
 // Refresh teams
@@ -1287,7 +1414,6 @@ window.teamManagement = {
     refreshTeams,
     viewTeamDetails,
     manageTeam,
-    leaveTeam,
     acceptInvitation,
     declineInvitation,
     createSampleTeams,

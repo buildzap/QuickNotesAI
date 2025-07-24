@@ -1,3 +1,5 @@
+console.log('[Task] task.js loaded');
+
 // Task Manager Application with Voice Commands
 
 // Import utilities
@@ -249,6 +251,56 @@ function formatRecurrenceInfo(recurrence) {
     }
     
     return info;
+}
+
+// Function to get recurring badge text for task tiles
+function getRecurringBadgeText(task) {
+    if (!task.recurring) return '';
+    
+    let recurringType = '';
+    let interval = null;
+    
+    // Handle different recurring data structures
+    if (typeof task.recurring === 'string' && task.recurring !== 'none') {
+        // String format: task.recurring = 'daily', 'weekly', etc.
+        recurringType = task.recurring;
+    } else if (typeof task.recurring === 'boolean' && task.recurring === true) {
+        // Boolean format: task.recurring = true, check task.recurrence
+        if (task.recurrence && task.recurrence.type) {
+            recurringType = task.recurrence.type;
+            interval = task.recurrence.interval;
+        } else {
+            recurringType = 'recurring';
+        }
+    } else if (typeof task.recurring === 'object') {
+        // Object format: task.recurring = { recurring: true, recurrence: { type: 'daily', ... } }
+        if (task.recurring.recurring === true && task.recurring.recurrence) {
+            recurringType = task.recurring.recurrence.type || 'recurring';
+            interval = task.recurring.recurrence.interval;
+        } else if (task.recurring.type) {
+            // Direct object format: task.recurring = { type: 'daily', ... }
+            recurringType = task.recurring.type;
+            interval = task.recurring.interval;
+        }
+    }
+    
+    // Format the recurring type for display
+    switch (recurringType) {
+        case 'daily':
+            return 'Daily';
+        case 'weekly':
+            return 'Weekly';
+        case 'monthly':
+            return 'Monthly';
+        case 'yearly':
+            return 'Yearly';
+        case 'custom':
+            return `Every ${interval || 7} Days`;
+        case 'recurring':
+            return 'Recurring';
+        default:
+            return recurringType.charAt(0).toUpperCase() + recurringType.slice(1);
+    }
 }
 
 // Multilingual Voice Recognition Manager
@@ -1918,8 +1970,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         showToast('Google Calendar integration not available. Please refresh the page.', 'warning');
                     }
                     
-                    // Initialize calendar integration UI
-                    initCalendarIntegration();
+                    // Note: Calendar integration is now initialized in task.html
                     
                     console.log('[Task] Premium user detected - Calendar integration enabled');
                 } else {
@@ -2565,7 +2616,7 @@ function setupTaskListener() {
 
 // --- Pagination State ---
 let currentTaskPage = 1;
-const TASKS_PER_PAGE = 5; // Show only the latest 5 records
+const TASKS_PER_PAGE = 8; // Show 8 records per page for professional appearance
 
 // --- Task Selection for Calendar Integration ---
 function makeTaskSelectable(taskElement, taskId) {
@@ -2768,7 +2819,7 @@ function renderTasks(page = 1) {
                                         </h5>
                                         ${task.recurring ? `<div class="badge bg-warning text-dark ms-2">
                                             <i class="bi bi-arrow-repeat me-1"></i>
-                                            ${formatRecurrenceInfo(task.recurring || task.recurrence || { type: 'recurring' })}
+                                            ${getRecurringBadgeText(task)}
                                         </div>` : ''}
                                 <p class="card-text mb-1">
                                     <small class="text-muted" id="taskCreatedDate_${task.id}">Created: ${formatDate(task.createdAt) || ''}</small><br>
@@ -3872,407 +3923,7 @@ window.stopVoiceCommand = function() {
 
 // Google Calendar Integration for Premium Users
 function initCalendarIntegration() {
-    console.log('[Task] Initializing Calendar Integration');
-    
-    // Check if user is premium
-    if (window.userRole !== 'premium') {
-        console.log('[Task] User is not premium, hiding Google Calendar integration');
-        const calendarSection = document.querySelector('.dashboard-card');
-        if (calendarSection) {
-            calendarSection.style.display = 'none';
-        }
-        return;
-    }
-    
-    // Get UI elements
-    const connectBtn = document.getElementById('connect-google-calendar');
-    const syncBtn = document.getElementById('sync-to-google-calendar');
-    const connectionStatus = document.getElementById('connection-status');
-    const selectedTaskDisplay = document.getElementById('selected-task-display');
-    
-    // Update connection status
-    function updateConnectionStatus(isConnected) {
-        if (connectionStatus) {
-            if (isConnected) {
-                connectionStatus.innerHTML = '<span class="badge bg-success">Connected</span>';
-                if (connectBtn) {
-                    connectBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Connected';
-                    connectBtn.classList.remove('btn-google');
-                    connectBtn.classList.add('btn-success');
-                    connectBtn.disabled = true;
-                }
-            } else {
-                connectionStatus.innerHTML = '<span class="badge bg-secondary">Not Connected</span>';
-                if (connectBtn) {
-                    connectBtn.innerHTML = '<i class="bi bi-google me-2"></i>Connect to Google Calendar';
-                    connectBtn.classList.remove('btn-success');
-                    connectBtn.classList.add('btn-google');
-                    connectBtn.disabled = false;
-                }
-            }
-        }
-    }
-    
-    // Update selected task display
-    window.updateSelectedTaskDisplay = function() {
-        const selectedTaskDisplay = document.getElementById('selected-task-display');
-        if (!selectedTaskDisplay) return;
-        
-        const taskId = taskState.selectedTaskId;
-        if (taskId) {
-            const task = taskState.tasks.find(t => t.id === taskId);
-            if (task) {
-                selectedTaskDisplay.innerHTML = `
-                    <div class="fw-bold text-primary">${escapeHtml(task.title)}</div>
-                    <div class="small text-muted">Due: ${task.dueDate ? formatDate(task.dueDate) : 'No due date'}</div>
-                    <div class="small text-muted">Priority: ${task.priority || 'Medium'}</div>
-                `;
-                return;
-            }
-        }
-        
-        selectedTaskDisplay.innerHTML = '<span class="text-muted">No task selected</span>';
-    };
-    
-    // Update sync button state
-    window.updateSyncButton = function() {
-        const syncBtn = document.getElementById('sync-to-google-calendar');
-        if (!syncBtn) {
-            console.log('[Task] Sync button not found');
-            return;
-        }
-        
-        // Check Google Calendar connection status
-        let isConnected = false;
-        try {
-            isConnected = window.gcal && window.gcal.isSignedIn && window.gcal.isSignedIn();
-            
-            // Additional check for localStorage token
-            const accessToken = localStorage.getItem('gcal_access_token');
-            const tokenExpiry = localStorage.getItem('gcal_token_expiry');
-            const hasValidToken = accessToken && tokenExpiry && new Date(tokenExpiry) > new Date();
-            
-            console.log('[Task] Connection checks:', {
-                gcalExists: !!window.gcal,
-                isSignedInMethod: !!window.gcal?.isSignedIn,
-                isSignedInResult: isConnected,
-                hasAccessToken: !!accessToken,
-                hasTokenExpiry: !!tokenExpiry,
-                hasValidToken: hasValidToken
-            });
-            
-            // If we have a valid token but isSignedIn() returns false, force it to true
-            if (!isConnected && hasValidToken) {
-                console.log('[Task] Found valid token but isSignedIn() returned false, forcing connection state');
-                isConnected = true;
-            }
-            
-        } catch (error) {
-            console.log('[Task] Error checking Google Calendar connection:', error);
-            isConnected = false;
-        }
-        
-        // Check task selection status
-        const hasTaskSelected = !!taskState.selectedTaskId;
-        
-        console.log('[Task] Sync button state check:', { 
-            isConnected, 
-            hasTaskSelected, 
-            taskId: taskState.selectedTaskId,
-            buttonFound: !!syncBtn,
-            currentDisabled: syncBtn.disabled,
-            taskStateExists: !!taskState,
-            gcalExists: !!window.gcal
-        });
-        
-        // Button should be ENABLED when both connected AND task is selected
-        const newDisabledState = !isConnected || !hasTaskSelected;
-        syncBtn.disabled = newDisabledState;
-        
-        console.log('[Task] Setting button disabled to:', newDisabledState, 'because:', {
-            notConnected: !isConnected,
-            noTaskSelected: !hasTaskSelected
-        });
-        
-        if (syncBtn.disabled) {
-            syncBtn.classList.add('opacity-50');
-            syncBtn.title = !isConnected ? 'Connect to Google Calendar first' : 'Select a task first';
-            console.log('[Task] Button disabled - reason:', !isConnected ? 'Not connected' : 'No task selected');
-        } else {
-            syncBtn.classList.remove('opacity-50');
-            syncBtn.title = 'Sync selected task to Google Calendar';
-            console.log('[Task] Button enabled - ready to sync');
-        }
-        
-        // Force re-render of button state
-        syncBtn.style.pointerEvents = syncBtn.disabled ? 'none' : 'auto';
-        
-        console.log('[Task] Final button state:', {
-            disabled: syncBtn.disabled,
-            opacityClass: syncBtn.classList.contains('opacity-50'),
-            pointerEvents: syncBtn.style.pointerEvents
-        });
-    };
-    
-    // Event handlers
-    if (connectBtn) {
-        connectBtn.addEventListener('click', async () => {
-            try {
-                console.log('[Task] Connect button clicked');
-                
-                // Check if Google Calendar API is available
-                if (!window.gcal) {
-                    throw new Error("Google Calendar API not loaded. Please refresh the page.");
-                }
-                
-                // Check configuration first
-                const configValidation = validateGoogleConfiguration();
-                if (!configValidation.isValid) {
-                    console.error('[Task] Google Calendar configuration invalid:', configValidation.issues);
-                    showGoogleConfigurationError(configValidation.issues);
-                    throw new Error("Google Calendar configuration issues: " + configValidation.issues.join(', '));
-                }
-                
-                if (!window.gcal.signIn) {
-                    throw new Error("Google Calendar sign-in function not available.");
-                }
-                
-                // Show loading state
-                connectBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Connecting...';
-                connectBtn.disabled = true;
-                
-                await window.gcal.signIn();
-                updateConnectionStatus(true);
-                
-                // Force update sync button after successful sign-in
-                setTimeout(() => {
-                    window.updateSyncButton();
-                    console.log('[Task] Sync button updated after sign-in');
-                }, 100);
-                
-                showToast('Successfully connected to Google Calendar', 'success');
-            } catch (error) {
-                console.error('[Task] Failed to connect to Google Calendar:', error);
-                
-                // Provide specific error messages based on error type
-                let errorMessage = 'Failed to connect to Google Calendar';
-                if (error.message) {
-                    if (error.message.includes('Client ID') || error.message.includes('API Key')) {
-                        errorMessage = 'Google Calendar configuration error. Please check your API key and Client ID.';
-                    } else if (error.message.includes('not loaded')) {
-                        errorMessage = 'Google Calendar service not loaded. Please refresh the page.';
-                    } else if (error.message.includes('configuration issues')) {
-                        errorMessage = 'Google Calendar setup incomplete. Please check your configuration.';
-                    } else if (error.message.includes('403')) {
-                        errorMessage = 'Google Calendar API access denied. Please enable Google Calendar API in Google Cloud Console.';
-                    } else if (error.message.includes('400')) {
-                        errorMessage = 'Google Calendar API key is invalid. Please check your API key configuration.';
-                    } else if (error.message.includes('401')) {
-                        errorMessage = 'Google Calendar authentication failed. Please check your Client ID.';
-                    } else {
-                        errorMessage = error.message;
-                    }
-                } else if (error.status) {
-                    if (error.status === 403) {
-                        errorMessage = 'Google Calendar API access denied. Please enable Google Calendar API in Google Cloud Console.';
-                    } else if (error.status === 400) {
-                        errorMessage = 'Google Calendar API key is invalid. Please check your API key configuration.';
-                    } else if (error.status === 401) {
-                        errorMessage = 'Google Calendar authentication failed. Please check your Client ID.';
-                    }
-                }
-                
-                showToast(errorMessage, 'danger');
-                
-                // Reset button state
-                updateConnectionStatus(false);
-                window.updateSyncButton();
-            }
-        });
-    }
-    
-    if (syncBtn) {
-        syncBtn.addEventListener('click', async () => {
-            if (!taskState.selectedTaskId) {
-                showToast('Please select a task first', 'warning');
-                return;
-            }
-            
-            const selectedTask = taskState.tasks.find(t => t.id === taskState.selectedTaskId);
-            if (selectedTask) {
-                try {
-                    // Show loading state
-                    syncBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Syncing...';
-                    syncBtn.disabled = true;
-                    
-                    showToast('Creating calendar event...', 'info');
-                    
-                    if (window.gcal && window.gcal.createEvent) {
-                        // Create a proper calendar event object from the task
-                        const event = createCalendarEventFromTask(selectedTask);
-                        await window.gcal.createEvent(event);
-                        
-                        // Mark task as synced in Firestore
-                        const taskRef = window.firebaseDb.collection('tasks').doc(selectedTask.id);
-                        await taskRef.update({
-                            synced: true,
-                            syncedAt: new Date()
-                        });
-                        
-                        showToast('Task synced to Google Calendar successfully!', 'success');
-                    } else {
-                        throw new Error('Google Calendar API not available');
-                    }
-                } catch (error) {
-                    console.error('[Task] Sync error:', error);
-                    showToast('Failed to sync task. Please try again.', 'danger');
-                } finally {
-                    // Reset button state
-                    syncBtn.innerHTML = '<i class="bi bi-calendar-plus me-2"></i>Sync Task to Google Calendar';
-                    window.updateSyncButton();
-                }
-            }
-        });
-    }
-    
-    // Check initial connection status
-    if (window.gcal && window.gcal.isSignedIn) {
-        const isSignedIn = window.gcal.isSignedIn();
-        updateConnectionStatus(isSignedIn);
-        window.updateSyncButton();
-        console.log('[Task] Initial Google Calendar connection status:', isSignedIn);
-    }
-    
-    // Update sync button when task selection changes
-    const originalSelectTask = window.selectTask;
-    window.selectTask = function(taskId) {
-        if (originalSelectTask) {
-            originalSelectTask(taskId);
-        }
-        taskState.selectedTaskId = taskId;
-        window.updateSelectedTaskDisplay();
-        window.updateSyncButton();
-    };
-    
-    // Listen for task selection changes
-    if (window.taskState) {
-        window.taskState.onTaskSelected = function() {
-            window.updateSelectedTaskDisplay();
-            window.updateSyncButton();
-        };
-    }
-    
-    // Initial sync button and display update
-    setTimeout(() => {
-        window.updateSyncButton();
-        window.updateSelectedTaskDisplay();
-        console.log('[Task] Initial sync button and display update completed');
-    }, 500);
-    
-    // Periodic sync button state check (every 2 seconds for first 10 seconds)
-    let checkCount = 0;
-    const maxChecks = 5;
-    const checkInterval = setInterval(() => {
-        if (checkCount >= maxChecks) {
-            clearInterval(checkInterval);
-            return;
-        }
-        
-        const syncBtn = document.getElementById('sync-to-google-calendar');
-        if (syncBtn && syncBtn.disabled) {
-            // Re-check if we should enable the button
-            const isConnected = window.gcal && window.gcal.isSignedIn && window.gcal.isSignedIn();
-            const hasTaskSelected = !!taskState.selectedTaskId;
-            
-            if (isConnected && hasTaskSelected) {
-                console.log('[Task] Periodic check: Enabling sync button');
-                window.updateSyncButton();
-            }
-        }
-        
-        checkCount++;
-    }, 2000);
-}
-
-// Production-ready Google Calendar integration
-// Test functions removed for clean production code
-
-// Create a calendar event object from a task
-function createCalendarEventFromTask(task) {
-    console.log('[Task] Creating calendar event from task:', task);
-    
-    // Parse due date and set event timing
-    let eventStart, eventEnd;
-    const now = new Date();
-    
-    if (task.dueDate) {
-        // Parse the due date
-        const dueDate = new Date(task.dueDate);
-        
-        // Always set event to start 30 minutes before the due date, regardless of past/future
-        eventStart = new Date(dueDate.getTime() - 30 * 60 * 1000); // 30 minutes before due date
-        eventEnd = new Date(dueDate.getTime() + 30 * 60 * 1000);   // 30 minutes after due date
-    } else {
-        // No due date, schedule for next 30 minutes
-        eventStart = new Date(now.getTime() + 30 * 60 * 1000);
-        eventEnd = new Date(eventStart.getTime() + 60 * 60 * 1000);
-    }
-    
-    // Get user email for attendee
-    const user = window.firebaseAuth.currentUser;
-    const userEmail = user ? user.email : null;
-    
-    // Create event object
-    const event = {
-        'summary': task.title,
-        'description': task.description || `Task: ${task.title}\nPriority: ${task.priority || 'Medium'}\nCategory: ${task.category || 'General'}`,
-        'start': {
-            'dateTime': eventStart.toISOString(),
-            'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        },
-        'end': {
-            'dateTime': eventEnd.toISOString(),
-            'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-        },
-        'reminders': {
-            'useDefault': false,
-            'overrides': [
-                {
-                    'method': 'email',
-                    'minutes': 24 * 60 // 24 hours before
-                },
-                {
-                    'method': 'popup',
-                    'minutes': 30 // 30 minutes before
-                }
-            ]
-        }
-    };
-    
-    // Add attendee if user email is available
-    if (userEmail) {
-        event.attendees = [
-            {
-                'email': userEmail,
-                'responseStatus': 'accepted'
-            }
-        ];
-    }
-    
-    // Add Google Meet link for Premium users
-    if (window.taskState && window.taskState.userRole === 'premium') {
-        event.conferenceData = {
-            'createRequest': {
-                'requestId': `task-${task.id}-${Date.now()}`,
-                'conferenceSolutionKey': {
-                    'type': 'hangoutsMeet'
-                }
-            }
-        };
-    }
-    
-    console.log('[Task] Calendar event object created:', event);
-    return event;
+    console.log('[Task] initCalendarIntegration TEST VERSION CALLED');
 }
 
 // Debug functions for troubleshooting
@@ -5320,8 +4971,7 @@ function initializePremiumFeatures() {
         // Show premium banner
         updatePremiumBannerDisplay();
         
-        // Initialize premium features
-        initCalendarIntegration();
+        // Note: Calendar integration is now initialized in task.html
         
         // Enable all premium features
         enablePremiumFeatures();
@@ -5648,6 +5298,44 @@ window.testTeamAssignment = async function() {
         elementsExist: Object.values(elements).every(el => !!el)
     };
 };
+
+// --- Productivity Score Calculation and Star Update ---
+const tasks = (window.taskState && window.taskState.tasks) ? window.taskState.tasks : [];
+const total = tasks.length;
+const completed = tasks.filter(t => t.completed).length;
+
+let productivityScore = 0;
+if (total > 0) {
+    const completionRate = completed / total;
+    productivityScore = Math.round(completionRate * 5 * 10) / 10; // 1 decimal place
+}
+const productivityScoreEl = document.getElementById('productivityScore');
+if (productivityScoreEl) {
+    productivityScoreEl.textContent = productivityScore.toFixed(1);
+}
+// Update star rating
+const starsContainer = document.getElementById('productivityStars');
+if (starsContainer) {
+    let starsHtml = '';
+    let score = productivityScore;
+    for (let i = 1; i <= 5; i++) {
+        if (score >= 1) {
+            starsHtml += '<i class="bi bi-star-fill"></i>';
+        } else if (score >= 0.5) {
+            starsHtml += '<i class="bi bi-star-half"></i>';
+        } else {
+            starsHtml += '<i class="bi bi-star"></i>';
+        }
+        score -= 1;
+    }
+    starsContainer.innerHTML = starsHtml;
+}
+
+// Note: Sign out button handler is now managed in task.html for better integration
+// with the calendar connection status management
+
+// Note: Calendar integration is now initialized in task.html to prevent duplicate initializations
+// and ensure proper event listener management
 
 
 

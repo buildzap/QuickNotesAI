@@ -310,7 +310,6 @@ class TaskUIManager {
     setupDebugButtons() {
         const debugButtons = [
             'forceRenderBtn',
-            'resetListenersBtn', 
             'syncTaskLoaderBtn',
             'reloadTasksBtn'
         ];
@@ -333,13 +332,6 @@ class TaskUIManager {
                 if (typeof window.forceRenderCurrentData === 'function') {
                     window.forceRenderCurrentData();
                 }
-                break;
-            case 'resetListenersBtn':
-                console.log('Reset Event Listeners button clicked');
-                if (typeof window.resetEventListeners === 'function') {
-                    window.resetEventListeners();
-                }
-                this.showToast('Event listeners reset successfully!', 'success');
                 break;
             case 'syncTaskLoaderBtn':
                 console.log('Syncing task loader data...');

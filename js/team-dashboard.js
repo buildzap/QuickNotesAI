@@ -21,7 +21,11 @@ if (typeof window.TeamDashboard === 'undefined') {
             member: ''
         },
         // Admin teams
-        adminTeams: []
+        adminTeams: [],
+        // User role and permissions
+        isTeamAdmin: false,
+        currentTeamOwner: null,
+        selectedTeamId: null
     };
 }
 
@@ -75,6 +79,14 @@ function resetFilters() {
 // Admin teams helper functions
 function getAdminTeams() { return window.TeamDashboard.adminTeams; }
 function setAdminTeams(teams) { window.TeamDashboard.adminTeams = teams; }
+
+// User role and permissions helper functions
+function getIsTeamAdmin() { return window.TeamDashboard.isTeamAdmin; }
+function setIsTeamAdmin(isAdmin) { window.TeamDashboard.isTeamAdmin = isAdmin; }
+function getCurrentTeamOwner() { return window.TeamDashboard.currentTeamOwner; }
+function setCurrentTeamOwner(owner) { window.TeamDashboard.currentTeamOwner = owner; }
+function getSelectedTeamId() { return window.TeamDashboard.selectedTeamId; }
+function setSelectedTeamId(teamId) { window.TeamDashboard.selectedTeamId = teamId; }
 
 // Helper function to get current team name
 async function getCurrentTeamName() {
@@ -681,8 +693,9 @@ async function switchToTeam(teamId) {
     try {
         console.log('Switching to team:', teamId);
         
-        // Update current team
+        // Update current team and selected team
         setCurrentTeam(teamId);
+        setSelectedTeamId(teamId);
         
         // Update URL
         const url = new URL(window.location);
@@ -947,6 +960,14 @@ async function loadTeamData(hasRetried = false) {
             const teamData = teamDoc.data();
             console.log('Team data loaded:', teamData);
             
+            // Check if current user is admin of this team
+            const currentUser = getCurrentUser();
+            const isAdmin = teamData.createdBy === currentUser.uid;
+            setIsTeamAdmin(isAdmin);
+            setCurrentTeamOwner(teamData.createdBy);
+            
+            console.log('User admin status:', isAdmin, 'Team owner:', teamData.createdBy);
+            
             // Update team information display
             const teamNameElement = document.getElementById('teamName');
             const teamDescriptionElement = document.getElementById('teamDescription');
@@ -960,7 +981,7 @@ async function loadTeamData(hasRetried = false) {
             // Load team members
             await loadTeamMembers(teamData.members || []);
             
-            // Load team tasks
+            // Load team tasks (filtered based on admin status)
             await loadTeamTasks();
             
             // Update dashboard statistics
@@ -1008,11 +1029,13 @@ async function loadTeamMembers(memberIds) {
             console.log('No member IDs provided, showing only current user');
             const currentUser = getCurrentUser();
             if (currentUser) {
+                const teamCreatorId = getCurrentTeamOwner();
+                const isCurrentUserTeamCreator = currentUser.uid === teamCreatorId;
                 members.push({
                     id: currentUser.uid,
                     name: currentUser.displayName || currentUser.email,
                     email: currentUser.email,
-                    isAdmin: true
+                    isAdmin: isCurrentUserTeamCreator
                 });
             }
             setTeamMembers(members);
@@ -1020,16 +1043,20 @@ async function loadTeamMembers(memberIds) {
             return;
         }
         
+        // Get team creator ID for role determination
+        const teamCreatorId = getCurrentTeamOwner();
+        
         // Always include the current user as a team member
         const currentUser = getCurrentUser();
         if (currentUser) {
+            const isCurrentUserTeamCreator = currentUser.uid === teamCreatorId;
             members.push({
                 id: currentUser.uid,
                 name: currentUser.displayName || currentUser.email,
                 email: currentUser.email,
-                isAdmin: true // Current user is admin by default
+                isAdmin: isCurrentUserTeamCreator // Only admin if team creator
             });
-            console.log('Added current user as team member:', currentUser.email);
+            console.log('Added current user as team member:', currentUser.email, 'Is Team Creator:', isCurrentUserTeamCreator);
         }
         
         // Load other team members
@@ -1047,14 +1074,14 @@ async function loadTeamMembers(memberIds) {
                 
                 if (userDoc.exists) {
                     const userData = userDoc.data();
-                    const isAdmin = userData.isAdmin || userData.role === 'admin' || userData.isTeamAdmin;
+                    const isTeamCreator = memberId === teamCreatorId;
                     members.push({
                         id: memberId,
                         name: userData.displayName || userData.email,
                         email: userData.email,
-                        isAdmin: isAdmin
+                        isAdmin: isTeamCreator // Only admin if team creator
                     });
-                    console.log('Added team member:', userData.email, 'Admin:', isAdmin);
+                    console.log('Added team member:', userData.email, 'Is Team Creator:', isTeamCreator);
                 } else {
                     console.log('User document not found for ID:', memberId);
                     // Add placeholder for missing user
@@ -1086,11 +1113,13 @@ async function loadTeamMembers(memberIds) {
         // Fallback: at least show current user
         const currentUser = getCurrentUser();
         if (currentUser) {
+            const teamCreatorId = getCurrentTeamOwner();
+            const isCurrentUserTeamCreator = currentUser.uid === teamCreatorId;
             setTeamMembers([{
                 id: currentUser.uid,
                 name: currentUser.displayName || currentUser.email,
                 email: currentUser.email,
-                isAdmin: true
+                isAdmin: isCurrentUserTeamCreator
             }]);
             updateTeamMembersDisplay();
         }
@@ -1403,7 +1432,32 @@ async function loadTeamTasks() {
         console.log('- debugTeamDashboard() - Show comprehensive dashboard debug info');
         console.log('- deleteAllSampleData() - Delete all sample teams and tasks');
         
-        setTeamTasks(uniqueTasks);
+        // Filter tasks based on admin status
+        const currentUser = getCurrentUser();
+        const isAdmin = getIsTeamAdmin();
+        const selectedTeamId = getSelectedTeamId();
+        
+        let filteredTasks = uniqueTasks;
+        
+        if (selectedTeamId) {
+            // If a specific team is selected, filter by that team
+            filteredTasks = uniqueTasks.filter(task => {
+                const taskTeamId = task.teamId || (task.teamAssignment && task.teamAssignment.teamId);
+                return taskTeamId === selectedTeamId;
+            });
+        } else if (!isAdmin) {
+            // Non-admin users only see tasks assigned to them
+            filteredTasks = uniqueTasks.filter(task => {
+                const assignedTo = task.assignedTo || (task.teamAssignment && task.teamAssignment.memberId);
+                return assignedTo === currentUser.uid;
+            });
+        }
+        // Admin users see all tasks (no filtering needed)
+        
+        console.log(`Filtered tasks: ${filteredTasks.length} out of ${uniqueTasks.length} total tasks`);
+        console.log('User is admin:', isAdmin, 'Selected team:', selectedTeamId);
+        
+        setTeamTasks(filteredTasks);
         updateTeamTasksDisplay();
         
     } catch (error) {
@@ -1498,7 +1552,7 @@ async function loadTasksForTeam(teamId) {
 }
 
 // Update team tasks display with pagination
-function updateTeamTasksDisplay() {
+async function updateTeamTasksDisplay() {
     const tasksContainer = document.getElementById('recentTeamTasksList');
     const statusIndicator = document.getElementById('teamTasksStatus');
     const pageInfo = document.getElementById('pageInfo');
@@ -1575,7 +1629,15 @@ function updateTeamTasksDisplay() {
     // Create task grid container
     let tasksHTML = '<div class="task-grid">';
     
-    currentPageTasks.forEach(task => {
+    for (const task of currentPageTasks) {
+        console.log('Processing task:', task.id, 'Title:', task.title);
+        console.log('Task data:', {
+            assignedTo: task.assignedTo,
+            teamAssignment: task.teamAssignment,
+            taskType: task.taskType,
+            teamId: task.teamId
+        });
+        
         const statusClass = task.status === 'completed' ? 'completed' : 
                            task.status === 'in-progress' ? 'in-progress' : 'pending';
         
@@ -1594,15 +1656,35 @@ function updateTeamTasksDisplay() {
         // Team assignment badge
         let teamTaskLabel = '';
         let teamName = '';
+        let teamMemberName = '';
         let isTeamTask = false;
         
         // Check if this is a team task
         if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
+            console.log('Task has teamAssignment structure');
             isTeamTask = true;
             teamName = task.teamAssignment.teamName || 'Unknown Team';
+            
+            // Try to get member name from different possible sources
+            if (task.teamAssignment.memberName && task.teamAssignment.memberName !== 'Unassigned') {
+                teamMemberName = task.teamAssignment.memberName;
+                console.log('Using memberName from teamAssignment:', teamMemberName);
+            } else if (task.teamAssignment.memberId) {
+                teamMemberName = await getMemberDisplayName(task.teamAssignment.memberId) || 'Unassigned';
+                console.log('Using memberId from teamAssignment:', task.teamAssignment.memberId, 'Result:', teamMemberName);
+            } else if (task.assignedTo) {
+                teamMemberName = await getMemberDisplayName(task.assignedTo) || 'Unassigned';
+                console.log('Using assignedTo field:', task.assignedTo, 'Result:', teamMemberName);
+            } else {
+                teamMemberName = 'Unassigned';
+                console.log('No member ID found, setting to Unassigned');
+            }
         } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
+            console.log('Task has legacy team structure');
             isTeamTask = true;
             teamName = task.teamName || 'Unknown Team';
+            teamMemberName = await getMemberDisplayName(task.assignedTo) || 'Unassigned';
+            console.log('Using assignedTo from legacy structure:', task.assignedTo, 'Result:', teamMemberName);
         }
 
         const isCompleted = task.status === 'completed';
@@ -1611,7 +1693,7 @@ function updateTeamTasksDisplay() {
             <div class="task-tile ${statusClass}" data-task-id="${task.id}">
                 ${isTeamTask ? `<div class="task-tile-team-label">
                     <i class="fas fa-users"></i>
-                    <span>👥 Team Task</span>
+                    <span>TEAM</span>
                 </div>` : ''}
                 <div class="task-tile-header">
                     <div class="task-tile-input-method ${inputMethod}">
@@ -1635,21 +1717,58 @@ function updateTeamTasksDisplay() {
                         <span class="task-date-label">Created:</span>
                         <span class="task-date-value">${createdDate}</span>
                     </div>
+                    ${isTeamTask ? `
+                    <div class="task-date-item">
+                        <i class="fas fa-users text-info"></i>
+                        <span class="task-date-label">Team:</span>
+                        <span class="task-date-value">${teamName}</span>
+                    </div>
+                    <div class="task-date-item">
+                        <i class="fas fa-user text-secondary"></i>
+                        <span class="task-date-label">Member:</span>
+                        <span class="task-date-value">${teamMemberName}</span>
+                    </div>
+                    ` : ''}
                 </div>
                 <div class="task-tile-meta">
-                    ${isTeamTask ? `<div class="task-tile-team-name">
-                        <i class="fas fa-users"></i>
-                        <span>${teamName}</span>
-                    </div>` : ''}
                     <span class="task-tile-status status-${task.status}">${task.status}</span>
                 </div>
             </div>
         `;
-    });
+    }
     
     tasksHTML += '</div>';
     
     tasksContainer.innerHTML = tasksHTML;
+}
+
+// Helper function to get member display name
+async function getMemberDisplayName(memberId) {
+    if (!memberId || memberId === 'Unassigned' || memberId === 'unassigned') {
+        return 'Unassigned';
+    }
+    
+    try {
+        console.log('Getting member display name for ID:', memberId);
+        
+        const userDoc = await firebase.firestore()
+            .collection('users')
+            .doc(memberId)
+            .get();
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const displayName = userData.displayName || userData.email?.split('@')[0] || 'Unknown User';
+            console.log('Found member name:', displayName, 'for ID:', memberId);
+            return displayName;
+        } else {
+            console.log('User document not found for ID:', memberId);
+            return 'Unknown User';
+        }
+    } catch (error) {
+        console.error('Error getting member display name for ID:', memberId, error);
+        return 'Error Loading User';
+    }
 }
 
 // Helper function to format detailed dates (same as in task.html)
@@ -1816,19 +1935,24 @@ function updateTeamMembersDisplay() {
     let membersHTML = '';
     members.forEach(member => {
         const avatarText = member.name ? member.name.charAt(0).toUpperCase() : '?';
-        const roleBadge = member.isAdmin ? 
-            '<span class="badge bg-primary">Admin</span>' : 
+        const isCurrentUser = member.id === getCurrentUser().uid;
+        const isTeamOwner = member.id === getCurrentTeamOwner();
+        const roleBadge = isTeamOwner ? 
+            '<span class="badge bg-primary"><i class="fas fa-crown me-1"></i>Admin</span>' : 
             '<span class="badge bg-secondary">Member</span>';
         
         membersHTML += `
-            <li class="member-item">
-                <div class="member-info">
-                    <div class="member-avatar">
+            <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                <div class="d-flex align-items-center">
+                    <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
                         ${avatarText}
                     </div>
                     <div>
-                        <div class="fw-semibold">${member.name}</div>
-                        <small class="text-muted">${member.email}</small>
+                        <div class="fw-semibold" style="font-size: 0.9rem;">
+                            ${member.name}
+                            ${isCurrentUser ? '<span class="badge bg-info ms-1" style="font-size: 0.7rem;">You</span>' : ''}
+                        </div>
+                        <small class="text-muted" style="font-size: 0.8rem;">${member.email}</small>
                     </div>
                 </div>
                 <div class="member-role">
@@ -1839,6 +1963,18 @@ function updateTeamMembersDisplay() {
     });
     
     membersContainer.innerHTML = membersHTML;
+    
+    // Show/hide manage members button based on admin status
+    const manageMembersBtn = document.getElementById('manageMembersBtn');
+    if (manageMembersBtn) {
+        const isAdmin = getIsTeamAdmin();
+        if (isAdmin) {
+            manageMembersBtn.style.display = 'inline-block';
+        } else {
+            manageMembersBtn.style.display = 'none';
+        }
+    }
+    
     console.log('Team members display updated successfully');
 }
 
@@ -3740,6 +3876,243 @@ window.manageTeam = function() {
     console.log('Opening team management...');
     window.location.href = 'team.html';
 };
+
+window.manageTeamMembers = function() {
+    console.log('Opening team member management modal...');
+    showTeamMemberManagementModal();
+};
+
+// Function to show team member management modal
+async function showTeamMemberManagementModal() {
+    try {
+        const currentTeamId = getCurrentTeam();
+        if (!currentTeamId) {
+            showAlert('No team selected. Please select a team first.', 'warning');
+            return;
+        }
+
+        // Get team information
+        const teamDoc = await firebase.firestore()
+            .collection('teams')
+            .doc(currentTeamId)
+            .get();
+
+        if (!teamDoc.exists) {
+            showAlert('Team not found.', 'danger');
+            return;
+        }
+
+        const teamData = teamDoc.data();
+        const currentUser = getCurrentUser();
+        const isOwner = teamData.createdBy === currentUser.uid;
+
+        if (!isOwner) {
+            showAlert('Only team owners can manage members.', 'warning');
+            return;
+        }
+
+        // Update modal title
+        document.getElementById('teamMemberManagementModalLabel').innerHTML = `
+            <i class="fas fa-users me-2"></i>Manage Members - ${teamData.name}
+        `;
+
+        // Load team information
+        const teamInfoHTML = `
+            <div class="mb-3">
+                <strong>Name:</strong> ${teamData.name}
+            </div>
+            <div class="mb-3">
+                <strong>Description:</strong> ${teamData.description || 'No description'}
+            </div>
+            <div class="mb-3">
+                <strong>Type:</strong> <span class="badge bg-primary">${teamData.type || 'General'}</span>
+            </div>
+            <div class="mb-3">
+                <strong>Members:</strong> ${teamData.members ? teamData.members.length : 0} members
+            </div>
+            ${teamData.code ? `
+                <div class="mb-3">
+                    <strong>Invitation Code:</strong> 
+                    <span class="badge bg-secondary">${teamData.code}</span>
+                    <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyInvitationCode('${teamData.code}', '${teamData.name}')">
+                        <i class="fas fa-copy me-1"></i>Copy
+                    </button>
+                </div>
+            ` : ''}
+        `;
+
+        document.getElementById('teamInfoForManagement').innerHTML = teamInfoHTML;
+
+        // Load team members with remove functionality
+        const membersHTML = await generateMemberListForManagement(teamData.members || [], currentTeamId, isOwner, teamData.createdBy);
+        document.getElementById('teamMembersForManagement').innerHTML = `
+            <ul class="list-unstyled">
+                ${membersHTML}
+            </ul>
+        `;
+
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('teamMemberManagementModal'));
+        modal.show();
+
+    } catch (error) {
+        console.error('Error showing team member management modal:', error);
+        showAlert('Error loading team member management. Please try again.', 'danger');
+    }
+}
+
+// Function to generate member list for management modal
+async function generateMemberListForManagement(memberIds, teamId, isTeamOwner, teamCreatorId) {
+    try {
+        console.log('Generating member list for management:', memberIds, 'Team ID:', teamId, 'Is Owner:', isTeamOwner, 'Team Creator:', teamCreatorId);
+        let memberHTML = '';
+        
+        if (!memberIds || memberIds.length === 0) {
+            return '<li class="text-muted">No members found</li>';
+        }
+        
+        for (const memberId of memberIds) {
+            try {
+                const userDoc = await firebase.firestore()
+                    .collection('users')
+                    .doc(memberId)
+                    .get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const isCurrentUser = memberId === getCurrentUser().uid;
+                    const isTeamCreator = memberId === teamCreatorId;
+                    const displayName = userData.displayName || userData.email.split('@')[0];
+                    
+                    // Determine role badge - only team creator is admin, rest are members
+                    let roleBadge = '';
+                    if (isTeamCreator) {
+                        roleBadge = '<span class="badge bg-primary"><i class="fas fa-crown me-1"></i>Admin</span>';
+                    } else {
+                        roleBadge = '<span class="badge bg-secondary">Member</span>';
+                    }
+                    
+                    // Add remove button for team owners (but not for themselves)
+                    let removeButton = '';
+                    if (isTeamOwner && !isCurrentUser && teamId) {
+                        removeButton = `
+                            <button class="btn btn-sm btn-outline-danger ms-2" 
+                                    onclick="removeUserFromTeam('${teamId}', '${memberId}', '${displayName}')" 
+                                    title="Remove ${displayName} from team">
+                                <i class="fas fa-user-minus"></i> Remove
+                            </button>
+                        `;
+                    }
+                    
+                    memberHTML += `
+                        <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                    ${displayName.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" style="font-size: 0.9rem;">
+                                        ${displayName}
+                                        ${isCurrentUser ? '<span class="badge bg-info ms-1" style="font-size: 0.7rem;">You</span>' : ''}
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.8rem;">${userData.email}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                ${roleBadge}
+                                ${removeButton}
+                            </div>
+                        </li>
+                    `;
+                } else {
+                    console.log('User document not found for ID:', memberId);
+                    // Add placeholder for missing user
+                    memberHTML += `
+                        <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                    ?
+                                </div>
+                                <div>
+                                    <div class="fw-semibold" style="font-size: 0.9rem;">Unknown User</div>
+                                    <small class="text-muted" style="font-size: 0.8rem;">User ID: ${memberId}</small>
+                                </div>
+                            </div>
+                            <span class="badge bg-secondary">Member</span>
+                        </li>
+                    `;
+                }
+            } catch (memberError) {
+                console.error('Error loading member:', memberId, memberError);
+                // Add error placeholder
+                memberHTML += `
+                    <li class="member-item d-flex align-items-center justify-content-between p-2 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="member-avatar me-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--danger-color); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                                !
+                            </div>
+                            <div>
+                                <div class="fw-semibold" style="font-size: 0.9rem;">Error Loading</div>
+                                <small class="text-muted" style="font-size: 0.8rem;">User ID: ${memberId}</small>
+                            </div>
+                            </div>
+                        <span class="badge bg-secondary">Member</span>
+                    </li>
+                `;
+            }
+        }
+        
+        return memberHTML || '<li class="text-muted">No members found</li>';
+        
+    } catch (error) {
+        console.error('Error generating member list for management:', error);
+        return '<li class="text-muted">Error loading members</li>';
+    }
+}
+
+// Function to copy invitation code
+async function copyInvitationCode(code, teamName) {
+    try {
+        await navigator.clipboard.writeText(code);
+        showAlert('Invitation code copied to clipboard!', 'success');
+    } catch (error) {
+        console.error('Error copying to clipboard:', error);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showAlert('Invitation code copied to clipboard!', 'success');
+    }
+}
+
+// Function to remove user from team
+async function removeUserFromTeam(teamId, userId, userName) {
+    try {
+        const confirmed = confirm(`Are you sure you want to remove "${userName}" from the team?`);
+        if (!confirmed) return;
+
+        // Remove user from team members
+        await firebase.firestore()
+            .collection('teams')
+            .doc(teamId)
+            .update({
+                members: firebase.firestore.FieldValue.arrayRemove(userId),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        showAlert(`Successfully removed "${userName}" from the team`, 'success');
+        
+        // Refresh the modal
+        showTeamMemberManagementModal();
+        
+    } catch (error) {
+        console.error('Error removing user from team:', error);
+        showAlert('Error removing user from team. Please try again.', 'danger');
+    }
+}
 
 window.exportChartData = function(chartType) {
     console.log('Exporting chart data:', chartType);

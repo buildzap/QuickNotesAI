@@ -170,6 +170,7 @@
             const connectBtn = document.getElementById('connectCalendarBtn');
             const syncBtn = document.getElementById('syncSelectedTasksBtn');
             const autoSyncToggle = document.getElementById('autoSyncToggle');
+            const disconnectBtn = document.getElementById('disconnect-google-calendar');
 
             if (connectBtn) connectBtn.disabled = _connected;
             if (syncBtn) syncBtn.disabled = !_connected;
@@ -177,6 +178,7 @@
                 autoSyncToggle.checked = autoSync;
                 autoSyncToggle.disabled = !_connected;
             }
+            if (disconnectBtn) disconnectBtn.style.display = _connected ? '' : 'none';
         },
 
         // Set up event listeners
@@ -185,6 +187,7 @@
             const disconnectBtn = document.getElementById('disconnectCalendarBtn');
             const autoSyncToggle = document.getElementById('autoSyncToggle');
             const syncBtn = document.getElementById('syncSelectedTasksBtn');
+            const disconnectGoogleCalendarBtn = document.getElementById('disconnect-google-calendar');
 
             if (connectBtn) {
                 connectBtn.addEventListener('click', async () => {
@@ -227,6 +230,17 @@
                     } catch (error) {
                         console.error('[Calendar] Sync error:', error);
                         window.showToast?.('Failed to sync tasks with calendar', 'error');
+                    }
+                });
+            }
+
+            if (disconnectGoogleCalendarBtn) {
+                disconnectGoogleCalendarBtn.addEventListener('click', async () => {
+                    try {
+                        await this.disconnect();
+                    } catch (error) {
+                        console.error('[Calendar] Disconnect error:', error);
+                        window.showToast?.('Failed to disconnect from Google Calendar', 'error');
                     }
                 });
             }

@@ -247,6 +247,56 @@ function formatRecurrenceInfo(recurrence) {
     return info;
 }
 
+// Function to get recurring badge text for task tiles
+function getRecurringBadgeText(task) {
+    if (!task.recurring) return '';
+    
+    let recurringType = '';
+    let interval = null;
+    
+    // Handle different recurring data structures
+    if (typeof task.recurring === 'string' && task.recurring !== 'none') {
+        // String format: task.recurring = 'daily', 'weekly', etc.
+        recurringType = task.recurring;
+    } else if (typeof task.recurring === 'boolean' && task.recurring === true) {
+        // Boolean format: task.recurring = true, check task.recurrence
+        if (task.recurrence && task.recurrence.type) {
+            recurringType = task.recurrence.type;
+            interval = task.recurrence.interval;
+        } else {
+            recurringType = 'recurring';
+        }
+    } else if (typeof task.recurring === 'object') {
+        // Object format: task.recurring = { recurring: true, recurrence: { type: 'daily', ... } }
+        if (task.recurring.recurring === true && task.recurring.recurrence) {
+            recurringType = task.recurring.recurrence.type || 'recurring';
+            interval = task.recurring.recurrence.interval;
+        } else if (task.recurring.type) {
+            // Direct object format: task.recurring = { type: 'daily', ... }
+            recurringType = task.recurring.type;
+            interval = task.recurring.interval;
+        }
+    }
+    
+    // Format the recurring type for display
+    switch (recurringType) {
+        case 'daily':
+            return 'Daily';
+        case 'weekly':
+            return 'Weekly';
+        case 'monthly':
+            return 'Monthly';
+        case 'yearly':
+            return 'Yearly';
+        case 'custom':
+            return `Every ${interval || 7} Days`;
+        case 'recurring':
+            return 'Recurring';
+        default:
+            return recurringType.charAt(0).toUpperCase() + recurringType.slice(1);
+    }
+}
+
 // Multilingual Voice Recognition Manager
 class MultilingualVoiceManager {
     constructor() {
@@ -2399,7 +2449,7 @@ function renderTasks(page = 1) {
                                         </h5>
                                         ${task.recurring ? `<div class="badge bg-warning text-dark ms-2">
                                             <i class="bi bi-arrow-repeat me-1"></i>
-                                            ${formatRecurrenceInfo(task.recurrence || { type: 'recurring' })}
+                                            ${getRecurringBadgeText(task)}
                                         </div>` : ''}
                                 <p class="card-text mb-1">
                                     <small class="text-muted" id="taskCreatedDate_${task.id}">Created: ${formatDate(task.createdAt) || ''}</small><br>

@@ -90,7 +90,6 @@ window.gcal.checkConfiguration = function() {
     return validateGcalConfiguration();
 };
 
-const DISCOVERY_DOC = window.gcal.DISCOVERY_DOC;
 // Set scopes specifically for task syncing (create events)
 const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
 
@@ -166,7 +165,7 @@ function loadGapiClient(retryCount = 0, maxRetries = 3) {
             // Initialize the client
             await gapi.client.init({
                 apiKey: window.gcal.API_KEY,
-                discoveryDocs: [DISCOVERY_DOC],
+                discoveryDocs: [window.gcal.DISCOVERY_DOC],
             });
 
             console.log('[gcal] Client initialized, checking calendar API...');
@@ -317,10 +316,51 @@ async function gcalSignIn() {
 }
 
 // Sign out (revoke token)
-function gcalSignOut() {
-    accessToken = null;
-    localStorage.removeItem('gcal_access_token');
-    // Optionally revoke token via Google API
+async function gcalSignOut() {
+    try {
+        // Revoke the token if we have one
+        const accessToken = localStorage.getItem('gcal_access_token');
+        if (accessToken) {
+            try {
+                // Revoke the token via Google's revoke endpoint
+                await fetch(`https://oauth2.googleapis.com/revoke?token=${accessToken}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                });
+                console.log('[gcal] Token revoked successfully');
+            } catch (error) {
+                console.warn('[gcal] Failed to revoke token:', error);
+                // Continue with sign out even if token revocation fails
+            }
+        }
+        
+        // Clear local storage
+        localStorage.removeItem('gcal_access_token');
+        localStorage.removeItem('gcal_token_expiry');
+        
+        // Clear any global variables
+        if (typeof accessToken !== 'undefined') {
+            accessToken = null;
+        }
+        
+        // Clear gapi token if available
+        if (window.gapi && window.gapi.client) {
+            try {
+                window.gapi.client.setToken(null);
+            } catch (e) {
+                console.log('[gcal] gapi token cleared');
+            }
+        }
+        
+        console.log('[gcal] Sign out completed successfully');
+    } catch (error) {
+        console.error('[gcal] Error during sign out:', error);
+        // Still clear local storage even if there's an error
+        localStorage.removeItem('gcal_access_token');
+        localStorage.removeItem('gcal_token_expiry');
+    }
 }
 
 // Check if user is signed in
@@ -438,6 +478,7 @@ async function addTaskToGcal(task) {
         }
     }
 }
+window.gcal.addTaskToGcal = addTaskToGcal;
 
 // Add recurring task to Google Calendar with recurring pattern
 async function addRecurringTaskToGcal(task, syncDuration = '1month') {
@@ -560,6 +601,7 @@ async function addRecurringTaskToGcal(task, syncDuration = '1month') {
         }
     }
 }
+window.gcal.addRecurringTaskToGcal = addRecurringTaskToGcal;
 
 // Helper function to create RRULE for Google Calendar
 function createRRule(recurrence, startDate, syncDuration = '1month') {
@@ -895,7 +937,7 @@ function initGoogleOAuth() {
     gapi.load('client:auth2', async () => {
         await gapi.client.init({
             clientId: CLIENT_ID,
-            discoveryDocs: [DISCOVERY_DOC],
+            discoveryDocs: [window.gcal.DISCOVERY_DOC],
             scope: SCOPES
         });
         const authInstance = gapi.auth2.getAuthInstance();

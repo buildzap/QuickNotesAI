@@ -25,6 +25,7 @@
 #connectCalendarBtn {
     min-width: 200px;
     padding: 0.75rem 1.5rem;
+    font-size: 0.8rem;
 }
 
 .btn-google {
@@ -39,6 +40,7 @@
     gap: 0.5rem;
     width: 100%;
     transition: all 0.3s ease;
+    font-size: 0.8rem;
 }
 
 .btn-google:hover {
@@ -48,7 +50,7 @@
 }
 
 .btn-google i {
-    font-size: 1.1em;
+    font-size: 1rem;
 }
 
 .btn-sync {
@@ -61,6 +63,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    font-size: 0.8rem;
 }
 
 .btn-sync:not(:disabled) {
