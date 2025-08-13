@@ -33,6 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
+    <link href="css/header.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #6366f1;
@@ -67,7 +68,7 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         }
 
-        /* Font Awesome Icon Fixes */
+        /* Enhanced Icon Styling - Matching Task Page */
         .fas, .far, .fab, .fa {
             font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Pro', 'Font Awesome 6 Brands', 'FontAwesome' !important;
             font-weight: 900;
@@ -76,13 +77,6 @@
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            display: inline-block !important;
-            width: auto !important;
-            height: auto !important;
-        }
-
-        /* Ensure Font Awesome icons are visible even if font doesn't load */
-        .fas::before, .far::before, .fab::before, .fa::before {
             display: inline-block !important;
             width: auto !important;
             height: auto !important;
@@ -105,30 +99,70 @@
             font-size: inherit;
         }
 
-        /* Specific icon sizing */
+        /* Enhanced Section Title Icon Styling - Matching Task Page */
+        .section-title i,
+        .form-title i,
+        .card-title i,
+        .welcome-title i,
+        .lesson-title i {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
+        }
+
+        /* Specific icon styling for different sections */
+        .section-title i.fas.fa-graduation-cap {
+            color: var(--primary-color) !important;
+        }
+
+        .section-title i.fas.fa-lightbulb {
+            color: var(--primary-color) !important;
+        }
+
+        .section-title i.fas.fa-history {
+            color: var(--primary-color) !important;
+        }
+
+        .section-title i.fas.fa-crown {
+            color: var(--primary-color) !important;
+        }
+
+        /* Field option icons */
+        .field-option i {
+            font-size: 1.1rem !important;
+            color: var(--primary-color) !important;
+            margin-right: 0.5rem !important;
+        }
+
+        /* Welcome header icons */
+        .welcome-header i {
+            font-size: 1.1rem !important;
+            color: var(--primary-color) !important;
+        }
+
+        /* Lesson card icons */
+        .lesson-card i {
+            font-size: 1rem !important;
+            color: var(--primary-color) !important;
+        }
+
+        /* Button icons */
+        .btn i {
+            font-size: 0.9rem !important;
+        }
+
+        /* Navbar icons */
         .navbar-brand i {
-            font-size: 1.2em;
+            font-size: 1.2rem !important;
         }
 
         .nav-link i {
-            font-size: 0.9em;
-        }
-
-        .btn i {
-            font-size: 0.9em;
-        }
-
-        .welcome-header i {
-            font-size: 1.1em;
-        }
-
-        .field-option i {
-            font-size: 1.3em;
-            color: var(--primary-color);
-        }
-
-        .lesson-card i {
-            font-size: 1em;
+            font-size: 0.9rem !important;
         }
 
         body {
@@ -153,6 +187,251 @@
                 radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
             z-index: -1;
             pointer-events: none;
+        }
+
+        /* 3D Animated Background Elements */
+        .bg-3d-element {
+            position: fixed;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            box-shadow: 
+                0 0 50px rgba(99, 102, 241, 0.3),
+                inset 0 0 50px rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            animation: float-3d 8s ease-in-out infinite;
+        }
+
+        .bg-3d-element:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(79, 172, 254, 0.3));
+        }
+
+        .bg-3d-element:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 70%;
+            right: 15%;
+            animation-delay: 2s;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
+        }
+
+        .bg-3d-element:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 25%;
+            left: 20%;
+            animation-delay: 4s;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(34, 197, 94, 0.3));
+        }
+
+        .bg-3d-element:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 45%;
+            right: 25%;
+            animation-delay: 6s;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(245, 158, 11, 0.3));
+        }
+
+        @keyframes float-3d {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+                box-shadow: 
+                    0 0 50px rgba(99, 102, 241, 0.3),
+                    inset 0 0 50px rgba(255, 255, 255, 0.1);
+            }
+            25% { 
+                transform: translateY(-20px) translateX(10px) rotate(90deg) scale(1.1);
+                box-shadow: 
+                    0 0 60px rgba(99, 102, 241, 0.4),
+                    inset 0 0 60px rgba(255, 255, 255, 0.15);
+            }
+            50% { 
+                transform: translateY(-10px) translateX(-15px) rotate(180deg) scale(0.9);
+                box-shadow: 
+                    0 0 40px rgba(99, 102, 241, 0.2),
+                    inset 0 0 40px rgba(255, 255, 255, 0.05);
+            }
+            75% { 
+                transform: translateY(15px) translateX(5px) rotate(270deg) scale(1.05);
+                box-shadow: 
+                    0 0 55px rgba(99, 102, 241, 0.35),
+                    inset 0 0 55px rgba(255, 255, 255, 0.12);
+            }
+        }
+
+        /* 3D Card Effects */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Removed hover effects for welcome section to prevent unwanted highlighting/jumping */
+        .welcome-header.card-3d:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+        }
+
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-3d:hover::before {
+            opacity: 1;
+        }
+
+        /* Enhanced Icon Animations */
+        .icon-3d {
+            display: inline-block;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Removed hover effects for welcome section icons to prevent unwanted highlighting/jumping */
+        .welcome-header .icon-3d:hover {
+            transform: none;
+            filter: none;
+        }
+
+        .icon-pulse {
+            animation: icon-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: brightness(1.2);
+            }
+        }
+
+        .icon-float {
+            animation: icon-float 3s ease-in-out infinite;
+        }
+
+        @keyframes icon-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .icon-glow {
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.6));
+            animation: icon-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes icon-glow {
+            0% { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.6)); }
+            100% { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
+        }
+
+        /* Dark theme adjustments for 3D elements */
+        [data-bs-theme="dark"] .bg-3d-element {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+            box-shadow: 
+                0 0 50px rgba(99, 102, 241, 0.2),
+                inset 0 0 50px rgba(255, 255, 255, 0.05);
+        }
+
+        [data-bs-theme="dark"] .card-3d:hover {
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(99, 102, 241, 0.2);
+        }
+
+        [data-bs-theme="dark"] .icon-glow {
+            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.8));
+        }
+
+        /* Dark theme icon glow animation */
+        @keyframes icon-glow-dark {
+            0% { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.8)); }
+            100% { filter: drop-shadow(0 0 25px rgba(99, 102, 241, 1)); }
+        }
+
+        [data-bs-theme="dark"] .icon-glow {
+            animation: icon-glow-dark 2s ease-in-out infinite alternate;
+        }
+
+        /* Dark theme adjustments for trending 3D elements */
+        [data-bs-theme="dark"] .brain-core {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+            box-shadow: 
+                0 0 50px rgba(79, 70, 229, 0.6),
+                inset 0 0 30px rgba(255, 255, 255, 0.1),
+                0 0 100px rgba(236, 72, 153, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .ai-element {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.8));
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.05),
+                0 0 30px rgba(79, 70, 229, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .ai-element i {
+            color: #8b5cf6;
+        }
+
+        [data-bs-theme="dark"] .particle {
+            background: linear-gradient(45deg, #4f46e5, #ec4899);
+        }
+
+        [data-bs-theme="dark"] .ring {
+            border-color: rgba(79, 70, 229, 0.4);
+        }
+
+        [data-bs-theme="dark"] .wave {
+            border-color: rgba(79, 70, 229, 0.2);
+        }
+
+        /* Enhanced hover effects for interactive elements */
+        /* Removed hover effects for welcome section to prevent unwanted highlighting/jumping */
+        .welcome-header .card-3d:hover .icon-3d {
+            transform: none;
+        }
+
+        .btn:hover .icon-3d {
+            transform: scale(1.1);
+        }
+
+        /* Special effects for premium elements */
+        .premium-icon .icon-3d {
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+        }
+
+        .premium-icon .icon-pulse {
+            animation: premium-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes premium-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+            }
+            50% { 
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+            }
         }
 
         /* Floating Background Elements */
@@ -196,256 +475,105 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        /* Enhanced Navigation */
-        .navbar {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
 
-        [data-bs-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
 
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Navbar link styling to match task page */
-        .navbar-nav .nav-link {
-            font-weight: 500;
-            color: var(--text-primary) !important;
-            transition: color 0.3s ease;
-            padding: 0.5rem 1rem;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
-        }
-
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color) !important;
-            font-weight: 600;
-        }
-
-        /* Ensure navbar icons are visible */
-        .navbar-nav .nav-link i {
-            display: inline-block !important;
-            width: auto !important;
-            height: auto !important;
-            margin-right: 0.5rem;
-            font-size: 0.9em;
-            color: inherit;
-        }
-
-        .navbar-nav .nav-link:hover i {
-            color: var(--primary-color) !important;
-        }
-
-        .navbar-nav .nav-link.active i {
-            color: var(--primary-color) !important;
-        }
-
-        /* User section styling */
-        .navbar-text {
-            color: var(--text-secondary) !important;
-            font-weight: 500;
-        }
-
-        /* Theme toggle button styling */
-        #themeToggle {
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        #themeToggle:hover {
-            transform: scale(1.05);
-        }
-
-        /* Premium Banner Styles - New Compact Design */
-        .premium-banner {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
-            border-bottom: 2px solid #ffd700;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-            position: absolute;
-            top: 80px;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            width: 100%;
-            min-height: 32px;
+        /* Enhanced Section Headers with Professional Grey Background - Matching Task Page */
+        .section-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border: 2px solid #dee2e6;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
             overflow: hidden;
-            /* Hide by default */
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
         }
 
-        /* Force banner visibility when premium user */
-        .premium-user .premium-banner {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        /* Ensure banner is hidden for non-premium users */
-        body:not(.premium-user) .premium-banner {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            position: absolute !important;
-            top: -100px !important;
-            left: -100px !important;
-            width: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* Animated background pattern */
-        .premium-banner::before {
+        .section-header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            animation: premium-glow 4s ease-in-out infinite;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
-        @keyframes premium-glow {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.9; }
-        }
-
-        .premium-banner-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.4rem 0;
-            position: relative;
-            z-index: 1;
-            gap: 0.75rem;
-        }
-
-        .premium-banner-icon {
-            font-size: 0.85rem;
-            color: #ffd700;
-            animation: crown-pulse 2s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-        }
-
-        @keyframes crown-pulse {
-            0%, 100% { 
-                transform: scale(1) rotate(0deg); 
-                filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-            }
-            50% { 
-                transform: scale(1.1) rotate(2deg); 
-                filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
-            }
-        }
-
-        .premium-banner-text {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .premium-banner-title {
-            color: #ffffff;
+        .section-title {
+            color: var(--text-primary);
             font-weight: 600;
-            font-size: 0.8rem;
             margin: 0;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-        }
-
-        .premium-banner-badge {
             display: flex;
             align-items: center;
+            font-size: 1.2rem !important;
+            line-height: 1.3;
         }
 
-        .premium-banner-badge .badge {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a2e;
-            font-size: 0.65rem;
-            padding: 0.25rem 0.5rem;
-            font-weight: 700;
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.4rem;
+        }
+
+        /* Enhanced Form Header with Professional Grey Background - Matching Task Page */
+        .form-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            animation: badge-shine 3s ease-in-out infinite;
+            padding: 1.25rem;
+            border: 2px solid #dee2e6;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes badge-shine {
-            0%, 100% { 
-                box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
-                transform: scale(1.05);
-            }
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
-        /* Dark theme adjustments */
-        [data-bs-theme="dark"] .premium-banner {
-            background: linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #0e7490 100%);
-            border-bottom: 2px solid #ffd700;
+        .form-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem !important;
+            line-height: 1.3;
         }
 
-        [data-bs-theme="dark"] .premium-banner-title {
-            color: #f8fafc;
+        .form-title i {
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.4rem !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
         }
 
-        [data-bs-theme="dark"] .premium-banner-icon {
-            color: #ffd700;
+        /* Dark theme adjustments for headers */
+        [data-bs-theme="dark"] .section-header,
+        [data-bs-theme="dark"] .form-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid #475569;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .premium-banner-content {
-                padding: 0.3rem 0;
-                gap: 0.5rem;
-            }
-
-            .premium-banner-text {
-                flex-direction: column;
-                gap: 0.25rem;
-                text-align: center;
-            }
-
-            .premium-banner-title {
-                font-size: 0.75rem;
-            }
-
-            .premium-banner-badge .badge {
-                font-size: 0.6rem;
-                padding: 0.2rem 0.4rem;
-            }
+        [data-bs-theme="dark"] .section-title,
+        [data-bs-theme="dark"] .form-title {
+            color: var(--text-primary);
         }
 
-        /* Hover effects */
-        .premium-banner:hover {
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
-            transition: box-shadow 0.3s ease;
-        }
 
-        .premium-banner:hover .premium-banner-icon {
-            animation: crown-pulse 1s ease-in-out infinite;
-        }
 
         /* Main Content */
         .main-content {
@@ -455,13 +583,13 @@
             z-index: 1;
         }
 
-        /* Premium Access Control - Professional Styling */
+        /* Premium Access Control - Professional Grey Background Styling - Matching Task Page */
         .premium-access-control {
-            background: var(--background-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border-color);
-            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 2px solid #dee2e6;
+            padding: 1.5rem;
             margin: 2rem auto;
             max-width: 600px;
             text-align: center;
@@ -472,7 +600,7 @@
 
         .premium-access-control:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow);
         }
 
         .premium-access-control::before {
@@ -482,7 +610,13 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 50%, var(--primary-color) 100%);
+            background: var(--gradient-primary);
+        }
+
+        /* Dark theme adjustments for premium access control */
+        [data-bs-theme="dark"] .premium-access-control {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid #475569;
         }
 
         .premium-icon {
@@ -509,6 +643,7 @@
             margin-bottom: 1rem;
             color: var(--text-primary);
             position: relative;
+            letter-spacing: -0.025em;
         }
 
         .premium-description {
@@ -516,13 +651,14 @@
             margin-bottom: 2rem;
             color: var(--text-secondary);
             line-height: 1.6;
+            font-weight: 400;
         }
 
         .upgrade-btn {
             background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
             border: none;
             color: #1a1a1a;
-            font-weight: 600;
+            font-weight: 700;
             padding: 0.875rem 1.75rem;
             border-radius: 8px;
             font-size: 1rem;
@@ -530,6 +666,7 @@
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
             position: relative;
             overflow: hidden;
+            letter-spacing: 0.01em;
         }
 
         .upgrade-btn:hover {
@@ -539,16 +676,17 @@
             color: #1a1a1a;
         }
 
-        /* Welcome Header - Professional Styling */
+        /* Welcome Header - Professional Grey Background Styling - Matching Task Page */
         .welcome-header {
-            background: var(--gradient-primary);
-            color: white;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text-primary);
             padding: 2.5rem 0;
             margin-bottom: 2rem;
-            border-radius: 0 0 20px 20px;
+            border-radius: 16px;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
         }
 
         .welcome-header::before {
@@ -557,60 +695,701 @@
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
         .welcome-content {
             position: relative;
             z-index: 1;
+            padding: 0 1rem;
         }
 
         .welcome-title {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
             font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
         }
 
         .welcome-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
             font-size: 1.1rem;
-            opacity: 0.9;
+        }
+
+        /* Dark theme adjustments for welcome header */
+        [data-bs-theme="dark"] .welcome-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid #475569;
+        }
+
+        /* Trending 3D Container for Right Side */
+        .trending-3d-container {
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* AI Brain Hub */
+        .ai-brain-hub {
+            position: relative;
+            z-index: 10;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brain-core {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 50px rgba(102, 126, 234, 0.6),
+                inset 0 0 30px rgba(255, 255, 255, 0.3),
+                0 0 100px rgba(240, 147, 251, 0.3);
+            animation: brain-pulse 4s ease-in-out infinite;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .brain-icon {
+            font-size: 3.5rem;
+            color: white;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: brain-rotate 8s linear infinite;
+        }
+
+        .neural-rings {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ring {
+            position: absolute;
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 50%;
+            animation: ring-expand 6s ease-in-out infinite;
+        }
+
+        .ring-1 {
+            width: 120px;
+            height: 120px;
+            top: 10px;
+            left: 10px;
+            animation-delay: 0s;
+        }
+
+        .ring-2 {
+            width: 140px;
+            height: 140px;
+            top: 0px;
+            left: 0px;
+            animation-delay: 2s;
+        }
+
+        .ring-3 {
+            width: 160px;
+            height: 160px;
+            top: -10px;
+            left: -10px;
+            animation-delay: 4s;
+        }
+
+        /* Floating AI Elements */
+        .ai-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        .ai-element {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                inset 0 0 20px rgba(255, 255, 255, 0.9),
+                0 0 30px rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: ai-float 8s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .ai-element i {
+            font-size: 1.3rem;
+            color: #667eea;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .element-1 {
+            top: 15%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .element-2 {
+            top: 25%;
+            right: 20%;
+            animation-delay: 1.5s;
+        }
+
+        .element-3 {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 3s;
+        }
+
+        .element-4 {
+            bottom: 30%;
+            right: 15%;
+            animation-delay: 4.5s;
+        }
+
+        .element-5 {
+            top: 60%;
+            left: 10%;
+            animation-delay: 6s;
+        }
+
+        .element-6 {
+            top: 45%;
+            right: 10%;
+            animation-delay: 7.5s;
+        }
+
+        /* Data Flow Particles */
+        .data-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #667eea, #f093fb);
+            border-radius: 50%;
+            animation: particle-flow 10s linear infinite;
+        }
+
+        .particle-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .particle-2 { top: 30%; right: 15%; animation-delay: 1s; }
+        .particle-3 { bottom: 25%; left: 15%; animation-delay: 2s; }
+        .particle-4 { bottom: 35%; right: 20%; animation-delay: 3s; }
+        .particle-5 { top: 50%; left: 5%; animation-delay: 4s; }
+        .particle-6 { top: 40%; right: 5%; animation-delay: 5s; }
+        .particle-7 { bottom: 15%; left: 25%; animation-delay: 6s; }
+        .particle-8 { bottom: 45%; right: 10%; animation-delay: 7s; }
+
+        /* Energy Waves */
+        .energy-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .wave {
+            position: absolute;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 50%;
+            animation: wave-expand 8s ease-in-out infinite;
+        }
+
+        .wave-1 {
+            width: 200px;
+            height: 200px;
+            top: 50px;
+            left: 50px;
+            animation-delay: 0s;
+        }
+
+        .wave-2 {
+            width: 240px;
+            height: 240px;
+            top: 30px;
+            left: 30px;
+            animation-delay: 2.5s;
+        }
+
+        .wave-3 {
+            width: 280px;
+            height: 280px;
+            top: 10px;
+            left: 10px;
+            animation-delay: 5s;
+        }
+
+        /* Enhanced Field Display */
+        .field-display-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .field-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .field-value {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .field-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        .field-status-indicator i {
+            color: #22c55e;
+            font-size: 0.6rem;
+        }
+
+        .status-text {
+            font-size: 0.7rem;
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        /* Progress Indicator */
+        .welcome-progress {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
             margin-bottom: 1rem;
         }
 
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            width: 75%;
+            animation: progress-pulse 2s ease-in-out infinite;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .progress-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Brain Pulse Animation */
+        @keyframes brain-pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 50px rgba(102, 126, 234, 0.6),
+                    inset 0 0 30px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 
+                    0 0 70px rgba(102, 126, 234, 0.8),
+                    inset 0 0 40px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        /* Brain Rotate Animation */
+        @keyframes brain-rotate {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        /* Ring Expand Animation */
+        @keyframes ring-expand {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* AI Float Animation */
+        @keyframes ai-float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-8px) rotate(2deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-8px) rotate(-2deg);
+            }
+        }
+
+        /* Particle Flow Animation */
+        @keyframes particle-flow {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(100px, -50px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Wave Expand Animation */
+        @keyframes wave-expand {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Progress Pulse Animation */
+        @keyframes progress-pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Responsive Design for Welcome Section */
+        @media (max-width: 991.98px) {
+            .welcome-header {
+                padding: 2rem 0;
+            }
+            
+            .welcome-content {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1rem;
+            }
+            
+            .trending-3d-container {
+                height: 250px;
+                margin-top: 1rem;
+            }
+            
+            .ai-brain-hub {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .brain-core {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .brain-icon {
+                font-size: 2.8rem;
+            }
+            
+            .ai-element {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .ai-element i {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .welcome-header {
+                padding: 1.5rem 0;
+            }
+            
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .welcome-3d-container {
+                height: 200px;
+            }
+            
+            .welcome-3d-hub {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .welcome-3d-hub .welcome-main-icon {
+                font-size: 2rem;
+            }
+            
+            .orbit-element {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .orbit-element i {
+                font-size: 0.9rem;
+            }
+            
+            .floating-element {
+                display: none;
+            }
+            
+            .connection-line {
+                display: none;
+            }
+        }
+
+        /* Enhanced Typography - Compact and Attractive Headings */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        /* Compact Heading Sizes */
+        h1 { font-size: 1.8rem !important; }
+        h2 { font-size: 1.5rem !important; }
+        h3 { font-size: 1.3rem !important; }
+        h4 { font-size: 1.1rem !important; }
+        h5 { font-size: 1rem !important; }
+        h6 { font-size: 0.9rem !important; }
+
+        .section-title, .form-title, .card-title {
+            font-weight: 600 !important;
+            letter-spacing: -0.01em !important;
+        }
+
+        /* Enhanced Button Typography */
+        .btn {
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-lg {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .upgrade-btn {
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        /* Additional Compact Heading Styles */
+        .card-title {
+            font-size: 1rem !important;
+            line-height: 1.3;
+        }
+
+
+
+        /* Compact Form Labels */
+        label {
+            font-size: 0.9rem !important;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        /* Enhanced Form Controls */
+        .form-control {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-weight: 400;
+        }
+
+        /* Enhanced Badge Typography */
+        .badge {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        /* Compact Modal Titles */
+        .modal-title {
+            font-size: 1rem !important;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        /* Enhanced Typography for Specific Elements - Compact and Attractive */
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .field-option h5 {
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        .field-option p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .lesson-title {
+            font-size: 1.3rem;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        .lesson-date {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .lesson-summary h3 {
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        .premium-title {
+            font-size: 1.5rem;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .premium-description {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .custom-topic-item .topic-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .past-lesson-title {
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
+        .past-lesson-date {
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
         .user-field-display {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--background-card);
             border-radius: 20px;
             padding: 0.5rem 1.5rem;
             display: inline-flex;
             align-items: center;
-            backdrop-filter: blur(10px);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .user-field-display .btn-outline-light {
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
             font-size: 0.8rem;
             padding: 0.25rem 0.75rem;
             transition: all 0.3s ease;
         }
 
         .user-field-display .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: var(--primary-color);
+            border-color: var(--primary-color);
             color: white;
             transform: translateY(-1px);
         }
 
-        /* Field Selection - Professional Styling */
+        /* Field Selection - Compact and Attractive Styling */
         .field-selection {
-            background: var(--background-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border-color);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px; /* Reduced from 12px */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Reduced from 0 2px 4px */
+            border: 1px solid #dee2e6; /* Reduced from 2px */
+            padding: 1rem; /* Reduced from 1.5rem */
+            margin-bottom: 1.5rem; /* Reduced from 2rem */
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -618,7 +1397,7 @@
 
         .field-selection:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); /* Updated shadow */
         }
 
         .field-selection::before {
@@ -627,27 +1406,48 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
-            border-radius: 16px 16px 0 0;
+            height: 3px; /* Reduced from 4px */
+            background: var(--gradient-primary);
+        }
+
+        /* Dark theme adjustments for field selection */
+        [data-bs-theme="dark"] .field-selection {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid #475569; /* Reduced from 2px */
         }
 
         .field-option {
             background: var(--background-main);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            border: 1px solid var(--border-color); /* Reduced from 2px */
+            border-radius: 8px; /* Reduced from 12px */
+            padding: 0.75rem; /* Reduced from 1rem */
+            margin-bottom: 0.75rem; /* Reduced from 1rem */
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
+        .field-option h5 {
+            font-size: 0.9rem; /* Reduced from 1.1rem */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem; /* Reduced from 0.5rem */
+            letter-spacing: -0.01em;
+            line-height: 1.3; /* Added line-height */
+        }
+
+        .field-option p {
+            font-size: 0.75rem; /* Reduced from 0.9rem */
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.4; /* Reduced from 1.5 */
+        }
+
         .field-option:hover {
             border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            transform: translateY(-1px); /* Reduced from -2px */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Updated shadow */
         }
 
         .field-option.selected {
@@ -660,7 +1460,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
+            width: 3px; /* Reduced from 4px */
             height: 100%;
             background: var(--primary-color);
             opacity: 0;
@@ -671,13 +1471,55 @@
             opacity: 1;
         }
 
-        /* Custom Topic Section */
+        /* Field option meta info */
+        .field-option-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .field-option-stats {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .field-option-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .field-option-icon {
+            font-size: 0.8rem;
+            margin-right: 0.25rem;
+            opacity: 0.8;
+        }
+
+        /* Custom Topic Section - Compact Styling */
         .custom-topic-section {
             background: var(--background-main);
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
+            border: 1px dashed var(--border-color); /* Reduced from 2px */
+            border-radius: 8px; /* Added border-radius */
+            padding: 1rem; /* Reduced padding */
+            margin-top: 1rem; /* Reduced from default */
+        }
+
+        .custom-topic-section h5 {
+            font-size: 0.9rem; /* Reduced font size */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem; /* Reduced margin */
+            letter-spacing: -0.01em;
+        }
+
+        .custom-topic-section p {
+            font-size: 0.75rem; /* Reduced font size */
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem; /* Reduced margin */
+            line-height: 1.4;
         }
 
         .custom-topic-section:hover {
@@ -688,9 +1530,9 @@
         .custom-topic-item {
             background: var(--background-card);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
+            border-radius: 6px; /* Reduced from 8px */
+            padding: 0.5rem 0.75rem; /* Reduced from 0.75rem 1rem */
+            margin-bottom: 0.4rem; /* Reduced from 0.5rem */
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -709,8 +1551,9 @@
         }
 
         .custom-topic-item .topic-name {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
+            font-size: 0.85rem; /* Reduced from 1rem */
         }
 
         .custom-topic-item .remove-topic {
@@ -726,13 +1569,13 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* Lesson Card - Professional Styling */
+        /* Lesson Card - Professional Grey Background Styling - Matching Task Page */
         .lesson-card {
-            background: var(--background-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border-color);
-            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 2px solid #dee2e6;
+            padding: 1.5rem;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             position: relative;
@@ -741,7 +1584,7 @@
 
         .lesson-card:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow);
         }
 
         .lesson-card::before {
@@ -750,9 +1593,14 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);
-            border-radius: 16px 16px 0 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        /* Dark theme adjustments for lesson card */
+        [data-bs-theme="dark"] .lesson-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 2px solid #475569;
         }
 
         .lesson-header {
@@ -765,15 +1613,12 @@
         }
 
         .lesson-title {
-            font-size: 1.5rem;
-            font-weight: 700;
             color: var(--text-primary);
             margin: 0;
             flex: 1;
         }
 
         .lesson-date {
-            font-size: 0.9rem;
             color: var(--text-secondary);
             background: var(--background-main);
             padding: 0.5rem 1rem;
@@ -789,9 +1634,34 @@
             border: 1px solid var(--border-color);
         }
 
+        .lesson-summary ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .lesson-summary li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .lesson-summary li:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-summary li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+        }
+
         .lesson-summary h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 1rem;
         }
@@ -836,6 +1706,7 @@
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -864,14 +1735,47 @@
             transform: translateY(-1px);
         }
 
-        /* Past Lessons - Professional Styling */
+        /* Disabled button states */
+        .btn-remind:disabled,
+        .btn-link-task:disabled,
+        .btn-mark-read:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none !important;
+        }
+
+        .btn-remind:disabled:hover,
+        .btn-link-task:disabled:hover,
+        .btn-mark-read:disabled:hover {
+            border-color: var(--border-color);
+            background: var(--background-main);
+            color: var(--text-secondary);
+            transform: none;
+        }
+
+        /* Disabled button in past lessons */
+        .past-lesson-actions .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transform: none !important;
+            pointer-events: none;
+        }
+
+        .past-lesson-actions .btn:disabled:hover {
+            border-color: var(--border-color);
+            background: var(--background-main);
+            color: var(--text-secondary);
+            transform: none;
+        }
+
+        /* Past Lessons - Compact and Attractive Styling */
         .past-lessons {
-            background: var(--background-card);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border-color);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #dee2e6;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -879,7 +1783,7 @@
 
         .past-lessons:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .past-lessons::before {
@@ -889,42 +1793,103 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);
-            border-radius: 16px 16px 0 0;
+            background: var(--gradient-primary);
+        }
+
+        /* Dark theme adjustments for past lessons */
+        [data-bs-theme="dark"] .past-lessons {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid #475569;
         }
 
         .past-lesson-item {
             background: var(--background-main);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .past-lesson-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .past-lesson-item[data-status="read"]::before {
+            opacity: 1;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        .past-lesson-item[data-status="linked"]::before {
+            opacity: 1;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        }
+
+        .past-lesson-item[data-status="reminded"]::before {
+            opacity: 1;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
         }
 
         .past-lesson-item:hover {
             border-color: var(--primary-color);
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .past-lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
         }
 
         .past-lesson-title {
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
 
         .past-lesson-date {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .past-lesson-details {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .past-lesson-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
         }
 
         .past-lesson-status {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.65rem;
             font-weight: 600;
-            margin-top: 0.5rem;
+            margin-right: 0.5rem;
         }
 
         .status-read {
@@ -933,8 +1898,175 @@
         }
 
         .status-linked {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .status-new {
             background: rgba(99, 102, 241, 0.1);
             color: var(--primary-color);
+        }
+
+        .status-reminded {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        /* Button loading and success states */
+        .mark-read-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mark-read-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .mark-read-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .mark-read-btn.success {
+            background-color: #22c55e !important;
+            border-color: #22c55e !important;
+            color: white !important;
+            transform: scale(1.05);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success animation for past lesson items */
+        .past-lesson-item.status-updated {
+            animation: statusUpdate 0.6s ease-out;
+            border: 2px solid #10b981 !important;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        @keyframes statusUpdate {
+            0% { 
+                transform: scale(1); 
+                background-color: rgba(16, 185, 129, 0.05);
+            }
+            50% { 
+                transform: scale(1.02); 
+                background-color: rgba(16, 185, 129, 0.15);
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
+            }
+            100% { 
+                transform: scale(1); 
+                background-color: rgba(16, 185, 129, 0.05);
+            }
+        }
+
+        /* Button loading and success states */
+        .mark-read-btn.loading {
+            background-color: #f59e0b !important;
+            border-color: #f59e0b !important;
+            color: white !important;
+            pointer-events: none;
+        }
+
+        .mark-read-btn.success {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
+            color: white !important;
+            animation: buttonSuccess 0.5s ease-out;
+        }
+
+        @keyframes buttonSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Status transition animations */
+        .past-lesson-status {
+            transition: all 0.3s ease;
+        }
+
+        .past-lesson-status.status-new {
+            color: #f59e0b;
+        }
+
+        .past-lesson-status.status-read {
+            color: #10b981;
+        }
+
+        .past-lesson-status.status-linked {
+            color: #3b82f6;
+        }
+
+        .past-lesson-status.status-reminded {
+            color: #8b5cf6;
+        }
+
+        .past-lesson-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .past-lesson-actions .btn {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .past-lesson-icon {
+            font-size: 0.8rem;
+            margin-right: 0.25rem;
+            opacity: 0.8;
+        }
+
+        /* Empty state styling for past lessons */
+        .empty-state {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+        }
+
+        .empty-state h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Debug button styling */
+        .btn-outline-secondary {
+            opacity: 0.7;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .btn-outline-secondary:hover {
+            opacity: 1;
         }
 
         /* Loading States */
@@ -1009,6 +2141,9 @@
         .footer h5, .footer h6 {
             color: white;
             font-weight: 600;
+            font-size: 0.85rem !important;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
         }
 
         .footer p, .footer a {
@@ -1028,36 +2163,924 @@
         .footer-link:hover {
             color: var(--primary-color) !important;
         }
+
+        .social-link {
+            color: rgba(255, 255, 255, 0.75);
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Task Link Modal Styles */
+        .task-link-modal .modal-content {
+            background: var(--background-card);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+        }
+
+        .task-link-modal .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            background: var(--background-main);
+        }
+
+        .task-link-modal .modal-footer {
+            border-top: 1px solid var(--border-color);
+            background: var(--background-main);
+        }
+
+        .task-option {
+            background: var(--background-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .task-option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .task-option.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Loading state for task options */
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Disabled button styling */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Insights List Styles - Compact and Attractive */
+        .insights-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: var(--background-main);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .insights-list li {
+            padding: 0.5rem 0.75rem; /* Reduced from 0.75rem 0 */
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-left: 1.5rem; /* Reduced from 2rem */
+            font-size: 0.75rem; /* Reduced from 0.9rem */
+            line-height: 1.4; /* Reduced from 1.5 */
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .insights-list li:last-child {
+            border-bottom: none;
+        }
+
+        .insights-list li:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .insights-list li::before {
+            content: '💡'; /* Changed from bullet to lightbulb emoji */
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.8rem; /* Reduced from 1.5rem */
+            position: absolute;
+            left: 0.5rem; /* Reduced from 0 */
+            top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Insight point styling */
+        .insight-point {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        /* Insights header styling */
+        .insights-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0;
+        }
+
+        .insights-header h3 {
+            font-size: 0.85rem; /* Even more compact */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .insights-header i {
+            font-size: 0.75rem;
+            color: var(--primary-color);
+            margin-right: 0.4rem;
+        }
+
+        /* Insight content styling */
+        .insight-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .insight-text {
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .insight-meta {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .insight-type, .insight-priority {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .insight-type.trend {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .insight-type.tip {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+
+        .insight-type.data {
+            background: rgba(168, 85, 247, 0.1);
+            color: #9333ea;
+        }
+
+        .insight-type.tool {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .insight-type.skill {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .insight-type.insight {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .insight-type.important {
+            background: rgba(245, 101, 101, 0.1);
+            color: #ef4444;
+        }
+
+        .insight-type.strategy {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .insight-priority.high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .insight-priority.normal {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+
+        .insight-type i, .insight-priority i {
+            font-size: 0.5rem;
+        }
+
+        /* Priority styling */
+        .high-priority {
+            border-left: 3px solid #dc2626;
+        }
+
+        .normal-priority {
+            border-left: 3px solid #6b7280;
+        }
+
+        .btn-unlink-task {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-unlink-task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+        }
+
+        .btn-unlink-task:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+        }
+
+
+
+        /* Refresh Past Lessons Button Styling */
+        #refreshPastLessonsBtn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #refreshPastLessonsBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            color: white;
+        }
+
+        #refreshPastLessonsBtn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 5px rgba(59, 130, 246, 0.3);
+        }
+
+        #refreshPastLessonsBtn i {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        #refreshPastLessonsBtn:hover i {
+            transform: rotate(180deg);
+        }
+
+        #refreshPastLessonsBtn.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Button pulse animation for highlighting */
+        @keyframes btn-pulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 6px 25px rgba(13, 110, 253, 0.5);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            }
+        }
+
+        .btn-pulse {
+            animation: btn-pulse 0.6s ease-in-out;
+        }
+
+        /* Advanced Professional Navigation */
+        .advanced-navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .advanced-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 0.5rem 0;
+        }
+
+        /* Enhanced Brand */
+        .advanced-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-brand:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-brand:hover .brand-icon::before {
+            left: 100%;
+        }
+
+        .brand-icon-inner {
+            color: white;
+            font-size: 1.5rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Advanced Navigation Menu */
+        .advanced-nav-menu {
+            gap: 0.5rem;
+        }
+
+        .advanced-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem !important;
+            font-weight: 600;
+            color: #475569 !important;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .advanced-nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .advanced-nav-link:hover::before,
+        .advanced-nav-link.active::before {
+            opacity: 1;
+        }
+
+        .advanced-nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        .advanced-nav-link.active {
+            color: #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .advanced-nav-link i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Premium Link Styling */
+        .premium-link {
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* Advanced CTA Button */
+        .advanced-cta-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .advanced-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-cta-btn:hover .btn-glow {
+            left: 100%;
+        }
+
+        /* Advanced Theme Toggle */
+        .advanced-theme-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.75rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-theme-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: translateY(-2px);
+            color: #667eea;
+        }
+
+        .theme-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-theme-btn:hover .theme-glow {
+            left: 100%;
+        }
+
+        /* Advanced Mobile Toggle */
+        .advanced-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .advanced-toggler:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        }
+
+        .toggler-icon {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #667eea;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(2) {
+            opacity: 0;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Navigation Progress Bar */
+        .nav-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Dark Theme Support */
+        [data-bs-theme="dark"] .advanced-navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        [data-bs-theme="dark"] .advanced-navbar.scrolled {
+            background: rgba(15, 23, 42, 0.98) !important;
+        }
+
+        [data-bs-theme="dark"] .brand-name {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-bs-theme="dark"] .brand-tagline {
+            color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link:hover,
+        [data-bs-theme="dark"] .advanced-nav-link.active {
+            color: #667eea !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 991.98px) {
+            .advanced-nav-menu {
+                margin: 1rem 0;
+                gap: 0.25rem;
+            }
+
+            .advanced-nav-link {
+                padding: 1rem !important;
+                border-radius: 8px;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .advanced-brand {
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Premium User Banner Styles */
+        .premium-user-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 32px;
+            overflow: hidden;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-user .premium-user-banner {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        body:not(.premium-user) .premium-user-banner {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .premium-user-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 6px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .premium-banner-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #ffd700;
+            animation: pulse-gold 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .premium-banner-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .premium-banner-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 0;
+        }
+
+        .premium-banner-badge {
+            margin-left: 15px;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a1a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Dark theme adjustments */
+        [data-bs-theme="dark"] .premium-user-banner {
+            background: linear-gradient(135deg, #4c63d2 0%, #6b46c1 100%);
+        }
+
+        [data-bs-theme="dark"] .premium-banner-title {
+            color: #f8fafc;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-icon {
+            color: #fbbf24;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .premium-banner-content {
+                padding: 4px 0;
+            }
+            
+            .premium-banner-title {
+                font-size: 13px;
+            }
+            
+            .premium-banner-icon {
+                font-size: 14px;
+                margin-right: 8px;
+            }
+            
+            .premium-banner-badge {
+                margin-left: 10px;
+            }
+            
+            .premium-badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .premium-banner-title {
+                font-size: 12px;
+            }
+            
+            .premium-banner-icon {
+                font-size: 13px;
+                margin-right: 6px;
+            }
+            
+            .premium-badge {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+        }
+
+        /* Hover effects */
+        .premium-user-banner:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        .premium-user-banner:hover .premium-banner-icon {
+            animation: pulse-gold 1s infinite;
+        }
     </style>
 </head>
 <body>
+    <!-- 3D Animated Background Elements -->
+    <div class="bg-3d-element"></div>
+    <div class="bg-3d-element"></div>
+    <div class="bg-3d-element"></div>
+    <div class="bg-3d-element"></div>
+    
     <!-- Floating Background Elements -->
     <div class="floating-bg-element"></div>
     <div class="floating-bg-element"></div>
     <div class="floating-bg-element"></div>
     
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
-                <i class="bi bi-check2-square me-2"></i>
-                <span>QuickNotes AI</span>
-                <i class="fas fa-check-circle ms-2" style="font-size: 0.8em; color: var(--accent-color);" title="Font Awesome Test"></i>
+    <!-- Advanced Professional Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top advanced-navbar">
+        <div class="container-fluid px-4">
+            <!-- Enhanced Brand -->
+            <a class="navbar-brand advanced-brand" href="index.html">
+                <div class="brand-icon">
+                    <div class="brand-icon-inner">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">QuickNotes AI</span>
+                    <span class="brand-tagline">Intelligent Productivity</span>
+                </div>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler advanced-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
             </button>
+            
+            <!-- Navigation Menu -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="task.html"><i class="fas fa-tasks me-1"></i>Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line me-1"></i>Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="learn.html"><i class="fas fa-graduation-cap me-1"></i>Learn</a></li>
-                    <li class="nav-item"><a class="nav-link" href="premium.html"><i class="fas fa-crown me-1"></i>Premium</a></li>
-                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html"><i class="fas fa-users me-1"></i>Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html"><i class="fas fa-chart-bar me-1"></i>Team-Dashboard</a></li>
+                <ul class="navbar-nav mx-auto advanced-nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="index.html">
+                            <i class="bi bi-house-door-fill me-2"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="task.html">
+                            <i class="bi bi-check2-square me-2"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="dashboard.html">
+                            <i class="bi bi-graph-up me-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link active" href="learn.html">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link premium-link" href="premium.html">
+                            <i class="bi bi-star-fill me-2"></i>
+                            <span>Premium</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamNavItem">
+                        <a class="nav-link advanced-nav-link" href="team.html">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span>Team</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamDashboardNavItem">
+                        <a class="nav-link advanced-nav-link" href="team-dashboard.html">
+                            <i class="bi bi-kanban me-2"></i>
+                            <span>Team Dashboard</span>
+                        </a>
+                    </li>
                 </ul>
-                <ul class="navbar-nav">
+                
+                <!-- Right Side Actions -->
+                <ul class="navbar-nav advanced-nav-actions">
                     <!-- User Welcome and Sign Out -->
                     <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
                         <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
@@ -1066,28 +3089,32 @@
                         <span class="navbar-text" id="userWelcome">Welcome User</span>
                     </li>
                     <li class="nav-item">
-                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                        <button id="themeToggle" class="btn advanced-theme-btn" title="Toggle theme">
                             <i class="bi bi-moon-fill" id="themeIcon"></i>
+                            <div class="theme-glow"></div>
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
+        
+        <!-- Navigation Progress Bar -->
+        <div class="nav-progress-bar"></div>
     </nav>
 
-    <!-- Premium Banner (Only for Premium Users) -->
-    <div id="premiumBanner" class="premium-banner d-none" style="display: none;">
+    <!-- Premium User Banner -->
+    <div id="premiumBanner" class="premium-user-banner d-none">
         <div class="container">
             <div class="premium-banner-content">
                 <div class="premium-banner-icon">
                     <i class="fas fa-crown"></i>
                 </div>
                 <div class="premium-banner-text">
-                    <h5 class="premium-banner-title">Premium User – Enjoy all advanced features</h5>
+                    <span class="premium-banner-title">Premium User – Enjoy all advanced features</span>
                 </div>
                 <div class="premium-banner-badge">
-                    <span class="badge">
-                        <i class="fas fa-star me-1"></i>Premium
+                    <span class="badge premium-badge">
+                        <i class="fas fa-diamond me-1"></i>Premium
                     </span>
                 </div>
             </div>
@@ -1100,17 +3127,21 @@
             <div class="col-12">
                 <!-- Premium Access Control (Hidden by default) -->
                 <div class="container" id="premiumAccessControl" style="display: none;">
-                    <div class="premium-access-control">
-                        <div class="premium-icon">
-                            <i class="fas fa-crown"></i>
+                    <div class="premium-access-control card-3d">
+                        <div class="section-header card-3d">
+                            <h2 class="section-title">
+                                <i class="fas fa-crown icon-3d icon-glow"></i>Premium Feature
+                            </h2>
                         </div>
-                        <h2 class="premium-title">Premium Feature</h2>
+                        <div class="premium-icon">
+                            <i class="fas fa-crown icon-3d icon-pulse"></i>
+                        </div>
                         <p class="premium-description">
-                            Microlearning Reminders are available exclusively for premium users. 
+                            <i class="fas fa-star icon-3d icon-float"></i>Microlearning Reminders are available exclusively for premium users. 
                             Get personalized daily lessons tailored to your field of interest.
                         </p>
-                        <button class="upgrade-btn" onclick="window.location.href='premium.html'">
-                            <i class="fas fa-crown me-2"></i>Upgrade to Premium
+                        <button class="upgrade-btn card-3d" onclick="window.location.href='premium.html'">
+                            <i class="fas fa-crown icon-3d icon-glow"></i>Upgrade to Premium
                         </button>
                     </div>
                 </div>
@@ -1118,102 +3149,252 @@
                 <!-- Main Learning Content (Hidden by default) -->
                 <div class="container" id="mainLearningContent" style="display: none;">
                     <!-- Welcome Header -->
-                    <div class="welcome-header">
-                        <div class="welcome-content text-center">
-                            <h1 class="welcome-title">Welcome back! 👋</h1>
-                            <p class="welcome-subtitle">Here's your microlearning for today</p>
-                            <div class="user-field-display">
-                                <i class="fas fa-graduation-cap me-2"></i>
-                                Learning: <span id="userFieldDisplay">Productivity</span>
-                                <button class="btn btn-sm btn-outline-light ms-3" id="changeTopicBtn" title="Change Learning Topic" style="display: none;">
-                                    <i class="fas fa-edit me-1"></i>Change Topic
-                                </button>
+                    <div class="welcome-header card-3d">
+                        <div class="row align-items-center">
+                            <!-- Left Column: Welcome Content -->
+                            <div class="col-lg-7">
+                                <div class="welcome-content">
+                                    <h1 class="welcome-title">
+                                        <i class="fas fa-brain icon-3d icon-pulse"></i>Welcome back! 👋
+                                    </h1>
+                                    <p class="welcome-subtitle">
+                                        <i class="fas fa-lightbulb icon-3d icon-glow"></i>Here's your microlearning for today
+                                    </p>
+                                    
+                                    <!-- Enhanced Field Display with 3D Elements -->
+                                    <div class="user-field-display card-3d">
+                                        <div class="field-display-content">
+                                            <i class="fas fa-graduation-cap icon-3d icon-float"></i>
+                                            <span class="field-label">Learning:</span>
+                                            <span id="userFieldDisplay" class="fw-bold field-value">Productivity</span>
+                                            <div class="field-status-indicator">
+                                                <i class="fas fa-circle icon-3d icon-pulse"></i>
+                                                <span class="status-text">Active</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-light ms-3 card-3d" id="changeTopicBtn" title="Change Learning Topic" style="display: none;">
+                                            <i class="fas fa-edit icon-3d"></i>Change Topic
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Progress Indicator -->
+                                    <div class="welcome-progress card-3d">
+                                        <div class="progress-info">
+                                            <i class="fas fa-calendar-check icon-3d icon-glow"></i>
+                                            <span>Today's Progress</span>
+                                        </div>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill" id="dailyProgressBar"></div>
+                                        </div>
+                                        <div class="progress-stats">
+                                            <span><i class="fas fa-fire icon-3d icon-pulse"></i>Streak: 7 days</span>
+                                            <span><i class="fas fa-trophy icon-3d icon-glow"></i>Level: Expert</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Column: Trending 3D Animated Images -->
+                            <div class="col-lg-5">
+                                <div class="trending-3d-container">
+                                    <!-- Main AI Brain Hub -->
+                                    <div class="ai-brain-hub">
+                                        <div class="brain-core">
+                                            <i class="fas fa-brain brain-icon"></i>
+                                        </div>
+                                        <div class="neural-rings">
+                                            <div class="ring ring-1"></div>
+                                            <div class="ring ring-2"></div>
+                                            <div class="ring ring-3"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Floating AI Elements -->
+                                    <div class="ai-elements">
+                                        <div class="ai-element element-1">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div class="ai-element element-2">
+                                            <i class="fas fa-microchip"></i>
+                                        </div>
+                                        <div class="ai-element element-3">
+                                            <i class="fas fa-network-wired"></i>
+                                        </div>
+                                        <div class="ai-element element-4">
+                                            <i class="fas fa-cogs"></i>
+                                        </div>
+                                        <div class="ai-element element-5">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="ai-element element-6">
+                                            <i class="fas fa-rocket"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Data Flow Particles -->
+                                    <div class="data-particles">
+                                        <div class="particle particle-1"></div>
+                                        <div class="particle particle-2"></div>
+                                        <div class="particle particle-3"></div>
+                                        <div class="particle particle-4"></div>
+                                        <div class="particle particle-5"></div>
+                                        <div class="particle particle-6"></div>
+                                        <div class="particle particle-7"></div>
+                                        <div class="particle particle-8"></div>
+                                    </div>
+                                    
+                                    <!-- Energy Waves -->
+                                    <div class="energy-waves">
+                                        <div class="wave wave-1"></div>
+                                        <div class="wave wave-2"></div>
+                                        <div class="wave wave-3"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Field Selection (Hidden by default) -->
-                    <div class="field-selection" id="fieldSelection" style="display: none;">
-                        <h3 class="mb-3" id="fieldSelectionTitle">
-                            <i class="fas fa-graduation-cap me-2"></i>Choose Your Learning Field
-                        </h3>
-                        <p class="text-muted mb-4" id="fieldSelectionDescription">Select a field to receive personalized microlearning content daily.</p>
+                    <div class="field-selection card-3d" id="fieldSelection" style="display: none;">
+                        <div class="section-header card-3d">
+                            <h3 class="section-title" id="fieldSelectionTitle">
+                                <i class="fas fa-graduation-cap icon-3d icon-pulse"></i>Choose Your Learning Field
+                            </h3>
+                        </div>
+                        <p class="text-muted mb-4" id="fieldSelectionDescription">
+                            <i class="fas fa-star icon-3d icon-glow"></i>Select a field to receive personalized microlearning content daily.
+                        </p>
                         
                         <div class="row">
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="productivity">
-                                    <h5><i class="fas fa-rocket me-2"></i>Productivity</h5>
+                                <div class="field-option card-3d" data-field="productivity">
+                                    <h5><i class="fas fa-rocket field-option-icon icon-3d icon-float"></i>Productivity</h5>
                                     <p class="mb-0 text-muted">Time management, focus, and efficiency techniques</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>5 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.8/5</span>
+                                        </div>
+                                        <small class="text-success"><i class="fas fa-check-circle icon-3d icon-pulse"></i>Popular</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="leadership">
-                                    <h5><i class="fas fa-users me-2"></i>Leadership</h5>
+                                <div class="field-option card-3d" data-field="leadership">
+                                    <h5><i class="fas fa-users field-option-icon icon-3d icon-float"></i>Leadership</h5>
                                     <p class="mb-0 text-muted">Team management, communication, and decision-making</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>7 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.9/5</span>
+                                        </div>
+                                        <small class="text-primary"><i class="fas fa-fire icon-3d icon-pulse"></i>Trending</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="marketing">
-                                    <h5><i class="fas fa-bullhorn me-2"></i>Marketing</h5>
+                                <div class="field-option card-3d" data-field="marketing">
+                                    <h5><i class="fas fa-bullhorn field-option-icon icon-3d icon-float"></i>Marketing</h5>
                                     <p class="mb-0 text-muted">Digital marketing, branding, and customer engagement</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>6 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.7/5</span>
+                                        </div>
+                                        <small class="text-info"><i class="fas fa-chart-line icon-3d icon-pulse"></i>Growing</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="technology">
-                                    <h5><i class="fas fa-laptop-code me-2"></i>Technology</h5>
+                                <div class="field-option card-3d" data-field="technology">
+                                    <h5><i class="fas fa-laptop-code field-option-icon icon-3d icon-float"></i>Technology</h5>
                                     <p class="mb-0 text-muted">Programming, AI, and emerging tech trends</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>8 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.9/5</span>
+                                        </div>
+                                        <small class="text-warning"><i class="fas fa-rocket icon-3d icon-pulse"></i>Hot</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="finance">
-                                    <h5><i class="fas fa-chart-line me-2"></i>Finance</h5>
+                                <div class="field-option card-3d" data-field="finance">
+                                    <h5><i class="fas fa-chart-line field-option-icon icon-3d icon-float"></i>Finance</h5>
                                     <p class="mb-0 text-muted">Personal finance, investing, and financial planning</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>6 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.6/5</span>
+                                        </div>
+                                        <small class="text-success"><i class="fas fa-trending-up icon-3d icon-pulse"></i>Stable</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-4 mb-3">
-                                <div class="field-option" data-field="health">
-                                    <h5><i class="fas fa-heartbeat me-2"></i>Health & Wellness</h5>
+                                <div class="field-option card-3d" data-field="health">
+                                    <h5><i class="fas fa-heartbeat field-option-icon icon-3d icon-float"></i>Health & Wellness</h5>
                                     <p class="mb-0 text-muted">Mental health, fitness, and work-life balance</p>
+                                    <div class="field-option-meta">
+                                        <div class="field-option-stats">
+                                            <span><i class="fas fa-clock icon-3d"></i>5 min/day</span>
+                                            <span><i class="fas fa-star icon-3d icon-glow"></i>4.8/5</span>
+                                        </div>
+                                        <small class="text-info"><i class="fas fa-leaf icon-3d icon-pulse"></i>Essential</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Custom Topic Input -->
-                        <div class="row mt-4">
+                        <div class="row mt-3">
                             <div class="col-12">
-                                <div class="custom-topic-section">
-                                    <h5 class="mb-3">
-                                        <i class="fas fa-lightbulb me-2"></i>Or Choose Your Own Topic
+                                <div class="custom-topic-section card-3d">
+                                    <h5 class="mb-2">
+                                        <i class="fas fa-lightbulb field-option-icon icon-3d icon-glow"></i>Or Choose Your Own Topic
                                     </h5>
-                                    <p class="text-muted mb-3">Enter any topic you're interested in learning about, and we'll provide you with the latest insights and trends.</p>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="customTopicInput" placeholder="e.g., artificial intelligence, sustainable fashion, quantum computing..." maxlength="50">
-                                        <button class="btn btn-outline-primary" type="button" id="addCustomTopicBtn">
-                                            <i class="fas fa-plus me-1"></i>Add Topic
+                                    <p class="text-muted mb-2">
+                                        <i class="fas fa-magic icon-3d icon-float"></i>Enter any topic you're interested in learning about, and we'll provide you with the latest insights and trends. <strong>After adding a topic, click on it to select it, then click "Save Field Selection" to generate lessons.</strong>
+                                    </p>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm" id="customTopicInput" placeholder="e.g., artificial intelligence, sustainable fashion, quantum computing..." maxlength="50">
+                                        <button class="btn btn-outline-primary btn-sm card-3d" type="button" id="addCustomTopicBtn">
+                                            <i class="fas fa-plus icon-3d"></i>Add Topic
                                         </button>
                                     </div>
-                                    <div class="custom-topics-container mt-3" id="customTopicsContainer">
+                                    <div class="custom-topics-container mt-2" id="customTopicsContainer">
                                         <!-- Custom topics will be added here -->
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle icon-3d icon-pulse"></i> Popular custom topics: AI, Blockchain, Design Thinking, Data Science
+                                        </small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-primary btn-lg" id="saveFieldBtn">
-                                <i class="fas fa-save me-2"></i>Save Field Selection
+                            <button class="btn btn-primary btn-sm card-3d" id="saveFieldBtn">
+                                <i class="fas fa-save icon-3d icon-pulse"></i>Save Field Selection
                             </button>
-                            <button class="btn btn-outline-secondary btn-lg" id="cancelFieldBtn" style="display: none;">
-                                <i class="fas fa-times me-2"></i>Cancel
+                            <button class="btn btn-outline-secondary btn-sm card-3d" id="cancelFieldBtn" style="display: none;">
+                                <i class="fas fa-times icon-3d"></i>Cancel
                             </button>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> <span id="selectionHint">Select a topic above to get started</span>
+                            </small>
                         </div>
                     </div>
 
-                    <!-- Today's Lesson -->
-                    <div class="lesson-card" id="todayLesson" data-aos="fade-up">
-                        <div class="lesson-header">
-                            <h2 class="lesson-title" id="lessonTitle">Loading today's lesson...</h2>
-                            <span class="lesson-date" id="lessonDate"></span>
+                    <!-- Latest Insights -->
+                    <div class="lesson-card card-3d" id="todayLesson" data-aos="fade-up">
+                        <div class="section-header card-3d mb-3">
+                            <h3 class="section-title">
+                                <i class="fas fa-lightbulb icon-3d icon-pulse"></i>Latest Insights
+                            </h3>
                         </div>
                         <div class="lesson-summary" id="lessonSummary">
                             <div class="loading-spinner">
@@ -1223,23 +3404,38 @@
                             </div>
                         </div>
                         <div class="lesson-actions">
-                            <button class="btn-remind" id="remindLaterBtn">
-                                <i class="fas fa-clock me-2"></i>Remind Me Later
+                            <button class="btn-remind card-3d" id="remindLaterBtn">
+                                <i class="fas fa-clock icon-3d icon-float"></i>Remind Me Later
                             </button>
-                            <button class="btn-link-task" id="linkTaskBtn">
-                                <i class="fas fa-link me-2"></i>Link to Task
+                            <button class="btn-link-task card-3d" id="linkTaskBtn">
+                                <i class="fas fa-link icon-3d icon-pulse"></i>Link to Task
                             </button>
-                            <button class="btn-mark-read" id="markReadBtn">
-                                <i class="fas fa-check me-2"></i>Mark as Read
+                            <button class="btn-unlink-task card-3d" id="unlinkTaskBtn" style="display: none;">
+                                <i class="fas fa-unlink icon-3d icon-pulse"></i>Unlink Task
+                            </button>
+                            <button class="btn-mark-read card-3d" id="markReadBtn">
+                                <i class="fas fa-check icon-3d icon-glow"></i>Mark as Read
                             </button>
                         </div>
                     </div>
 
                     <!-- Past Lessons -->
-                    <div class="past-lessons" data-aos="fade-up" data-aos-delay="200">
-                        <h3 class="mb-3">
-                            <i class="fas fa-history me-2"></i>Past Lessons
-                        </h3>
+                    <div class="past-lessons card-3d" data-aos="fade-up" data-aos-delay="200">
+                        <div class="section-header card-3d">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="section-title">
+                                    <i class="fas fa-history icon-3d icon-pulse"></i>Past Lessons
+                                </h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" id="refreshPastLessonsBtn" title="Refresh Past Lessons">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="testPastLessonsFlow()" title="Test Past Lessons Flow">
+                                        <i class="fas fa-bug"></i> Debug
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="pastLessonsContainer">
                             <div class="loading-spinner">
                                 <div class="spinner-border" role="status">
@@ -1264,26 +3460,28 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-5 mt-5" style="background: #000000 !important;">
+    <footer class="footer py-5 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h5 class="mb-3 text-white fw-bold">
-                        <i class="fas fa-check-double me-2 text-primary"></i>QuickNotes AI
+                    <h5 class="mb-3 fw-bold">
+                        <i class="fas fa-check-double icon-3d icon-glow me-2 text-primary"></i>QuickNotes AI
                     </h5>
-                    <p class="text-light opacity-75 mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <p class="mb-4">
+                        <i class="fas fa-robot icon-3d icon-float"></i>Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.
+                    </p>
                     <div class="d-flex gap-3">
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="fab fa-twitter"></i>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-twitter icon-3d"></i>
                         </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="fab fa-linkedin"></i>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-linkedin icon-3d"></i>
                         </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="fab fa-github"></i>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-github icon-3d"></i>
                         </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="fab fa-youtube"></i>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-youtube icon-3d"></i>
                         </a>
                     </div>
                 </div>
@@ -1291,10 +3489,11 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6 class="mb-3 fw-semibold">Product</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
-                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
-                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
-                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
+                        <li class="mb-2"><a href="dashboard.html" class="footer-link">Dashboard</a></li>
+                        <li class="mb-2"><a href="task.html" class="footer-link">Tasks</a></li>
+                        <li class="mb-2" id="footerTeamLink" style="display: none;"><a href="team.html" class="footer-link">Team</a></li>
+                        <li class="mb-2" id="footerTeamDashboardLink" style="display: none;"><a href="team-dashboard.html" class="footer-link">Team Dashboard</a></li>
+                        <li class="mb-2"><a href="premium.html" class="footer-link">Premium</a></li>
                     </ul>
                 </div>
                 
@@ -1329,15 +3528,15 @@
                 </div>
             </div>
             
-            <hr class="my-4 border-light opacity-25">
+            <hr class="my-4 border-secondary opacity-25">
             
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0 opacity-75">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                    <p class="mb-0">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <button class="btn btn-outline-light btn-sm" id="footerThemeToggle">
-                        <i class="fas fa-moon"></i>
+                    <button class="btn btn-outline-primary btn-sm card-3d" id="footerThemeToggle">
+                        <i class="fas fa-moon icon-3d icon-pulse"></i>
                     </button>
                 </div>
             </div>
@@ -1366,7 +3565,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmLinkBtn">
+                    <button type="button" class="btn btn-secondary" id="confirmLinkBtn" disabled>
                         <i class="fas fa-link me-2"></i>Link Lesson
                     </button>
                 </div>
@@ -1389,6 +3588,7 @@
     <!-- Custom Scripts -->
     <script src="js/firebase-config.js"></script>
     <script src="js/firebase.js"></script>
+    <script src="js/theme.js"></script>
     <script src="js/learn.js"></script>
     
     <!-- Font Awesome Check and Fallback -->
@@ -1485,6 +3685,172 @@
                     testIcon.parentNode.removeChild(testIcon);
                 }
             }, 5000);
+        });
+
+        // Footer theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const footerThemeToggle = document.getElementById('footerThemeToggle');
+            if (footerThemeToggle) {
+                footerThemeToggle.addEventListener('click', function() {
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // Advanced Header Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.advanced-navbar');
+            const navProgressBar = document.querySelector('.nav-progress-bar');
+            
+            // Scroll-based navbar effects
+            function handleNavbarScroll() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Add scrolled class for styling changes
+                if (scrollTop > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                // Update progress bar
+                if (navProgressBar) {
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (scrollTop / scrollHeight) * 100;
+                    navProgressBar.style.width = `${progress}%`;
+                }
+            }
+            
+            // Throttled scroll handler for better performance
+            let scrollTicking = false;
+            function updateNavbarOnScroll() {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        handleNavbarScroll();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+            
+            // Initialize navbar state
+            handleNavbarScroll();
+            
+            // Enhanced mobile menu functionality
+            const mobileToggle = document.querySelector('.advanced-toggler');
+            const navMenu = document.querySelector('.advanced-nav-menu');
+            
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Animate menu items
+                    const menuItems = navMenu.querySelectorAll('.nav-item');
+                    menuItems.forEach((item, index) => {
+                        if (!isExpanded) {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(-20px)';
+                            setTimeout(() => {
+                                item.style.transition = 'all 0.3s ease';
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        }
+                    });
+                });
+            }
+            
+            // Active link highlighting
+            function updateActiveLink() {
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.advanced-nav-link');
+                
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink, { passive: true });
+            
+            // Enhanced theme toggle with animation
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon with animation
+                    const icon = this.querySelector('#themeIcon');
+                    if (icon) {
+                        icon.style.transform = 'rotate(180deg)';
+                        setTimeout(() => {
+                            icon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+                            icon.style.transform = 'rotate(0deg)';
+                        }, 150);
+                    }
+                    
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+            
+            // Premium Banner Functionality
+            function checkPremiumStatus() {
+                // For demo purposes, you can set this to true to see the banner
+                // In production, this should check the actual user's premium status
+                const isPremium = localStorage.getItem('isPremium') === 'true' || false;
+                
+                const premiumBanner = document.getElementById('premiumBanner');
+                const body = document.body;
+                
+                if (isPremium && premiumBanner) {
+                    body.classList.add('premium-user');
+                    premiumBanner.classList.remove('d-none');
+                } else {
+                    body.classList.remove('premium-user');
+                    premiumBanner.classList.add('d-none');
+                }
+            }
+            
+            // Initialize premium banner
+            checkPremiumStatus();
         });
     </script>
 </body>

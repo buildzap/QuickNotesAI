@@ -1,0 +1,124 @@
+{
+  "microlearning_tips": [
+    {
+      "id": "prod_001",
+      "topic": "productivity",
+      "tip": "Use the 2-minute rule: If a task takes less than 2 minutes, do it immediately instead of adding it to your to-do list. This prevents small tasks from accumulating and overwhelming you.",
+      "isPremiumOnly": true,
+      "category": "time-management",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "prod_002",
+      "topic": "productivity",
+      "tip": "Implement the Pomodoro Technique: Work for 25 minutes, then take a 5-minute break. After 4 cycles, take a longer 15-30 minute break. This helps maintain focus and prevents burnout.",
+      "isPremiumOnly": true,
+      "category": "focus",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "prod_003",
+      "topic": "productivity",
+      "tip": "Create a 'not-to-do' list alongside your to-do list. Identify activities that waste time or don't contribute to your goals, and consciously avoid them.",
+      "isPremiumOnly": true,
+      "category": "planning",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "focus_001",
+      "topic": "focus",
+      "tip": "Practice single-tasking instead of multitasking. Research shows that switching between tasks can reduce productivity by up to 40%. Focus on one task at a time for better results.",
+      "isPremiumOnly": true,
+      "category": "concentration",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "focus_002",
+      "topic": "focus",
+      "tip": "Use the 'deep work' method: Schedule 90-minute blocks of uninterrupted, focused work on your most important tasks. Eliminate all distractions during these sessions.",
+      "isPremiumOnly": true,
+      "category": "concentration",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "focus_003",
+      "topic": "focus",
+      "tip": "Create a distraction-free environment by using apps that block social media, turning off notifications, and setting your phone to airplane mode during focused work sessions.",
+      "isPremiumOnly": true,
+      "category": "environment",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "ai_001",
+      "topic": "ai",
+      "tip": "Use AI as a thinking partner, not a replacement. Ask AI tools to help you brainstorm, organize ideas, or provide different perspectives on your work, but always apply your own critical thinking.",
+      "isPremiumOnly": true,
+      "category": "collaboration",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "ai_002",
+      "topic": "ai",
+      "tip": "Learn to write effective prompts for AI tools. Be specific, provide context, and ask for step-by-step explanations. The better your prompt, the more useful the AI response will be.",
+      "isPremiumOnly": true,
+      "category": "skills",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "ai_003",
+      "topic": "ai",
+      "tip": "Use AI to automate repetitive tasks like email drafting, data analysis, or content summarization. This frees up your time for more creative and strategic work.",
+      "isPremiumOnly": true,
+      "category": "automation",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "wellness_001",
+      "topic": "wellness",
+      "tip": "Take regular micro-breaks throughout your workday. Every 30 minutes, stand up, stretch, or take a short walk. This improves circulation, reduces eye strain, and boosts mental clarity.",
+      "isPremiumOnly": true,
+      "category": "health",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "wellness_002",
+      "topic": "wellness",
+      "tip": "Practice mindful breathing during stressful moments. Take 3 deep breaths, inhaling for 4 counts, holding for 4, and exhaling for 6. This activates your parasympathetic nervous system.",
+      "isPremiumOnly": true,
+      "category": "stress-management",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "wellness_003",
+      "topic": "wellness",
+      "tip": "Set boundaries between work and personal time. Create a clear end to your workday and engage in activities that help you disconnect, such as exercise, hobbies, or spending time with loved ones.",
+      "isPremiumOnly": true,
+      "category": "work-life-balance",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "leadership_001",
+      "topic": "leadership",
+      "tip": "Practice active listening by giving your full attention to others, asking clarifying questions, and reflecting back what you've heard. This builds trust and improves communication.",
+      "isPremiumOnly": true,
+      "category": "communication",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "leadership_002",
+      "topic": "leadership",
+      "tip": "Lead by example by demonstrating the behaviors and work ethic you expect from your team. Your actions speak louder than your words and set the tone for your organization's culture.",
+      "isPremiumOnly": true,
+      "category": "culture",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "leadership_003",
+      "topic": "leadership",
+      "tip": "Give specific, actionable feedback that focuses on behavior and impact rather than personality. Use the 'situation-behavior-impact' model for constructive feedback conversations.",
+      "isPremiumOnly": true,
+      "category": "feedback",
+      "difficulty": "intermediate"
+    }
+  ]
+} 

@@ -1,0 +1,84 @@
+<!-- Shared Header for QuickNotes AI -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <!-- Brand/Logo -->
+        <a class="navbar-brand" href="index.html" id="brandHomeLink">
+            <i class="bi bi-check2-square"></i>
+            <span>QuickNotes AI</span>
+        </a>
+        
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navigation Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Main Navigation Links -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="task.html">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="learn.html">Learn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="premium.html">Premium</a>
+                </li>
+                <li class="nav-item" id="teamNavItem">
+                    <a class="nav-link" href="team.html">Team</a>
+                </li>
+                <li class="nav-item" id="teamDashboardNavItem">
+                    <a class="nav-link" href="team-dashboard.html">Team-Dashboard</a>
+                </li>
+            </ul>
+            
+            <!-- Right Side Navigation -->
+            <ul class="navbar-nav">
+                <!-- User Section (Hidden by default, shown when authenticated) -->
+                <li class="nav-item" id="userSection" style="display: none;">
+                    <div class="user-section">
+                        <span class="user-welcome" id="userWelcome">Welcome, Xyz</span>
+                        <button id="signOutBtn" class="sign-out-btn" title="Sign Out">
+                            <i class="bi bi-box-arrow-right"></i>Signout
+                        </button>
+                    </div>
+                </li>
+                
+                <!-- Theme Toggle Button -->
+                <li class="nav-item">
+                    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme">
+                        <i class="bi bi-moon-fill" id="themeIcon"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Premium User Banner -->
+<div id="premiumBanner" class="premium-user-banner d-none">
+    <div class="container">
+        <div class="premium-banner-content">
+            <div class="premium-banner-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="premium-banner-text">
+                <span class="premium-banner-title">Premium User – Enjoy all advanced features</span>
+            </div>
+            <div class="premium-banner-badge">
+                <span class="badge premium-badge">
+                    <i class="fas fa-diamond me-1"></i>Premium
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 

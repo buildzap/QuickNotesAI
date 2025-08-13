@@ -7,9 +7,13 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "firebase:serve": "firebase serve",
-    "firebase:deploy": "firebase deploy"
+    "firebase:deploy": "firebase deploy",
+    "react:start": "cd react-app && npm start",
+    "react:build": "cd react-app && npm run build",
+    "react:dev": "cd react-app && npm run dev"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "@lottiefiles/lottie-player": "^2.0.2",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.0",
@@ -19,10 +23,23 @@
     "express": "^4.18.2",
     "mailersend": "^2.6.0",
     "node-fetch": "^3.3.2",
-    "resend": "^4.6.0"
+    "resend": "^4.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "lucide-react": "^0.263.1",
+    "react-icons": "^4.10.1"
   },
   "devDependencies": {
     "firebase-tools": "^12.4.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "vite": "^4.4.0",
+    "@vitejs/plugin-react": "^4.0.0"
   }
 }

@@ -6,6 +6,7 @@
     <title>Upgrade to Premium - QuickNotes AI</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236366f1' d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="css/styles.css" rel="stylesheet">
     <link href="css/theme.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -49,44 +50,480 @@
             background-color: var(--primary-color);
             border-color: var(--primary-color);
             color: white;
-        }</style>
+        }
+
+        /* Advanced Professional Navigation */
+        .advanced-navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .advanced-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 0.5rem 0;
+        }
+
+        /* Enhanced Brand */
+        .advanced-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-brand:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-brand:hover .brand-icon::before {
+            left: 100%;
+        }
+
+        .brand-icon-inner {
+            color: white;
+            font-size: 1.5rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Advanced Navigation Menu */
+        .advanced-nav-menu {
+            gap: 0.5rem;
+        }
+
+        .advanced-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem !important;
+            font-weight: 600;
+            color: #475569 !important;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .advanced-nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .advanced-nav-link:hover::before,
+        .advanced-nav-link.active::before {
+            opacity: 1;
+        }
+
+        .advanced-nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        .advanced-nav-link.active {
+            color: #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .advanced-nav-link i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Premium Link Styling */
+        .premium-link {
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* Advanced CTA Button */
+        .advanced-cta-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .advanced-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-cta-btn:hover .btn-glow {
+            left: 100%;
+        }
+
+        /* Advanced Theme Toggle */
+        .advanced-theme-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.75rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-theme-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: translateY(-2px);
+            color: #667eea;
+        }
+
+        .theme-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-theme-btn:hover .theme-glow {
+            left: 100%;
+        }
+
+        /* Advanced Mobile Toggle */
+        .advanced-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .advanced-toggler:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        }
+
+        .toggler-icon {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #667eea;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(2) {
+            opacity: 0;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Navigation Progress Bar */
+        .nav-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Dark Theme Support */
+        [data-bs-theme="dark"] .advanced-navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        [data-bs-theme="dark"] .advanced-navbar.scrolled {
+            background: rgba(15, 23, 42, 0.98) !important;
+        }
+
+        [data-bs-theme="dark"] .brand-name {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-bs-theme="dark"] .brand-tagline {
+            color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link:hover,
+        [data-bs-theme="dark"] .advanced-nav-link.active {
+            color: #667eea !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 991.98px) {
+            .advanced-nav-menu {
+                margin: 1rem 0;
+                gap: 0.25rem;
+            }
+
+            .advanced-nav-link {
+                padding: 1rem !important;
+                border-radius: 8px;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .advanced-brand {
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* User Section Styles */
+        #userSection {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-bs-theme="dark"] #userSection {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        #userWelcome {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        #signOutBtn {
+            transition: all 0.3s ease;
+        }
+
+        #signOutBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            #userSection {
+                margin: 0.5rem 0;
+                padding: 0.5rem;
+            }
+            
+            #userWelcome {
+                font-size: 0.8rem;
+            }
+        }
+
+
+
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     </head>
 <body class="d-flex flex-column min-vh-100">
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm py-2">
-        <div class="container">
-            <a class="navbar-brand" href="index.html" id="brandHomeLink">
-                <i class="fas fa-check-double"></i>
-                <span>QuickNotes AI</span>
+    <!-- Advanced Professional Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top advanced-navbar">
+        <div class="container-fluid px-4">
+            <!-- Enhanced Brand -->
+            <a class="navbar-brand advanced-brand" href="index.html">
+                <div class="brand-icon">
+                    <div class="brand-icon-inner">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">QuickNotes AI</span>
+                    <span class="brand-tagline">Intelligent Productivity</span>
+                </div>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler advanced-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
             </button>
+            
+            <!-- Navigation Menu -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="premium.html">Premium</a></li>
-                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item user-section">
-                        <button id="signOut" class="btn btn-outline-danger sign-out-btn">Sign Out</button>
-                        <span class="user-welcome" id="userName">User</span>
+                <ul class="navbar-nav mx-auto advanced-nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="index.html">
+                            <i class="bi bi-house-door-fill me-2"></i>
+                            <span>Home</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <button id="themeToggle" class="btn btn-outline-primary theme-toggle-btn" title="Toggle theme">
-                            <i class="fas fa-moon" id="themeIcon"></i>
+                        <a class="nav-link advanced-nav-link" href="task.html">
+                            <i class="bi bi-check2-square me-2"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="dashboard.html">
+                            <i class="bi bi-graph-up me-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="learn.html">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link active" href="premium.html">
+                            <i class="bi bi-star-fill me-2"></i>
+                            <span>Premium</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamNavItem">
+                        <a class="nav-link advanced-nav-link" href="team.html">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span>Team</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamDashboardNavItem">
+                        <a class="nav-link advanced-nav-link" href="team-dashboard.html">
+                            <i class="bi bi-kanban me-2"></i>
+                            <span>Team Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Right Side Actions -->
+                <ul class="navbar-nav advanced-nav-actions">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn advanced-theme-btn" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                            <div class="theme-glow"></div>
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
+        
+        <!-- Navigation Progress Bar -->
+        <div class="nav-progress-bar"></div>
     </nav>
+
     <div class="container py-5 flex-grow-1">
         <div class="row justify-content-center mb-5">
             <div class="col-lg-8 text-center">
@@ -105,7 +542,7 @@
                             <li><i class="bi bi-check-circle-fill text-success me-2"></i>Basic task management</li>
                             <li><i class="bi bi-check-circle-fill text-success me-2"></i>Simple dashboard</li>
                         </ul>
-                        <div class="mb-2"><span class="h3">₹0</span> <span class="text-muted">/month</span></div>
+                                                 <div class="mb-2"><span class="h3">$0</span> <span class="text-muted">/month</span></div>
                     </div>
                 </div>
             </div>
@@ -123,12 +560,12 @@
                             <li><i class="bi bi-check-circle-fill me-2"></i>Sentiment analysis</li>
                             <li><i class="bi bi-check-circle-fill me-2"></i><strong>Smart Daily Digest</strong> - AI-powered productivity insights</li>
                         </ul>
-                        <div class="mb-2"><span class="h3">₹499</span> <span>/month</span></div>
+                        <div class="mb-2"><span class="h3">$10</span> <span>/month</span></div>
                         <button id="subscribeBtn" class="btn btn-premium btn-lg w-100 mt-3">Subscribe Now</button>
-                        <button id="exportCsvBtn" class="btn btn-outline-primary d-none mb-3 w-100">
+                        <button id="exportCsvBtn" class="btn btn-outline-primary d-none mb-3 w-100 fw-bold">
                             Export to CSV
                         </button>
-                        <button id="exportExcelBtn" class="btn btn-outline-success d-none mb-3 w-100">
+                        <button id="exportExcelBtn" class="btn btn-outline-success d-none mb-3 w-100 fw-bold">
                             Export to Excel
                         </button>
                     </div>
@@ -136,33 +573,336 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h3 class="mb-4">Frequently Asked Questions</h3>
+            <div class="col-lg-10">
+                <h3 class="mb-4 text-center">Frequently Asked Questions</h3>
                 <div class="accordion" id="faqAccordion">
+                    
+                    <!-- Subscription & Payment FAQs -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Can I cancel my subscription anytime?</button>
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <i class="bi bi-credit-card me-2"></i>Can I cancel my subscription anytime?
+                            </button>
                         </h2>
                         <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">Yes, you can cancel your subscription at any time. You'll continue to have premium access until the end of your billing period.</div>
+                            <div class="accordion-body">
+                                <strong>Yes, absolutely!</strong> You can cancel your subscription at any time through your account settings. You'll continue to have premium access until the end of your current billing period. No questions asked, and no cancellation fees.
+                            </div>
                         </div>
                     </div>
+
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">What payment methods do you accept?</button>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <i class="bi bi-wallet2 me-2"></i>What payment methods do you accept?
+                            </button>
                         </h2>
                         <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">We accept all major credit/debit cards, UPI, and net banking through our secure payment gateway.</div>
+                            <div class="accordion-body">
+                                We accept all major payment methods including:
+                                <ul class="mt-2">
+                                    <li><strong>Credit/Debit Cards:</strong> Visa, MasterCard, American Express, RuPay</li>
+                                    <li><strong>Digital Wallets:</strong> UPI, Google Pay, PhonePe, Paytm</li>
+                                    <li><strong>Net Banking:</strong> All major Indian banks</li>
+                                    <li><strong>Other:</strong> Wallets, EMI options available</li>
+                                </ul>
+                                All payments are processed securely through Razorpay.
+                            </div>
                         </div>
                     </div>
+
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">How do I access premium features?</button>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <i class="bi bi-shield-check me-2"></i>Is my payment information secure?
+                            </button>
                         </h2>
                         <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">Premium features are automatically unlocked immediately after your payment is processed. Just refresh the page to start using them.</div>
+                            <div class="accordion-body">
+                                <strong>Yes, your security is our top priority!</strong> We use industry-standard SSL encryption and partner with Razorpay, a PCI DSS compliant payment gateway. We never store your payment details on our servers - they're handled securely by our payment processor.
+                            </div>
                         </div>
                     </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                <i class="bi bi-arrow-clockwise me-2"></i>How do I access premium features after payment?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Premium features are automatically unlocked immediately after your payment is processed (usually within 1-2 minutes). Simply refresh the page and you'll see all premium features available. You'll also receive a confirmation email with your premium account details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Voice-to-Text Features -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                <i class="bi bi-mic me-2"></i>How does voice-to-text task creation work?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Voice-to-text allows you to create tasks by speaking naturally:
+                                <ul class="mt-2">
+                                    <li><strong>Click the microphone button</strong> in the task creation section</li>
+                                    <li><strong>Speak your task</strong> clearly (e.g., "Create a meeting with John tomorrow at 3 PM")</li>
+                                    <li><strong>AI automatically extracts</strong> title, description, due date, and priority</li>
+                                    <li><strong>Review and edit</strong> if needed before saving</li>
+                                </ul>
+                                Supports multiple languages including English, Hindi, and other Indian languages.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                <i class="bi bi-translate me-2"></i>Which languages are supported for voice input?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We support multiple languages for voice input:
+                                <ul class="mt-2">
+                                    <li><strong>English</strong> (US, UK, Indian)</li>
+                                    <li><strong>Hindi</strong> (various dialects)</li>
+                                    <li><strong>Other Indian languages:</strong> Tamil, Telugu, Bengali, Marathi, Gujarati</li>
+                                    <li><strong>International:</strong> Spanish, French, German, and more</li>
+                                </ul>
+                                You can switch languages using the language selector in the voice input section.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Calendar Integration -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                <i class="bi bi-calendar-event me-2"></i>How does Google Calendar integration work?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Google Calendar integration allows seamless task-to-calendar sync:
+                                <ul class="mt-2">
+                                    <li><strong>Connect your Google account</strong> securely through OAuth</li>
+                                    <li><strong>Select any task</strong> from your task history</li>
+                                    <li><strong>Click "Sync to Calendar"</strong> to create a calendar event</li>
+                                    <li><strong>Automatic sync</strong> of due dates, descriptions, and reminders</li>
+                                    <li><strong>Recurring tasks</strong> can be set up with custom frequencies</li>
+                                </ul>
+                                Your Google account data is never stored on our servers - we only create calendar events.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                <i class="bi bi-arrow-repeat me-2"></i>Can I sync recurring tasks to Google Calendar?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <strong>Yes!</strong> Recurring tasks can be synced to Google Calendar with custom frequencies:
+                                <ul class="mt-2">
+                                    <li><strong>Daily:</strong> Every day at the same time</li>
+                                    <li><strong>Weekly:</strong> Same day of the week</li>
+                                    <li><strong>Monthly:</strong> Same date each month</li>
+                                    <li><strong>Custom:</strong> Set specific intervals and end dates</li>
+                                </ul>
+                                When syncing, you can specify the frequency, time, and until date for the recurring event.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics & Dashboard -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                                <i class="bi bi-graph-up me-2"></i>What analytics and insights do I get with Premium?
+                            </button>
+                        </h2>
+                        <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Premium users get comprehensive analytics:
+                                <ul class="mt-2">
+                                    <li><strong>Task Progress Overview:</strong> Completion rates, productivity trends</li>
+                                    <li><strong>Priority Distribution:</strong> Visual breakdown of high/medium/low priority tasks</li>
+                                    <li><strong>Recent Activity:</strong> Timeline of all task actions and updates</li>
+                                    <li><strong>Productivity Score:</strong> AI-powered performance rating</li>
+                                    <li><strong>Time-based Analytics:</strong> Daily, weekly, and monthly progress tracking</li>
+                                    <li><strong>Smart Daily Digest:</strong> AI-generated productivity insights and recommendations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export Features -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">
+                                <i class="bi bi-file-earmark-arrow-down me-2"></i>What export formats are available?
+                            </button>
+                        </h2>
+                        <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Premium users can export their data in multiple formats:
+                                <ul class="mt-2">
+                                    <li><strong>CSV Export:</strong> All tasks with complete details in spreadsheet format</li>
+                                    <li><strong>Excel Export:</strong> Formatted Excel file with multiple sheets for different views</li>
+                                    <li><strong>PDF Reports:</strong> Professional reports with charts and analytics</li>
+                                    <li><strong>Custom Date Ranges:</strong> Export specific time periods</li>
+                                    <li><strong>Filtered Exports:</strong> Export only completed, pending, or specific priority tasks</li>
+                                </ul>
+                                All exports include task details, timestamps, priorities, and status information.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Collaboration -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11">
+                                <i class="bi bi-people me-2"></i>How does team collaboration work?
+                            </button>
+                        </h2>
+                        <div id="faq11" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Team collaboration features include:
+                                <ul class="mt-2">
+                                    <li><strong>Create Teams:</strong> Set up teams with custom names and descriptions</li>
+                                    <li><strong>Invite Members:</strong> Send email invitations to team members</li>
+                                    <li><strong>Assign Tasks:</strong> Assign tasks to specific team members</li>
+                                    <li><strong>Team Dashboard:</strong> View all team tasks and progress</li>
+                                    <li><strong>Real-time Updates:</strong> See task updates from team members instantly</li>
+                                    <li><strong>Team Analytics:</strong> Track team productivity and performance</li>
+                                </ul>
+                                Team features are available for both individual and team premium subscriptions.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Features -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq12">
+                                <i class="bi bi-robot me-2"></i>What AI features are included?
+                            </button>
+                        </h2>
+                        <div id="faq12" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Premium includes powerful AI features:
+                                <ul class="mt-2">
+                                    <li><strong>Smart Task Suggestions:</strong> AI recommends task titles and descriptions</li>
+                                    <li><strong>Sentiment Analysis:</strong> Analyze task descriptions for emotional context</li>
+                                    <li><strong>Smart Daily Digest:</strong> AI-generated productivity insights and recommendations</li>
+                                    <li><strong>Priority Prediction:</strong> AI suggests optimal task priorities</li>
+                                    <li><strong>Due Date Optimization:</strong> Smart suggestions for realistic deadlines</li>
+                                    <li><strong>Productivity Insights:</strong> AI analysis of your work patterns and suggestions</li>
+                                </ul>
+                                AI features learn from your usage patterns to provide better recommendations over time.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Support -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq13">
+                                <i class="bi bi-headset me-2"></i>What support do I get as a Premium user?
+                            </button>
+                        </h2>
+                        <div id="faq13" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Premium users receive enhanced support:
+                                <ul class="mt-2">
+                                    <li><strong>Priority Support:</strong> Faster response times for all inquiries</li>
+                                    <li><strong>Email Support:</strong> Direct access to our support team</li>
+                                    <li><strong>Feature Requests:</strong> Priority consideration for new feature requests</li>
+                                    <li><strong>Training Resources:</strong> Access to premium tutorials and guides</li>
+                                    <li><strong>Account Management:</strong> Personalized account setup assistance</li>
+                                    <li><strong>Integration Help:</strong> Support for Google Calendar and other integrations</li>
+                                </ul>
+                                We typically respond to premium support requests within 24 hours.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data & Privacy -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq14">
+                                <i class="bi bi-shield-lock me-2"></i>How is my data protected?
+                            </button>
+                        </h2>
+                        <div id="faq14" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Your data security is our top priority:
+                                <ul class="mt-2">
+                                    <li><strong>End-to-End Encryption:</strong> All data is encrypted in transit and at rest</li>
+                                    <li><strong>GDPR Compliant:</strong> Full compliance with data protection regulations</li>
+                                    <li><strong>Regular Backups:</strong> Automatic daily backups of all your data</li>
+                                    <li><strong>No Data Sharing:</strong> We never sell or share your personal data</li>
+                                    <li><strong>Secure Infrastructure:</strong> Hosted on Google Cloud with enterprise-grade security</li>
+                                    <li><strong>Data Export:</strong> You can export all your data anytime</li>
+                                    <li><strong>Account Deletion:</strong> Complete data deletion upon request</li>
+                                </ul>
+                                Read our <a href="privacy-policy.html" class="text-decoration-none">Privacy Policy</a> for complete details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing & Refunds -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq15">
+                                <i class="bi bi-receipt me-2"></i>What's your refund policy?
+                            </button>
+                        </h2>
+                        <div id="faq15" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We offer a <strong>30-day money-back guarantee</strong>:
+                                <ul class="mt-2">
+                                    <li><strong>Full Refund:</strong> 100% refund within 30 days if you're not satisfied</li>
+                                    <li><strong>No Questions Asked:</strong> Simple refund process, no complicated forms</li>
+                                    <li><strong>Partial Refunds:</strong> Pro-rated refunds for annual subscriptions</li>
+                                    <li><strong>Easy Process:</strong> Contact support with your request</li>
+                                    <li><strong>Refund Timeline:</strong> Processed within 5-7 business days</li>
+                                </ul>
+                                We want you to be completely satisfied with your premium experience.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Management -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq16">
+                                <i class="bi bi-person-gear me-2"></i>How do I manage my account and subscription?
+                            </button>
+                        </h2>
+                        <div id="faq16" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Account management is simple and secure:
+                                <ul class="mt-2">
+                                    <li><strong>Profile Settings:</strong> Update your name, email, and preferences</li>
+                                    <li><strong>Subscription Management:</strong> View billing history, update payment methods</li>
+                                    <li><strong>Password Changes:</strong> Update your password anytime</li>
+                                    <li><strong>Data Export:</strong> Download all your data in multiple formats</li>
+                                    <li><strong>Account Deletion:</strong> Permanently delete your account and data</li>
+                                    <li><strong>Notification Settings:</strong> Customize email and push notifications</li>
+                                    <li><strong>Privacy Controls:</strong> Manage data sharing and privacy settings</li>
+                                </ul>
+                                All account changes are logged for security purposes.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -368,6 +1108,23 @@
             }
             check();
         }
+        
+        // Function to update user interface with user name
+        function updateUserInterface(user) {
+            const userSection = document.getElementById('userSection');
+            const userWelcome = document.getElementById('userWelcome');
+            
+            if (userSection && userWelcome) {
+                // Extract name from email (everything before @)
+                const name = user.email.split('@')[0];
+                // Capitalize first letter
+                const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+                
+                userWelcome.textContent = `Welcome, ${displayName}`;
+                userSection.style.display = 'flex !important';
+            }
+        }
+        
         waitForFirebaseInitialized(function() {
             window.firebaseInitialized.then(() => {
                 const auth = window.firebaseAuth;
@@ -379,6 +1136,10 @@
                         window.location.href = 'login.html';
                         return;
                     }
+                    
+                    // Update user interface with user name
+                    updateUserInterface(user);
+                    
                     // Real-time Firestore listener for user role
                     if (unsubscribe) unsubscribe();
                     unsubscribe = db.collection('users').doc(user.uid).onSnapshot(doc => {
@@ -395,6 +1156,130 @@
             });
         });
     });
+    </script>
+
+    <script>
+        // Advanced Header Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.advanced-navbar');
+            const navProgressBar = document.querySelector('.nav-progress-bar');
+            
+            // Scroll-based navbar effects
+            function handleNavbarScroll() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Add scrolled class for styling changes
+                if (scrollTop > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                // Update progress bar
+                if (navProgressBar) {
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (scrollTop / scrollHeight) * 100;
+                    navProgressBar.style.width = `${progress}%`;
+                }
+            }
+            
+            // Throttled scroll handler for better performance
+            let scrollTicking = false;
+            function updateNavbarOnScroll() {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        handleNavbarScroll();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+            
+            // Initialize navbar state
+            handleNavbarScroll();
+            
+            // Enhanced mobile menu functionality
+            const mobileToggle = document.querySelector('.advanced-toggler');
+            const navMenu = document.querySelector('.advanced-nav-menu');
+            
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Animate menu items
+                    const menuItems = navMenu.querySelectorAll('.nav-item');
+                    menuItems.forEach((item, index) => {
+                        if (!isExpanded) {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(-20px)';
+                            setTimeout(() => {
+                                item.style.transition = 'all 0.3s ease';
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        }
+                    });
+                });
+            }
+            
+            // Active link highlighting
+            function updateActiveLink() {
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.advanced-nav-link');
+                
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink, { passive: true });
+            
+            // Enhanced theme toggle with animation
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon with animation
+                    const icon = this.querySelector('#themeIcon');
+                    if (icon) {
+                        icon.style.transform = 'rotate(180deg)';
+                        setTimeout(() => {
+                            icon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+                            icon.style.transform = 'rotate(0deg)';
+                        }, 150);
+                    }
+                    
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+            
+
+        });
     </script>
 </body>
 </html>

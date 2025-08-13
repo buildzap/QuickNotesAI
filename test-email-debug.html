@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Debug Test - QuickNotesAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .log-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="test-card">
+                    <div class="text-center mb-4">
+                        <h2><i class="bi bi-bug"></i> Email Debug Test</h2>
+                        <p class="text-muted">Debugging the Resend API response issue</p>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h6><i class="bi bi-exclamation-triangle"></i> Current Issue:</h6>
+                        <p class="mb-0">Getting "Resend API error: undefined" - this suggests the error message is not being properly extracted from the response.</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="bi bi-gear"></i> Configuration</h6>
+                                    <p><strong>API Key:</strong> <code>re_5dq8thU2_Jgn7sYmMuXUc5K5kZ1WbC9jU</code></p>
+                                    <p><strong>From Email:</strong> <code>onboarding@resend.dev</code></p>
+                                    <p><strong>Provider:</strong> Resend</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="bi bi-tools"></i> Debug Steps</h6>
+                                    <ol class="mb-0">
+                                        <li>Test basic Resend connectivity</li>
+                                        <li>Check response format</li>
+                                        <li>Verify error handling</li>
+                                        <li>Test actual email sending</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <button id="testConnectivityBtn" class="btn btn-info me-2">
+                            <i class="bi bi-wifi"></i> Test Connectivity
+                        </button>
+                        <button id="testEmailBtn" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Test Email Sending
+                        </button>
+                    </div>
+
+                    <div id="result" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="bi bi-activity"></i> Debug Results</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="resultContent"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <a href="dashboard.html" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let debugLog = [];
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            debugLog.push(logEntry);
+            console.log(logEntry);
+        }
+
+        function updateLogDisplay() {
+            const logOutput = document.getElementById('resultContent');
+            logOutput.innerHTML = `<div class="log-output">${debugLog.join('\n')}</div>`;
+        }
+
+        document.getElementById('testConnectivityBtn').addEventListener('click', async function() {
+            const btn = this;
+            const resultDiv = document.getElementById('result');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Testing...';
+            debugLog = [];
+            
+            addLog('Starting connectivity test...');
+            resultDiv.style.display = 'block';
+            updateLogDisplay();
+            
+            try {
+                addLog('Testing /api/test-email endpoint...');
+                const response = await fetch('/api/test-email');
+                const result = await response.json();
+                
+                addLog(`Response status: ${response.status}`);
+                addLog(`Response success: ${result.success}`);
+                addLog(`Response message: ${result.message}`);
+                addLog(`Response provider: ${result.provider}`);
+                
+                if (result.response) {
+                    addLog(`Full response: ${JSON.stringify(result.response, null, 2)}`);
+                }
+                
+                if (result.success) {
+                    addLog('✅ Connectivity test PASSED - Resend is working');
+                } else {
+                    addLog('❌ Connectivity test FAILED - Resend has issues');
+                    addLog(`Error: ${result.error || 'No error details'}`);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Network error: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-wifi"></i> Test Connectivity';
+                updateLogDisplay();
+            }
+        });
+
+        document.getElementById('testEmailBtn').addEventListener('click', async function() {
+            const btn = this;
+            const resultDiv = document.getElementById('result');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+            debugLog = [];
+            
+            addLog('Starting email sending test...');
+            resultDiv.style.display = 'block';
+            updateLogDisplay();
+            
+            try {
+                addLog('Sending test email via /api/send-email...');
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'chandrmc@gmail.com',
+                        summaryContent: 'This is a debug test email to identify the Resend API response issue.',
+                        summaryType: 'debug',
+                        recipientName: 'Debug User'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                addLog(`Response status: ${response.status}`);
+                addLog(`Response success: ${result.success}`);
+                addLog(`Response message: ${result.message}`);
+                addLog(`Response provider: ${result.provider}`);
+                
+                if (result.emailId) {
+                    addLog(`Email ID: ${result.emailId}`);
+                }
+                
+                if (result.error) {
+                    addLog(`❌ Error: ${result.error}`);
+                }
+                
+                if (result.success) {
+                    addLog('✅ Email sending test PASSED');
+                } else {
+                    addLog('❌ Email sending test FAILED');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Network error: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-send"></i> Test Email Sending';
+                updateLogDisplay();
+            }
+        });
+    </script>
+</body>
+</html> 

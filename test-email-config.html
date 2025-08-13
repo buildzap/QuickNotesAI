@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Configuration Test - QuickNotesAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-success { background-color: #28a745; }
+        .status-error { background-color: #dc3545; }
+        .status-loading { background-color: #ffc107; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="test-card">
+                    <h2 class="text-center mb-4">
+                        <i class="bi bi-envelope-check text-primary"></i>
+                        Email Configuration Test
+                    </h2>
+                    
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Resend Email Service Configuration</h5>
+                        <p class="mb-0">
+                            <strong>API Key:</strong> <code>re_5dq8thU2_Jgn7sYmMuXUc5K5kZ1WbC9jU</code><br>
+                            <strong>From Email:</strong> <code>onboarding@resend.dev</code>
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-gear"></i> Configuration Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="configStatus">
+                                        <span class="status-indicator status-loading"></span>
+                                        Checking configuration...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-send"></i> Test Email</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="testEmail" class="form-label">Test Email Address:</label>
+                                        <input type="email" id="testEmail" class="form-control" 
+                                               placeholder="Enter email to test" 
+                                               value="chandrumcspeaks@gmail.com">
+                                    </div>
+                                    <button id="sendTestEmail" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-send"></i> Send Test Email
+                                    </button>
+                                    <div id="testResult" class="mt-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="bi bi-list-check"></i> Test Results</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="testResults"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="dashboard.html" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test configuration status
+        async function checkConfiguration() {
+            const statusElement = document.getElementById('configStatus');
+            
+            try {
+                const response = await fetch('/api/test-email');
+                const result = await response.json();
+                
+                if (result.success) {
+                    statusElement.innerHTML = `
+                        <span class="status-indicator status-success"></span>
+                        Configuration working! Email sent successfully.
+                    `;
+                } else {
+                    statusElement.innerHTML = `
+                        <span class="status-indicator status-error"></span>
+                        Configuration failed: ${result.message}
+                    `;
+                }
+            } catch (error) {
+                statusElement.innerHTML = `
+                    <span class="status-indicator status-error"></span>
+                    Configuration error: ${error.message}
+                `;
+            }
+        }
+
+        // Send test email
+        async function sendTestEmail() {
+            const email = document.getElementById('testEmail').value;
+            const button = document.getElementById('sendTestEmail');
+            const resultDiv = document.getElementById('testResult');
+            
+            if (!email) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please enter an email address</div>';
+                return;
+            }
+            
+            button.disabled = true;
+            button.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+            resultDiv.innerHTML = '<div class="alert alert-info">Sending test email...</div>';
+            
+            try {
+                const response = await fetch('/api/test-email-to', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle"></i> Test email sent successfully!<br>
+                            <small>Email ID: ${result.emailId}</small>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle"></i> Failed to send test email: ${result.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-x-circle"></i> Error: ${error.message}
+                    </div>
+                `;
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-send"></i> Send Test Email';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkConfiguration();
+            
+            document.getElementById('sendTestEmail').addEventListener('click', sendTestEmail);
+        });
+    </script>
+</body>
+</html> 

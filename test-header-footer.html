@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Header Footer Loading</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .test-result { font-weight: bold; margin: 10px 0; }
+        .nav-test { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <!-- Header will be loaded by include.js -->
+    <div id="header-placeholder"></div>
+    
+    <h1>Header and Footer Loading Test</h1>
+    
+    <div class="test-section info">
+        <h3>Test Information</h3>
+        <p>This page tests if the new professional header with the specified navigation sequence is loading correctly across all pages.</p>
+        <p><strong>Expected Navigation Sequence:</strong> QuickNotes AI → Home → Tasks → Dashboard → Learn → Premium → Team → Team-Dashboard → Signout → Welcome, Xyz → Toggle Theme</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>Header Test</h3>
+        <div id="header-test-result">Testing header loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Footer Test</h3>
+        <div id="footer-test-result">Testing footer loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Include.js Test</h3>
+        <div id="include-test-result">Testing include.js functionality...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Navigation Sequence Test</h3>
+        <div id="nav-sequence-test">Testing navigation sequence...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Page Content</h3>
+        <p>This is the main content of the test page. The header should appear above this content.</p>
+        
+        <div class="nav-test">
+            <h4>Navigation Verification</h4>
+            <p>Check if the following navigation elements are present and properly styled:</p>
+            <ul>
+                <li>✅ QuickNotes AI brand/logo</li>
+                <li>✅ Home link</li>
+                <li>✅ Tasks link</li>
+                <li>✅ Dashboard link</li>
+                <li>✅ Learn link</li>
+                <li>✅ Premium link</li>
+                <li>✅ Team link</li>
+                <li>✅ Team-Dashboard link</li>
+                <li>✅ User section (Welcome, Xyz + Signout)</li>
+                <li>✅ Theme toggle button</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Footer will be loaded by include.js -->
+    <div id="footer-placeholder"></div>
+    
+    <script>
+        // Test header loading
+        async function testHeaderLoading() {
+            const resultDiv = document.getElementById('header-test-result');
+            try {
+                const response = await fetch('header.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    resultDiv.innerHTML = `<div class="test-result success">✅ Header loaded successfully (${html.length} characters)</div>`;
+                    console.log('Header HTML:', html.substring(0, 200) + '...');
+                } else {
+                    resultDiv.innerHTML = `<div class="test-result error">❌ Header loading failed: HTTP ${response.status}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="test-result error">❌ Header loading error: ${error.message}</div>`;
+            }
+        }
+        
+        // Test footer loading
+        async function testFooterLoading() {
+            const resultDiv = document.getElementById('footer-test-result');
+            try {
+                const response = await fetch('footer.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    resultDiv.innerHTML = `<div class="test-result success">✅ Footer loaded successfully (${html.length} characters)</div>`;
+                    console.log('Footer HTML:', html);
+                } else {
+                    resultDiv.innerHTML = `<div class="test-result error">❌ Footer loading failed: HTTP ${response.status}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="test-result error">❌ Footer loading error: ${error.message}</div>`;
+            }
+        }
+        
+        // Test include.js functionality
+        function testIncludeJS() {
+            const resultDiv = document.getElementById('include-test-result');
+            setTimeout(() => {
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                const footerPlaceholder = document.getElementById('footer-placeholder');
+                
+                const headerContent = headerPlaceholder ? headerPlaceholder.innerHTML.length : 0;
+                const footerContent = footerPlaceholder ? footerPlaceholder.innerHTML.length : 0;
+                
+                if (headerContent > 100 && footerContent > 50) {
+                    resultDiv.innerHTML = `<div class="test-result success">✅ Include.js working correctly (Header: ${headerContent} chars, Footer: ${footerContent} chars)</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="test-result error">❌ Include.js not working properly (Header: ${headerContent} chars, Footer: ${footerContent} chars)</div>`;
+                }
+            }, 1000);
+        }
+        
+        // Test navigation sequence
+        function testNavigationSequence() {
+            const resultDiv = document.getElementById('nav-sequence-test');
+            setTimeout(() => {
+                const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+                const brand = document.querySelector('.navbar-brand');
+                const userSection = document.getElementById('userSection');
+                const themeToggle = document.getElementById('themeToggle');
+                
+                let sequenceCorrect = true;
+                let issues = [];
+                
+                // Check brand
+                if (!brand || !brand.textContent.includes('QuickNotes AI')) {
+                    sequenceCorrect = false;
+                    issues.push('Brand/logo missing or incorrect');
+                }
+                
+                // Check navigation links
+                const expectedLinks = ['Home', 'Tasks', 'Dashboard', 'Learn', 'Premium', 'Team', 'Team-Dashboard'];
+                const actualLinks = Array.from(navLinks).map(link => link.textContent.trim());
+                
+                expectedLinks.forEach((expected, index) => {
+                    if (actualLinks[index] !== expected) {
+                        sequenceCorrect = false;
+                        issues.push(`Navigation sequence incorrect at position ${index + 1}: expected "${expected}", got "${actualLinks[index]}"`);
+                    }
+                });
+                
+                // Check user section
+                if (!userSection) {
+                    sequenceCorrect = false;
+                    issues.push('User section missing');
+                }
+                
+                // Check theme toggle
+                if (!themeToggle) {
+                    sequenceCorrect = false;
+                    issues.push('Theme toggle button missing');
+                }
+                
+                if (sequenceCorrect) {
+                    resultDiv.innerHTML = `<div class="test-result success">✅ Navigation sequence is correct and complete</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="test-result error">❌ Navigation sequence issues: ${issues.join(', ')}</div>`;
+                }
+            }, 1500);
+        }
+        
+        // Run tests
+        document.addEventListener('DOMContentLoaded', function() {
+            testHeaderLoading();
+            testFooterLoading();
+            testIncludeJS();
+            testNavigationSequence();
+        });
+    </script>
+    
+    <!-- Include the include.js script -->
+    <script src="js/include.js"></script>
+</body>
+</html> 

@@ -99,6 +99,7 @@
     </script>
     
     <link href="css/styles.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
     <link href="css/theme.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -178,6 +179,36 @@
             margin-bottom: 1rem;
         }
 
+        /* Enhanced icon visibility for all icon types */
+        .fas, .fab, .far, .bi {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Bootstrap Icons specific styling */
+        .bi {
+            font-family: "Bootstrap Icons" !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+        }
+
+        /* Font Awesome specific styling */
+        .fas, .fab, .far {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
+        }
+
+        .fab {
+            font-weight: 400 !important;
+        }
+
         .team-hero .fas,
         .team-hero .fab,
         .team-hero .far {
@@ -238,52 +269,143 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        /* Enhanced Navigation */
-        .navbar {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+
+
+
+        /* Professional Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        [data-bs-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
-        .navbar-nav .nav-link {
-            color: var(--text-primary) !important;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            border: none;
+            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
+        .btn-success:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
         }
 
-        .navbar-nav .nav-link.active {
-            color: var(--primary-color) !important;
-            font-weight: 600;
+        .btn-info {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            border: none;
+            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .navbar-toggler {
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
+        .btn-info:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
         }
 
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        /* Professional Container Styling */
+        .container {
+            max-width: 1200px;
         }
 
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Professional Card Styling */
+        .card {
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
+
+        .card:hover {
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        [data-bs-theme="dark"] .card {
+            border-color: rgba(102, 126, 234, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-bs-theme="dark"] .card:hover {
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Ultra Compact Layout Optimizations */
+        .task-form-compact {
+            padding: 0.75rem !important;
+        }
+
+        .form-header {
+            padding: 0.5rem 0 !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .form-title {
+            margin-bottom: 0.2rem !important;
+        }
+
+        .form-subtitle {
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* Compact button spacing */
+        .btn-sm {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+        }
+
+        /* Compact badge spacing */
+        .badge {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.7rem !important;
+        }
+
+        /* Compact alert spacing */
+        .alert {
+            padding: 0.5rem 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* Compact table spacing */
+        .table td, .table th {
+            padding: 0.5rem !important;
+            vertical-align: middle !important;
+        }
+
+        /* Compact list spacing */
+        .list-group-item {
+            padding: 0.5rem 0.75rem !important;
+        }
+
+        /* Compact modal spacing */
+        .modal-header {
+            padding: 0.75rem 1rem !important;
+        }
+
+        .modal-body {
+            padding: 0.75rem 1rem !important;
+        }
+
+        .modal-footer {
+            padding: 0.5rem 1rem !important;
+        }
+
+
+
+
+
+
 
         /* Premium Banner Styles */
         .premium-banner {
@@ -486,20 +608,103 @@
 
         /* Compact Team Page Styles */
         .main-content {
-            padding-top: 80px;
+            padding-top: 70px;
             min-height: calc(100vh - 200px);
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
         }
 
-        /* Compact Team Hero Section */
-        .team-hero {
-            background: var(--gradient-primary);
+        [data-bs-theme="dark"] .main-content {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        /* Professional Section Spacing */
+        .container {
+            padding: 0 0.75rem;
+        }
+
+        .row {
+            margin: 0 -0.25rem;
+        }
+
+        .col-md-4, .col-lg-6, .col-12 {
+            padding: 0 0.25rem;
+        }
+
+        /* Compact section spacing */
+        .mb-4 {
+            margin-bottom: 1rem !important;
+        }
+
+        .mb-3 {
+            margin-bottom: 0.75rem !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .py-5 {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+
+        .py-4 {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+        }
+
+        /* Professional Form Styling */
+        .form-control, .form-select {
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Professional Badge Styling */
+        .badge {
+            border-radius: 6px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Professional Alert Styling */
+        .alert {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Professional Table Styling */
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            border: none;
+            font-weight: 600;
+        }
+
+        /* Professional Team Hero Section */
+        .team-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
             position: relative;
             overflow: hidden;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
         }
 
         .team-hero::before {
@@ -510,8 +715,9 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -521,18 +727,20 @@
         }
 
         .team-hero h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
             color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
         }
 
         .team-hero p {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.75rem;
             font-weight: 400;
+            line-height: 1.3;
         }
 
         /* Compact Feature Cards */
@@ -578,15 +786,160 @@
             margin-bottom: 1rem;
         }
 
+        /* Ultra Compact Professional Feature Cards */
+        .feature-card-compact {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 100%;
+            text-align: center;
+            min-height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card-compact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card-compact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card-compact:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon-compact {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.4rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card-compact:hover .feature-icon-compact {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-title {
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 0.85rem;
+            letter-spacing: -0.2px;
+        }
+
+        .feature-subtitle {
+            color: #718096;
+            font-size: 0.7rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        /* Dark theme adjustments for compact cards */
+        [data-bs-theme="dark"] .feature-card-compact {
+            background: rgba(26, 32, 44, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .feature-title {
+            color: #f7fafc;
+        }
+
+        [data-bs-theme="dark"] .feature-subtitle {
+            color: #a0aec0;
+        }
+
+        [data-bs-theme="dark"] .feature-card-compact:hover {
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        /* Ensure Bootstrap Icons are visible in both themes */
+        .feature-icon-compact .bi {
+            display: inline-block !important;
+            font-family: "Bootstrap Icons" !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+            color: white !important;
+            font-size: 1.2rem !important;
+        }
+
+        /* Dark theme adjustments for compact cards */
+        [data-bs-theme="dark"] .feature-card-compact {
+            background: var(--background-card);
+            border-color: var(--border-color);
+        }
+
+        [data-bs-theme="dark"] .feature-title {
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="dark"] .feature-subtitle {
+            color: var(--text-secondary);
+        }
+
+        [data-bs-theme="dark"] .feature-icon-compact {
+            background: var(--gradient-primary);
+        }
+
+        /* Light theme adjustments for compact cards */
+        [data-bs-theme="light"] .feature-card-compact {
+            background: var(--background-card);
+            border-color: var(--border-color);
+        }
+
+        [data-bs-theme="light"] .feature-title {
+            color: var(--text-primary);
+        }
+
+        [data-bs-theme="light"] .feature-subtitle {
+            color: var(--text-secondary);
+        }
+
+        [data-bs-theme="light"] .feature-icon-compact {
+            background: var(--gradient-primary);
+        }
+
         /* Compact Team Cards */
         .team-card {
             background: var(--background-card);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1rem;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .team-card:hover {
@@ -598,7 +951,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .team-info h5 {
@@ -1092,7 +1445,7 @@
         }
 
         .form-section {
-            padding: 0.75rem 1.25rem;
+            padding: 0.5rem 1rem;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -1104,6 +1457,15 @@
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(139, 92, 246, 0.02) 100%);
         }
 
+        /* Remove extra space when form section contains button */
+        .form-section:has(button) {
+            padding-bottom: 0.5rem;
+        }
+
+        .form-section button {
+            margin-bottom: 0;
+        }
+
         .form-section.task-details {
             background: linear-gradient(135deg, rgba(0, 184, 148, 0.02) 0%, rgba(0, 184, 148, 0.01) 100%);
         }
@@ -1111,7 +1473,7 @@
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.6rem;
+            gap: 0.4rem;
             margin-bottom: 0;
         }
 
@@ -1138,7 +1500,7 @@
 
         .form-control {
             font-size: 0.75rem;
-            padding: 0.4rem 0.6rem;
+            padding: 0.3rem 0.5rem;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             background: var(--background-card);
@@ -1163,6 +1525,503 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Advanced Professional Navigation */
+        .advanced-navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .advanced-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 0.5rem 0;
+        }
+
+        /* Enhanced Brand */
+        .advanced-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-brand:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-brand:hover .brand-icon::before {
+            left: 100%;
+        }
+
+        .brand-icon-inner {
+            color: white;
+            font-size: 1.5rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Advanced Navigation Menu */
+        .advanced-nav-menu {
+            gap: 0.5rem;
+        }
+
+        .advanced-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem !important;
+            font-weight: 600;
+            color: #475569 !important;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .advanced-nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .advanced-nav-link:hover::before,
+        .advanced-nav-link.active::before {
+            opacity: 1;
+        }
+
+        .advanced-nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        .advanced-nav-link.active {
+            color: #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .advanced-nav-link i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Premium Link Styling */
+        .premium-link {
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* Advanced CTA Button */
+        .advanced-cta-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .advanced-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-cta-btn:hover .btn-glow {
+            left: 100%;
+        }
+
+        /* Advanced Theme Toggle */
+        .advanced-theme-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.75rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-theme-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: translateY(-2px);
+            color: #667eea;
+        }
+
+        .theme-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-theme-btn:hover .theme-glow {
+            left: 100%;
+        }
+
+        /* Advanced Mobile Toggle */
+        .advanced-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .advanced-toggler:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        }
+
+        .toggler-icon {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #667eea;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(2) {
+            opacity: 0;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Navigation Progress Bar */
+        .nav-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Dark Theme Support */
+        [data-bs-theme="dark"] .advanced-navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        [data-bs-theme="dark"] .advanced-navbar.scrolled {
+            background: rgba(15, 23, 42, 0.98) !important;
+        }
+
+        [data-bs-theme="dark"] .brand-name {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-bs-theme="dark"] .brand-tagline {
+            color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link:hover,
+        [data-bs-theme="dark"] .advanced-nav-link.active {
+            color: #667eea !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 991.98px) {
+            .advanced-nav-menu {
+                margin: 1rem 0;
+                gap: 0.25rem;
+            }
+
+            .advanced-nav-link {
+                padding: 1rem !important;
+                border-radius: 8px;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .advanced-brand {
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Premium User Banner Styles */
+        .premium-user-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            min-height: 32px;
+            overflow: hidden;
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-user .premium-user-banner {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        body:not(.premium-user) .premium-user-banner {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .premium-user-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .premium-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 6px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .premium-banner-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #ffd700;
+            animation: pulse-gold 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .premium-banner-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .premium-banner-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 0;
+        }
+
+        .premium-banner-badge {
+            margin-left: 15px;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a1a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Dark theme adjustments */
+        [data-bs-theme="dark"] .premium-user-banner {
+            background: linear-gradient(135deg, #4c63d2 0%, #6b46c1 100%);
+        }
+
+        [data-bs-theme="dark"] .premium-banner-title {
+            color: #f8fafc;
+        }
+
+        [data-bs-theme="dark"] .premium-banner-icon {
+            color: #fbbf24;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .premium-banner-content {
+                padding: 4px 0;
+            }
+            
+            .premium-banner-title {
+                font-size: 13px;
+            }
+            
+            .premium-banner-icon {
+                font-size: 14px;
+                margin-right: 8px;
+            }
+            
+            .premium-banner-badge {
+                margin-left: 10px;
+            }
+            
+            .premium-badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .premium-banner-title {
+                font-size: 12px;
+            }
+            
+            .premium-banner-icon {
+                font-size: 13px;
+                margin-right: 6px;
+            }
+            
+            .premium-badge {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+        }
+
+        /* Hover effects */
+        .premium-user-banner:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        .premium-user-banner:hover .premium-banner-icon {
+            animation: pulse-gold 1s infinite;
+        }
     </style>
 </head>
 <body>
@@ -1171,99 +2030,162 @@
     <div class="floating-bg-element"></div>
     <div class="floating-bg-element"></div>
 
-    <!-- Premium Banner -->
-    <div class="premium-banner" id="premiumBanner">
-        <div class="premium-banner-content">
-            <i class="fas fa-crown premium-banner-icon"></i>
-            <div class="premium-banner-text">
-                <h6 class="premium-banner-title">Premium User</h6>
+
+
+    <!-- Advanced Professional Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top advanced-navbar">
+        <div class="container-fluid px-4">
+            <!-- Enhanced Brand -->
+            <a class="navbar-brand advanced-brand" href="index.html">
+                <div class="brand-icon">
+                    <div class="brand-icon-inner">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">QuickNotes AI</span>
+                    <span class="brand-tagline">Intelligent Productivity</span>
+                </div>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler advanced-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto advanced-nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="index.html">
+                            <i class="bi bi-house-door-fill me-2"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="task.html">
+                            <i class="bi bi-check2-square me-2"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="dashboard.html">
+                            <i class="bi bi-graph-up me-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="learn.html">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="premium.html">
+                            <i class="bi bi-star-fill me-2"></i>
+                            <span>Premium</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamNavItem">
+                        <a class="nav-link advanced-nav-link active" href="team.html">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span>Team</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamDashboardNavItem">
+                        <a class="nav-link advanced-nav-link" href="team-dashboard.html">
+                            <i class="bi bi-kanban me-2"></i>
+                            <span>Team Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Right Side Actions -->
+                <ul class="navbar-nav advanced-nav-actions">
+                    <!-- User Welcome and Sign Out -->
+                    <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
+                        <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                        </button>
+                        <span class="navbar-text" id="userWelcome">Welcome User</span>
+                    </li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn advanced-theme-btn" title="Toggle theme">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                            <div class="theme-glow"></div>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Navigation Progress Bar -->
+        <div class="nav-progress-bar"></div>
+    </nav>
+
+    <!-- Premium User Banner -->
+    <div id="premiumBanner" class="premium-user-banner d-none">
+        <div class="container">
+            <div class="premium-banner-content">
+                <div class="premium-banner-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="premium-banner-text">
+                    <span class="premium-banner-title">Premium User – Enjoy all advanced features</span>
+                </div>
                 <div class="premium-banner-badge">
-                    <span class="badge">Active</span>
+                    <span class="badge premium-badge">
+                        <i class="fas fa-diamond me-1"></i>Premium
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html" id="brandHomeLink">
-                <i class="fas fa-check-double"></i>
-                <span>QuickNotes AI</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="task.html">Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
-                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
-                    <li class="nav-item" id="teamNavItem" style="display: block;"><a class="nav-link active" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem" style="display: block;"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
-                </ul>
-                <ul class="navbar-nav">
-                    <!-- User Welcome and Sign Out -->
-                    <li class="nav-item user-section" id="userSection" style="display: none;">
-                        <button id="signOutBtn" class="btn btn-outline-danger sign-out-btn" title="Sign Out">
-                            <i class="fas fa-sign-out-alt me-1"></i>Sign Out
-                        </button>
-                        <span class="user-welcome" id="userWelcome">Welcome User</span>
-                    </li>
-                    <li class="nav-item">
-                        <button id="themeToggle" class="btn btn-outline-primary theme-toggle-btn" title="Toggle theme">
-                            <i class="fas fa-moon" id="themeIcon"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- Main Content -->
-    <div class="main-content">
+    <main class="container-fluid flex-grow-1" style="padding-top: 70px;">
         <!-- Team Hero Section -->
         <section class="team-hero">
             <div class="container">
                 <div class="team-hero-content text-center">
                     <h1>Team Collaboration</h1>
                     <p>Create teams, assign tasks, and track progress together with your colleagues</p>
-                    <div class="row g-4 justify-content-center">
+                    <div class="row g-2 justify-content-center">
                         <div class="col-md-4">
-                            <div class="feature-card text-center">
-                                <div class="feature-icon mx-auto">
-                                    <i class="fas fa-users"></i>
+                            <div class="feature-card-compact text-center">
+                                <div class="feature-icon-compact mx-auto">
+                                    <i class="bi bi-people-fill"></i>
                                 </div>
-                                <h5>Create Teams</h5>
-                                <p class="text-muted">Build your dream team</p>
-                                <button class="btn btn-primary mt-3" onclick="scrollToCreateTeam()">
-                                    <i class="fas fa-plus-circle me-2"></i>Create Team
+                                <h6 class="feature-title">Create Teams</h6>
+                                <p class="feature-subtitle">Build your dream team</p>
+                                <button class="btn btn-primary btn-sm mt-1" onclick="scrollToCreateTeam()">
+                                    <i class="bi bi-plus-circle me-1"></i>Create Team
                                 </button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="feature-card text-center">
-                                <div class="feature-icon mx-auto">
-                                    <i class="fas fa-tasks"></i>
+                            <div class="feature-card-compact text-center">
+                                <div class="feature-icon-compact mx-auto">
+                                    <i class="bi bi-list-task"></i>
                                 </div>
-                                <h5>Assign Tasks</h5>
-                                <p class="text-muted">Delegate efficiently</p>
-                                <button class="btn btn-success mt-3" onclick="goToTaskAssignment()">
-                                    <i class="fas fa-tasks me-2"></i>Assign Tasks
+                                <h6 class="feature-title">Assign Tasks</h6>
+                                <p class="feature-subtitle">Delegate efficiently</p>
+                                <button class="btn btn-success btn-sm mt-1" onclick="goToTaskAssignment()">
+                                    <i class="bi bi-list-task me-1"></i>Assign Tasks
                                 </button>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="feature-card text-center">
-                                <div class="feature-icon mx-auto">
-                                    <i class="fas fa-chart-line"></i>
+                            <div class="feature-card-compact text-center">
+                                <div class="feature-icon-compact mx-auto">
+                                    <i class="bi bi-graph-up"></i>
                                 </div>
-                                <h5>Track Progress</h5>
-                                <p class="text-muted">Monitor team performance</p>
-                                <button class="btn btn-info mt-3" onclick="goToProgressTracking()">
-                                    <i class="fas fa-chart-line me-2"></i>Track Progress
+                                <h6 class="feature-title">Track Progress</h6>
+                                <p class="feature-subtitle">Monitor team performance</p>
+                                <button class="btn btn-info btn-sm mt-1" onclick="goToProgressTracking()">
+                                    <i class="bi bi-graph-up me-1"></i>Track Progress
                                 </button>
                             </div>
                         </div>
@@ -1272,15 +2194,15 @@
             </div>
         </section>
 
-        <div class="container">
-            <!-- Alerts Section -->
-            <div id="alertsContainer"></div>
+        <!-- Alerts Section -->
+        <div id="alertsContainer" class="mb-2"></div>
 
-            <!-- Team Management Section -->
+        <!-- Team Management Section -->
+        <div class="container">
             <div class="row">
                 <!-- Create Team Section (Admin Only) -->
                 <div class="col-lg-6 mb-4" id="createTeamSection" style="display: none;">
-                    <div class="task-form-compact mb-2" style="height: auto; min-height: 35vh; overflow-y: visible;">
+                    <div class="task-form-compact mb-1" style="height: auto; min-height: 30vh; overflow-y: visible;">
                         <div class="form-header">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -1460,10 +2382,10 @@
                                     </label>
                                     <input type="text" class="form-control" id="inviteCode" placeholder="Enter invitation code" required>
                                 </div>
+                                <button type="submit" class="btn btn-success w-100 mt-3">
+                                    <i class="fas fa-user-plus me-2"></i>Join Team
+                                </button>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">
-                                <i class="fas fa-user-plus me-2"></i>Join Team
-                            </button>
                         </form>
                     </div>
                 </div>
@@ -1619,6 +2541,7 @@
                 </div>
             </div>
         </div>
+    </main>
     </footer>
 
     <!-- Scripts -->
@@ -1918,6 +2841,149 @@
                     });
                 }
             }
+        });
+    </script>
+
+    <script>
+        // Advanced Header Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.advanced-navbar');
+            const navProgressBar = document.querySelector('.nav-progress-bar');
+            
+            // Scroll-based navbar effects
+            function handleNavbarScroll() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Add scrolled class for styling changes
+                if (scrollTop > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                // Update progress bar
+                if (navProgressBar) {
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (scrollTop / scrollHeight) * 100;
+                    navProgressBar.style.width = `${progress}%`;
+                }
+            }
+            
+            // Throttled scroll handler for better performance
+            let scrollTicking = false;
+            function updateNavbarOnScroll() {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        handleNavbarScroll();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+            
+            // Initialize navbar state
+            handleNavbarScroll();
+            
+            // Enhanced mobile menu functionality
+            const mobileToggle = document.querySelector('.advanced-toggler');
+            const navMenu = document.querySelector('.advanced-nav-menu');
+            
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Animate menu items
+                    const menuItems = navMenu.querySelectorAll('.nav-item');
+                    menuItems.forEach((item, index) => {
+                        if (!isExpanded) {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(-20px)';
+                            setTimeout(() => {
+                                item.style.transition = 'all 0.3s ease';
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        }
+                    });
+                });
+            }
+            
+            // Active link highlighting
+            function updateActiveLink() {
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.advanced-nav-link');
+                
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink, { passive: true });
+            
+            // Enhanced theme toggle with animation
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon with animation
+                    const icon = this.querySelector('#themeIcon');
+                    if (icon) {
+                        icon.style.transform = 'rotate(180deg)';
+                        setTimeout(() => {
+                            icon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+                            icon.style.transform = 'rotate(0deg)';
+                        }, 150);
+                    }
+                    
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+            
+            // Premium Banner Functionality
+            function checkPremiumStatus() {
+                // For demo purposes, you can set this to true to see the banner
+                // In production, this should check the actual user's premium status
+                const isPremium = localStorage.getItem('isPremium') === 'true' || false;
+                
+                const premiumBanner = document.getElementById('premiumBanner');
+                const body = document.body;
+                
+                if (isPremium && premiumBanner) {
+                    body.classList.add('premium-user');
+                    premiumBanner.classList.remove('d-none');
+                } else {
+                    body.classList.remove('premium-user');
+                    premiumBanner.classList.add('d-none');
+                }
+            }
+            
+            // Initialize premium banner
+            checkPremiumStatus();
         });
     </script>
 </body>

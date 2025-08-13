@@ -14,6 +14,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
     <link href="css/task.css" rel="stylesheet">
     <link href="css/theme.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,27 +121,7 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        /* Enhanced Navigation */
-        .navbar {
-            backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
 
-        [data-bs-theme="dark"] .navbar {
-            background: rgba(15, 23, 42, 0.8) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
 
         /* Premium Banner Styles - New Compact Design */
         .premium-banner {
@@ -420,24 +401,7 @@
             box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
         }
 
-        /* Disabled premium feature styles */
-        .premium-feature-disabled {
-            opacity: 0.6;
-            pointer-events: none;
-            position: relative;
-        }
 
-        .premium-feature-disabled::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: inherit;
-            z-index: 1;
-        }
 
         /* Target the specific dashboard header container */
         .premium-user .main-content .dashboard-header,
@@ -452,16 +416,201 @@
             padding-bottom: 0 !important;
         }
 
-        /* Modern Voice-to-Text Section */
+        /* Enhanced Section Headers with Professional Grey Background */
+        .section-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border: 2px solid #dee2e6;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem;
+        }
+
+        /* Enhanced icon styling for dashboard card headers */
+        .dashboard-card-header .card-title i {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem !important;
+            font-family: "Bootstrap Icons", "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 400 !important;
+        }
+
+        /* Specific icon styling for each section */
+        .dashboard-card-header .card-title i.bi-speedometer2 {
+            color: var(--primary-color) !important;
+        }
+
+        .dashboard-card-header .card-title i.bi-calendar-event {
+            color: var(--primary-color) !important;
+        }
+
+        .dashboard-card-header .card-title i.bi-activity {
+            color: var(--primary-color) !important;
+        }
+
+        .dashboard-card-header .card-title i.bi-pie-chart {
+            color: var(--primary-color) !important;
+        }
+
+        /* Ensure Task History icon is visible */
+        .task-history-header .section-title i {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Force Task History icon display */
+        .task-history-header .section-title i.fas.fa-history {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 5 Free", "Font Awesome 5 Pro" !important;
+        }
+
+
+
+
+
+        /* Enhanced Form Header with Professional Grey Background */
+        .form-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 2px solid #dee2e6;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .form-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
+        }
+
+        /* Specific styling for Add New Task icon */
+        .form-title i.bi-plus-circle {
+            color: var(--primary-color) !important;
+            font-size: 1.2rem !important;
+        }
+
+        /* Enhanced Task History Header with Professional Grey Background */
+        .task-history-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 2px solid #dee2e6;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-history-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        /* Enhanced Task History icon styling */
+        .task-history-header .section-title {
+            color: var(--text-primary) !important;
+        }
+        
+        .task-history-header .section-title i {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 900 !important;
+        }
+
+        .task-history-header .section-title i.bi-clock-history {
+            color: var(--primary-color) !important;
+        }
+
+        /* Modern Voice-to-Text Section with Enhanced Borders */
         .voice-section {
             background: var(--background-card);
             border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
+            overflow: visible;
             position: relative;
             margin-bottom: 2rem;
+            min-height: 40vh;
+            height: auto;
         }
+
+
 
         .voice-section::before {
             content: '';
@@ -474,10 +623,16 @@
         }
 
         .voice-header {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
-            padding: 1.25rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid #dee2e6;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 8vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .voice-title {
@@ -494,6 +649,9 @@
         .voice-title i {
             color: var(--primary-color);
             font-size: 1.1rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         .voice-subtitle {
@@ -504,8 +662,13 @@
         }
 
         .voice-controls {
-            padding: 1.5rem;
+            padding: 2rem;
             text-align: center;
+            min-height: 30vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .voice-controls-header {
@@ -779,6 +942,20 @@
             opacity: 1 !important;
         }
 
+        /* Final override to ensure all section header icons are visible */
+        .section-title i,
+        .form-title i,
+        .card-title i,
+        .dashboard-card-header .card-title i,
+        .task-history-header .section-title i {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            font-family: "Bootstrap Icons", "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 400 !important;
+            color: var(--primary-color) !important;
+        }
+
         /* Override any conflicting styles */
         .voice-section i[class*="fas"],
         .voice-section i[class*="fa"] {
@@ -810,20 +987,62 @@
             text-align: center;
         }
 
-        /* Dashboard Cards */
+        /* Dashboard Cards with Enhanced Borders */
         .dashboard-card {
             background: var(--background-card);
             border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
             overflow: hidden;
             height: 100%;
+            position: relative;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         .dashboard-card-header {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid #dee2e6;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .dashboard-card-header .card-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-card-header .card-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         .dashboard-card-title {
@@ -839,24 +1058,36 @@
 
         /* Enhanced Google Calendar Integration - Compact */
         .dashboard-card:has(.task-summary-tile) {
-            max-height: 280px;
-            overflow-y: auto;
+            max-height: 320px;
+            overflow: auto;
         }
 
         /* Fallback for browsers that don't support :has() */
         .dashboard-card .task-summary-tile {
-            max-height: 280px;
-            overflow-y: auto;
+            max-height: 320px;
         }
 
         .dashboard-card .task-summary-tile {
             background: var(--background-card);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-sm);
-            padding: 0.4rem;
+            padding: 0.5rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: var(--shadow-sm);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card .task-summary-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         .dashboard-card .task-summary-tile:hover {
@@ -868,15 +1099,14 @@
         .dashboard-card .task-summary-tile h6 {
             color: var(--primary-color);
             font-weight: 600;
-            font-size: 0.7rem;
-            margin-bottom: 0.15rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
         }
 
         .dashboard-card .task-summary-tile p {
             color: var(--text-secondary);
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             margin-bottom: 0;
-            line-height: 1.3;
         }
 
         .btn-google {
@@ -884,11 +1114,11 @@
             border: none;
             color: white;
             font-weight: 600;
-            padding: 0.3rem 0.6rem;
+            padding: 0.4rem 0.8rem;
             border-radius: var(--border-radius-sm);
             transition: all 0.3s ease;
             box-shadow: 0 2px 6px 0 rgba(66,133,244,0.3);
-            font-size: 0.65rem;
+            font-size: 0.75rem;
         }
 
         .btn-google:hover {
@@ -942,8 +1172,8 @@
             background: var(--background-main);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-sm);
-            padding: 0.5rem;
-            margin-top: 0.4rem;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
         }
 
         #calendar-sync-fields .form-label {
@@ -967,217 +1197,438 @@
 
         /* Task selection for Google Calendar */
         
-        /* Compact Integration Sections */
-        .compact-integration .dashboard-card-header {
-            padding: 0.3rem 0.6rem;
-        }
-        
-        .compact-integration .dashboard-card-body {
-            padding: 0.4rem 0.6rem;
-            max-height: 240px;
-            overflow-y: auto;
-        }
-        
-        .compact-integration .task-summary-tile {
-            padding: 0.3rem;
-            margin-bottom: 0.2rem;
-        }
-        
-        .compact-integration .task-summary-tile h6 {
-            font-size: 0.65rem;
-            margin-bottom: 0.1rem;
-        }
-        
-        .compact-integration .task-summary-tile p {
-            font-size: 0.55rem;
-            line-height: 1.2;
-        }
-        
-        .compact-integration .btn-sm {
-            padding: 0.2rem 0.4rem;
-            font-size: 0.55rem;
-        }
-        
-        .compact-integration .badge {
-            font-size: 0.5rem;
-            padding: 0.15rem 0.3rem;
-        }
-        
-        .compact-integration .form-select,
-        .compact-integration .form-control {
-            font-size: 0.6rem;
-            padding: 0.2rem 0.3rem;
-        }
-        
-        .compact-integration .form-label {
-            font-size: 0.55rem;
-            margin-bottom: 0.15rem;
-        }
-        
-        .compact-integration .alert {
-            padding: 0.3rem 0.5rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .compact-integration .alert-heading {
-            font-size: 0.65rem;
-            margin-bottom: 0.15rem;
-        }
-        
-        .compact-integration .alert div {
-            font-size: 0.6rem;
-        }
-        
-        /* Professional styling for integration sections */
-        .compact-integration {
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-        }
-        
-        .compact-integration:hover {
-            box-shadow: var(--shadow);
-            transform: translateY(-1px);
-        }
-        
-        /* Compact premium overlay */
-        .compact-integration .premium-overlay-content {
-            padding: 1rem;
-        }
-        
-        .compact-integration .premium-overlay-content .premium-title {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .compact-integration .premium-overlay-content .premium-description {
-            font-size: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .compact-integration .premium-overlay-content .upgrade-btn {
-            font-size: 0.7rem;
-            padding: 0.4rem 0.8rem;
-        }
-        
-        /* Ensure consistent height for integration sections */
-        .compact-integration .dashboard-card-body {
-            min-height: 120px;
-            max-height: 320px;
-        }
-        
-        /* Special styling for Google Calendar Integration */
-        .compact-integration:has(.bi-calendar-event) .dashboard-card-body {
-            max-height: 380px;
-        }
-        
-        /* Compact form fields in integration sections */
-        .compact-integration #calendar-sync-fields {
-            padding: 0.6rem;
-            margin-top: 0.5rem;
-            background: var(--background-main);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
-        }
-        
-        .compact-integration #calendar-sync-fields .row {
-            margin: 0;
-        }
-        
-        .compact-integration #calendar-sync-fields .col-4,
-        .compact-integration #calendar-sync-fields .col-6 {
-            padding: 0 0.3rem;
-        }
-        
-        .compact-integration #calendar-sync-fields .form-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 0.3rem;
-        }
-        
-        .compact-integration #calendar-sync-fields .form-select,
-        .compact-integration #calendar-sync-fields .form-control {
-            font-size: 0.7rem;
-            padding: 0.4rem 0.6rem;
-            border: 1px solid var(--border-color);
-            background: var(--background-card);
-            color: var(--text-primary);
-        }
-        
-        .compact-integration #calendar-sync-fields .form-select:focus,
-        .compact-integration #calendar-sync-fields .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
-        }
-        
-        /* Calendar fields header styling */
-        .calendar-fields-header h6 {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.3rem;
-        }
-        
-        /* Animation for calendar sync fields */
-        #calendar-sync-fields {
-            animation: fadeInUp 0.3s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Compact Telegram Integration */
+        #telegramIntegrationSection {
+            height: auto;
+            overflow: visible;
         }
 
+        #telegramIntegrationSection .dashboard-card-body {
+            padding: 0.75rem;
+        }
+
+        #telegramIntegrationSection .task-summary-tile {
+            padding: 0.4rem;
+            margin-bottom: 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #telegramIntegrationSection .task-summary-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            z-index: 1;
+        }
+
+        #telegramIntegrationSection .task-summary-tile h6 {
+            font-size: 0.75rem;
+            margin-bottom: 0.15rem;
+        }
+
+        #telegramIntegrationSection .task-summary-tile p {
+            font-size: 0.65rem;
+        }
+
+        #telegramIntegrationSection .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+
+        #telegramIntegrationSection .badge {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.4rem;
+        }
+
+        /* Compact Google Calendar Integration */
+        #calendarIntegrationSection {
+            height: auto;
+            overflow: visible;
+            min-height: 200px;
+        }
+
+        #calendarIntegrationSection .dashboard-card-body {
+            padding: 0.75rem;
+        }
+
+        #calendarIntegrationSection .task-summary-tile {
+            padding: 0.4rem;
+            margin-bottom: 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #calendarIntegrationSection .task-summary-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            z-index: 1;
+        }
+
+        #calendarIntegrationSection .task-summary-tile h6 {
+            font-size: 0.75rem;
+            margin-bottom: 0.15rem;
+        }
+
+        #calendarIntegrationSection .task-summary-tile p {
+            font-size: 0.65rem;
+        }
+
+        #calendarIntegrationSection .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+
+        #calendarIntegrationSection .badge {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.4rem;
+        }
+
+        /* Ensure proper spacing for content */
+        .dashboard-card:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        /* Additional compact styling for integration sections */
+        .premium-feature-card {
+            height: auto;
+            overflow: visible;
+        }
+
+        .premium-feature-card .dashboard-card-body {
+            height: auto;
+            overflow: visible;
+        }
+
+        /* Special handling for voice sections - they need more height */
+        .voice-section.premium-feature-card {
+            max-height: 450px;
+            overflow: visible;
+        }
+
+        .voice-section.premium-feature-card .voice-controls {
+            overflow-y: auto;
+            max-height: 300px;
+            padding: 1rem;
+        }
+
+        .voice-section.premium-feature-card .voice-header {
+            padding: 1rem;
+        }
+
+        /* Ensure buttons are compact */
+        .premium-feature-card .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+
+        /* Compact form controls */
+        .premium-feature-card .form-control-sm,
+        .premium-feature-card .form-select-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+
+        /* Compact badges */
+        .premium-feature-card .badge {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.4rem;
+        }
+
+        /* Ensure All Icons Are Visible */
+        .fas, .fab, .far, .bi {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Enhanced Border Styling for All Sections */
+        .container-fluid {
+            border: 2px solid #dee2e6;
+            border-radius: 16px;
+            background: var(--background-card);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+
+        .row {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: rgba(248, 249, 250, 0.5);
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+
+        .col-12, .col-md-6 {
+            border: 1px solid #f8f9fa;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem;
+        }
+
+        /* Enhanced Form Controls */
+        .form-control, .form-select {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            border: 2px solid transparent;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Enhanced Alerts */
+        .alert {
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Modals */
+        .modal-content {
+            border: 2px solid #dee2e6;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 2px solid #dee2e6;
+            border-radius: 16px 16px 0 0;
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Pagination */
+        .pagination {
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            background: var(--background-card);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+        }
+
+        .page-link {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin: 0 0.1rem;
+        }
+
+
+
+        /* Enhanced Borders for Team Assignment and Recurring Task Sections */
+        .team-assignment-section,
+        .recurring-section {
+            background: var(--background-card);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .team-assignment-section:hover,
+        .recurring-section:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-assignment-header,
+        .form-section-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 8px 8px 0 0;
+            color: var(--text-primary);
+        }
+
+        .team-assignment-body,
+        .form-section-body {
+            padding: 0.75rem 1rem;
+            background: var(--background-card);
+        }
+
+        .team-assignment-section .form-check-label,
+        .recurring-section .form-check-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .team-assignment-section .info-text,
+        .recurring-section .info-text {
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Ensure Font Awesome icons are visible */
+        .fas, .fab, .far {
+            display: inline-block !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            text-rendering: auto !important;
+            -webkit-font-smoothing: antialiased !important;
+        }
+
+        .form-title i {
+            display: inline-block !important;
+            font-size: 1.2rem !important;
+            vertical-align: middle !important;
+        }
+
+        /* Enhanced icon visibility for all section headers */
+        .section-title i,
+        .form-title i,
+        .card-title i,
+        .dashboard-card-header .card-title i {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            font-size: 1.1rem !important;
+            color: var(--primary-color) !important;
+            margin-right: 0.5rem !important;
+            font-family: "Bootstrap Icons", "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome", Arial, sans-serif !important;
+            font-weight: 400 !important;
+        }
+
+        /* Specific icon enhancements for each section */
+        .form-title i.bi-plus-circle {
+            color: var(--primary-color) !important;
+            font-size: 1.2rem !important;
+        }
+
+        .section-title i.bi-clock-history {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+        }
+
+        .card-title i.bi-speedometer2 {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+        }
+
+        .card-title i.bi-calendar-event {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+        }
+
+        .card-title i.bi-activity {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+        }
+
+        .card-title i.bi-pie-chart {
+            color: var(--primary-color) !important;
+            font-size: 1.1rem !important;
+        }
+
+        /* Force icon display with !important */
+        i[class*="fas"], i[class*="bi"] {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Bootstrap Icons specific styling */
+        .bi {
+            display: inline-block !important;
+            font-family: "Bootstrap Icons" !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-variant: normal !important;
+            text-transform: none !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+        }
+
+        /* Responsive adjustments for section headers */
+        @media (max-width: 768px) {
+            .section-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .form-header {
+                padding: 1rem;
+            }
+
+            .task-history-header {
+                padding: 1rem;
+            }
+
+            .dashboard-card-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .voice-header {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .form-title {
+                font-size: 1rem;
+            }
+        }
+        
         /* Responsive adjustments for Google Calendar Integration */
         @media (max-width: 768px) {
             .dashboard-card:has(.task-summary-tile) {
-                max-height: 320px;
+                max-height: 400px;
             }
             
             .dashboard-card .task-summary-tile {
-                max-height: 320px;
-            }
-            
-            .compact-integration .dashboard-card-body {
-                max-height: 320px;
-            }
-            
-            .compact-integration:has(.bi-calendar-event) .dashboard-card-body {
-                max-height: 420px;
+                max-height: 400px;
             }
             
             #calendar-sync-fields .row {
                 flex-direction: column;
             }
             
-            #calendar-sync-fields .col-4 {
+            #calendar-sync-fields .col-6 {
                 width: 100%;
                 margin-bottom: 0.5rem;
             }
-            
-            .compact-integration #calendar-sync-fields {
-                padding: 0.5rem;
-                margin-top: 0.4rem;
+
+            #telegramIntegrationSection {
+                max-height: 320px;
             }
-            
-            .compact-integration #calendar-sync-fields .form-label {
-                font-size: 0.7rem;
-                margin-bottom: 0.25rem;
+
+            #calendarIntegrationSection {
+                max-height: 350px;
             }
-            
-            .compact-integration #calendar-sync-fields .form-select,
-            .compact-integration #calendar-sync-fields .form-control {
-                font-size: 0.75rem;
-                padding: 0.5rem 0.7rem;
+
+            .voice-section.premium-feature-card {
+                max-height: 500px;
+            }
+
+            .voice-section.premium-feature-card .voice-controls {
+                max-height: 350px;
             }
         }
         .task-tile.selected {
@@ -1841,13 +2292,17 @@
             }
         }
 
-        /* Task Grid (Tile Layout) - Compact Version */
+        /* Task Grid (Tile Layout) - Compact Version with Enhanced Borders */
         .task-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 0.75rem;
             padding: 1rem;
             overflow-y: visible;
+            background: var(--background-card);
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Responsive adjustments for even more compact layout */
@@ -1897,13 +2352,14 @@
 
         .task-tile {
             background: var(--background-card);
-            border: 1px solid var(--border-color);
+            border: 2px solid #dee2e6;
             border-radius: 10px;
             padding: 0.75rem;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .task-tile::before {
@@ -2023,6 +2479,7 @@
             line-height: 1.3;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             max-height: 2.6em;
@@ -2031,11 +2488,13 @@
 
         .task-tile-description.expanded {
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             max-height: 3.9em;
         }
 
         .task-tile-description.long {
             -webkit-line-clamp: 4;
+            line-clamp: 4;
             max-height: 5.2em;
         }
 
@@ -2529,10 +2988,7 @@
             overflow: hidden;
         }
 
-        .premium-feature-card.free-user {
-            opacity: 0.6;
-            pointer-events: none;
-        }
+
 
         .premium-overlay {
             position: absolute;
@@ -2551,10 +3007,7 @@
             transition: all 0.3s ease;
         }
 
-        .premium-feature-card.free-user .premium-overlay {
-            opacity: 1;
-            visibility: visible;
-        }
+
 
         .premium-overlay-content {
             text-align: center;
@@ -2664,9 +3117,10 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         /* Language Selector Professional Styling */
@@ -2695,14 +3149,26 @@
             background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
         }
 
-        /* Task History Styles */
+        /* Task History Styles with Enhanced Borders */
         .task-history {
             background: var(--background-card);
             border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
             overflow: visible;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .task-history::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         .task-history:hover {
@@ -3205,9 +3671,22 @@
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         .summary-card:hover {
@@ -3228,17 +3707,29 @@
             font-weight: 500;
         }
 
-        /* Compact & Attractive Form */
+        /* Compact & Attractive Form with Enhanced Borders */
         .task-form-compact {
             background: var(--background-card);
             border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
             overflow: hidden;
+            position: relative;
+        }
+
+        .task-form-compact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            z-index: 1;
         }
 
         .form-header {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.15) 0%, rgba(186, 85, 211, 0.1) 100%);
             padding: 0.75rem 1.25rem;
             border-bottom: 1px solid var(--border-color);
         }
@@ -3250,6 +3741,15 @@
             margin: 0;
             display: flex;
             align-items: center;
+        }
+
+        .form-title i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            margin-right: 0.5rem;
         }
 
         .form-subtitle {
@@ -3341,13 +3841,13 @@
         }
 
         #taskDescription:focus {
-            min-height: 120px;
+            min-height: 80px;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         #taskDescription.expanded {
-            min-height: 150px;
-            max-height: 300px;
+            min-height: 100px;
+            max-height: 200px;
         }
 
         .description-helper {
@@ -3670,94 +4170,15 @@
             background: var(--text-secondary);
         }
 
-        /* Enhanced Footer */
-        .footer {
-            background: #000000 !important;
-            color: #f3f4f6 !important;
-            border-top: 3px solid var(--primary-color) !important;
-            margin-top: 4rem !important;
-        }
-        
-        /* Ensure proper spacing for integration sections */
-        .dashboard-card.premium-feature-card {
-            margin-bottom: 1.5rem;
-        }
-        
-        /* Compact integration sections */
-        .compact-integration {
-            margin-bottom: 1rem !important;
-        }
-        
-        .compact-integration .dashboard-card-header {
-            padding: 0.5rem 1rem !important;
-        }
-        
-        .compact-integration .dashboard-card-body {
-            padding: 0.5rem 1rem !important;
-        }
-        
-        .compact-tile {
-            padding: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-        
-        .compact-tile h6 {
-            font-size: 0.8rem !important;
-            margin-bottom: 0.25rem !important;
-        }
-        
-        .compact-tile p {
-            font-size: 0.7rem !important;
-            margin-bottom: 0.25rem !important;
-        }
-        
-        .compact-tile .btn {
-            font-size: 0.7rem !important;
-            padding: 0.25rem 0.5rem !important;
-        }
-        
-        /* Add extra spacing before footer */
-        .main-content {
-            min-height: calc(100vh - 200px);
-            padding-bottom: 2rem;
-        }
-        
-        /* Ensure proper spacing for integration sections */
-        .dashboard-card.compact-integration {
-            margin-bottom: 1rem;
-        }
-        
-        /* Professional scrollbar for integration sections */
-        .compact-integration .dashboard-card-body::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .compact-integration .dashboard-card-body::-webkit-scrollbar-track {
-            background: var(--background-main);
-            border-radius: 2px;
-        }
-        
-        .compact-integration .dashboard-card-body::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 2px;
-        }
-        
-        .compact-integration .dashboard-card-body::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-color);
+
+
+        /* Premium Banner Spacing Fix */
+        .premium-user main.container-fluid {
+            padding-top: 112px !important; /* 70px + 32px banner height + 10px gap */
         }
 
-        .footer h5, .footer h6 {
-            color: #ffffff !important;
-            font-weight: 600 !important;
-        }
-
-        .footer p, .footer a {
-            color: #94a3b8 !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .footer a:hover {
-            color: #6366f1 !important;
+        body:not(.premium-user) main.container-fluid {
+            padding-top: 70px !important;
         }
 
         /* User Section Styles */
@@ -4272,14 +4693,7 @@
             line-height: 1.4 !important;
         }
 
-        /* Footer Headings */
-        .footer-title {
-            font-size: 1rem !important;
-            font-weight: 600 !important;
-            color: #ffffff !important;
-            margin-bottom: 0.75rem !important;
-            line-height: 1.4 !important;
-        }
+
 
         /* Standardized Body Text */
         .body-text-primary {
@@ -4619,6 +5033,697 @@
 
         /* --- END STANDARDIZED TYPOGRAPHY SYSTEM --- */
 
+        /* Recently Updated Task Highlight */
+        .task-tile.recently-updated {
+            border: 3px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(40, 167, 69, 0.05) 100%);
+            animation: taskUpdatedPulse 2s ease-in-out;
+        }
+        
+        .task-tile.recently-updated::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #28a745, #20c997, #28a745);
+            border-radius: 14px;
+            z-index: -1;
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes taskUpdatedPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Advanced Professional Navigation */
+        .advanced-navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .advanced-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 0.5rem 0;
+        }
+
+        /* Enhanced Brand */
+        .advanced-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-brand:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-brand:hover .brand-icon::before {
+            left: 100%;
+        }
+
+        .brand-icon-inner {
+            color: white;
+            font-size: 1.5rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Advanced Navigation Menu */
+        .advanced-nav-menu {
+            gap: 0.5rem;
+        }
+
+        .advanced-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem !important;
+            font-weight: 600;
+            color: #475569 !important;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .advanced-nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .advanced-nav-link:hover::before,
+        .advanced-nav-link.active::before {
+            opacity: 1;
+        }
+
+        .advanced-nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        .advanced-nav-link.active {
+            color: #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .advanced-nav-link i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .advanced-nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Premium Link Styling */
+        .premium-link {
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* Advanced CTA Button */
+        .advanced-cta-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .advanced-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-cta-btn:hover .btn-glow {
+            left: 100%;
+        }
+
+        /* Advanced Theme Toggle */
+        .advanced-theme-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.75rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .advanced-theme-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            transform: translateY(-2px);
+            color: #667eea;
+        }
+
+        .theme-glow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-theme-btn:hover .theme-glow {
+            left: 100%;
+        }
+
+        /* Advanced Mobile Toggle */
+        .advanced-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .advanced-toggler:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        }
+
+        .toggler-icon {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #667eea;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(2) {
+            opacity: 0;
+        }
+
+        .advanced-toggler[aria-expanded="true"] .toggler-icon:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Navigation Progress Bar */
+        .nav-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Dark Theme Support */
+        [data-bs-theme="dark"] .advanced-navbar {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        [data-bs-theme="dark"] .advanced-navbar.scrolled {
+            background: rgba(15, 23, 42, 0.98) !important;
+        }
+
+        [data-bs-theme="dark"] .brand-name {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        [data-bs-theme="dark"] .brand-tagline {
+            color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        [data-bs-theme="dark"] .advanced-nav-link:hover,
+        [data-bs-theme="dark"] .advanced-nav-link.active {
+            color: #667eea !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 991.98px) {
+            .advanced-nav-menu {
+                margin: 1rem 0;
+                gap: 0.25rem;
+            }
+
+            .advanced-nav-link {
+                padding: 1rem !important;
+                border-radius: 8px;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .advanced-brand {
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Footer enhanced visibility - Proper theme support */
+        .footer {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* Ensure footer stays black in both themes - Override any theme changes */
+        [data-bs-theme="light"] .footer,
+        [data-bs-theme="dark"] .footer,
+        .footer.bg-dark,
+        footer.bg-dark {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+        }
+
+        /* Additional specificity to override Bootstrap theme classes */
+        footer.bg-dark,
+        .footer.bg-dark,
+        [data-bs-theme="light"] footer.bg-dark,
+        [data-bs-theme="dark"] footer.bg-dark {
+            background: #000000 !important;
+        }
+
+        /* Force footer visibility in all themes */
+        .footer,
+        [data-bs-theme="light"] .footer,
+        [data-bs-theme="dark"] .footer {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .footer h5, .footer h6 {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .footer h5 {
+            font-size: 1.1rem !important;
+            font-weight: bold !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .footer h6 {
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.3px !important;
+        }
+
+        .footer p {
+            color: #e2e8f0 !important;
+            line-height: 1.6 !important;
+            font-weight: 400 !important;
+        }
+
+        .footer .text-muted {
+            color: #94a3b8 !important;
+            font-weight: 400 !important;
+        }
+
+        /* Enhanced text visibility for all themes */
+        [data-bs-theme="light"] .footer h5,
+        [data-bs-theme="light"] .footer h6,
+        [data-bs-theme="dark"] .footer h5,
+        [data-bs-theme="dark"] .footer h6 {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        [data-bs-theme="light"] .footer p,
+        [data-bs-theme="dark"] .footer p {
+            color: #e2e8f0 !important;
+        }
+
+        [data-bs-theme="light"] .footer .text-muted,
+        [data-bs-theme="dark"] .footer .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        .footer .opacity-75 {
+            color: #e2e8f0 !important;
+            opacity: 0.9 !important;
+            font-weight: 400 !important;
+        }
+
+        .footer small {
+            color: #64748b !important;
+            font-weight: 400 !important;
+        }
+
+        .footer .opacity-25 {
+            opacity: 0.3 !important;
+        }
+
+        .footer .border-light {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .footer hr {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            opacity: 0.5 !important;
+        }
+
+        .footer a {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .footer a:hover {
+            color: #6366f1 !important;
+            transform: translateX(3px) !important;
+        }
+
+        .footer .footer-link {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+        }
+
+        .footer .footer-link:hover {
+            color: #6366f1 !important;
+            transform: translateX(3px) !important;
+        }
+
+        /* Enhanced link visibility for all themes */
+        [data-bs-theme="light"] .footer a,
+        [data-bs-theme="light"] .footer .footer-link,
+        [data-bs-theme="dark"] .footer a,
+        [data-bs-theme="dark"] .footer .footer-link {
+            color: #94a3b8 !important;
+            text-decoration: none !important;
+        }
+
+        [data-bs-theme="light"] .footer a:hover,
+        [data-bs-theme="light"] .footer .footer-link:hover,
+        [data-bs-theme="dark"] .footer a:hover,
+        [data-bs-theme="dark"] .footer .footer-link:hover {
+            color: #6366f1 !important;
+            transform: translateX(3px) !important;
+            text-decoration: none !important;
+        }
+
+        /* Social media icons styling */
+        .footer .d-flex.gap-3 a {
+            color: #94a3b8 !important;
+            transition: all 0.3s ease !important;
+            opacity: 0.8 !important;
+        }
+
+        .footer .d-flex.gap-3 a:hover {
+            color: #6366f1 !important;
+            opacity: 1 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Enhanced social media icons for all themes */
+        [data-bs-theme="light"] .footer .d-flex.gap-3 a,
+        [data-bs-theme="dark"] .footer .d-flex.gap-3 a {
+            color: #94a3b8 !important;
+            opacity: 0.8 !important;
+        }
+
+        [data-bs-theme="light"] .footer .d-flex.gap-3 a:hover,
+        [data-bs-theme="dark"] .footer .d-flex.gap-3 a:hover {
+            color: #6366f1 !important;
+            opacity: 1 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Button styling in footer */
+        .footer .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            color: #ffffff !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .footer .btn-outline-light:hover {
+            background-color: #6366f1 !important;
+            border-color: #6366f1 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .footer .btn-outline-primary {
+            border-color: rgba(99, 102, 241, 0.3) !important;
+            color: #6366f1 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .footer .btn-outline-primary:hover {
+            background-color: #6366f1 !important;
+            border-color: #6366f1 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Enhanced button visibility for all themes */
+        [data-bs-theme="light"] .footer .btn-outline-primary,
+        [data-bs-theme="dark"] .footer .btn-outline-primary {
+            border-color: rgba(99, 102, 241, 0.5) !important;
+            color: #6366f1 !important;
+            background-color: transparent !important;
+        }
+
+        [data-bs-theme="light"] .footer .btn-outline-primary:hover,
+        [data-bs-theme="dark"] .footer .btn-outline-primary:hover {
+            background-color: #6366f1 !important;
+            border-color: #6366f1 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+        }
+
+        .footer .border-light {
+            border-color: var(--bs-light) !important;
+        }
+
+        .footer .opacity-25 {
+            opacity: 0.25 !important;
+        }
+
+        /* Additional footer visibility enhancements */
+        .footer {
+            margin-top: 3rem !important;
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
+
+        /* Ensure footer content is always visible */
+        .footer .container {
+            position: relative;
+            z-index: 1001;
+        }
+
+        /* Force footer to stay at bottom */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Ensure main content doesn't push footer out of view */
+        main.container-fluid {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+        }
+
+        /* Enhanced contrast for better readability */
+        .footer .text-primary {
+            color: #6366f1 !important;
+        }
+
+        .footer .border-secondary {
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Ensure proper spacing */
+        .footer .py-5 {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        /* Final override to ensure footer visibility in all scenarios */
+        footer.footer,
+        .footer.footer,
+        footer[class*="footer"],
+        .footer[class*="footer"] {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 1000 !important;
+            width: 100% !important;
+            min-height: auto !important;
+        }
+
+        /* Ensure all footer text is visible */
+        footer *,
+        .footer * {
+            color: inherit !important;
+        }
+
+        /* Override any potential Bootstrap theme conflicts */
+        [data-bs-theme] footer,
+        [data-bs-theme] .footer {
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+        }
+
+        /* Emergency footer visibility fix */
+        footer,
+        .footer {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 9999 !important;
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border-top: 3px solid var(--primary-color) !important;
+            margin-top: 2rem !important;
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
+
+        /* Ensure footer content is visible */
+        footer *,
+        .footer * {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
     </style>
 </head>
 <body>
@@ -4627,27 +5732,78 @@
     <div class="floating-bg-element"></div>
     <div class="floating-bg-element"></div>
 
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="index.html" id="brandHomeLink">
-                <i class="bi bi-check2-square me-2"></i>
-                <span>QuickNotes AI</span>
+    <!-- Advanced Professional Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top advanced-navbar">
+        <div class="container-fluid px-4">
+            <!-- Enhanced Brand -->
+            <a class="navbar-brand advanced-brand" href="index.html">
+                <div class="brand-icon">
+                    <div class="brand-icon-inner">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">QuickNotes AI</span>
+                    <span class="brand-tagline">Intelligent Productivity</span>
+                </div>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler advanced-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
             </button>
+            
+            <!-- Navigation Menu -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="task.html">Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="learn.html">Learn</a></li>
-                    <li class="nav-item"><a class="nav-link" href="premium.html">Premium</a></li>
-                    <li class="nav-item" id="teamNavItem"><a class="nav-link" href="team.html">Team</a></li>
-                    <li class="nav-item" id="teamDashboardNavItem"><a class="nav-link" href="team-dashboard.html">Team-Dashboard</a></li>
+                <ul class="navbar-nav mx-auto advanced-nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="index.html">
+                            <i class="bi bi-house-door-fill me-2"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link active" href="task.html">
+                            <i class="bi bi-check2-square me-2"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="dashboard.html">
+                            <i class="bi bi-graph-up me-2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link" href="learn.html">
+                            <i class="bi bi-mortarboard-fill me-2"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link advanced-nav-link premium-link" href="premium.html">
+                            <i class="bi bi-star-fill me-2"></i>
+                            <span>Premium</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamNavItem">
+                        <a class="nav-link advanced-nav-link" href="team.html">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span>Team</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="teamDashboardNavItem">
+                        <a class="nav-link advanced-nav-link" href="team-dashboard.html">
+                            <i class="bi bi-kanban me-2"></i>
+                            <span>Team Dashboard</span>
+                        </a>
+                    </li>
                 </ul>
-                <ul class="navbar-nav">
+                
+                <!-- Right Side Actions -->
+                <ul class="navbar-nav advanced-nav-actions">
                     <!-- User Welcome and Sign Out -->
                     <li class="nav-item d-flex align-items-center me-3" id="userSection" style="display: none;">
                         <button id="signOutBtn" class="btn btn-outline-danger btn-sm me-2" title="Sign Out">
@@ -4656,13 +5812,17 @@
                         <span class="navbar-text" id="userWelcome">Welcome User</span>
                     </li>
                     <li class="nav-item">
-                        <button id="themeToggle" class="btn btn-outline-primary btn-sm" title="Toggle theme">
+                        <button id="themeToggle" class="btn advanced-theme-btn" title="Toggle theme">
                             <i class="bi bi-moon-fill" id="themeIcon"></i>
+                            <div class="theme-glow"></div>
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
+        
+        <!-- Navigation Progress Bar -->
+        <div class="nav-progress-bar"></div>
     </nav>
 
     <!-- Premium Banner (Only for Premium Users) -->
@@ -4673,7 +5833,9 @@
                     <i class="fas fa-crown"></i>
                 </div>
                 <div class="premium-banner-text">
-                    <h5 class="premium-banner-title">Premium User – Enjoy all advanced features</h5>
+                    <h5 class="premium-banner-title">
+                        <i class="fas fa-crown me-2"></i>Premium User – Enjoy all advanced features
+                    </h5>
                 </div>
                 <div class="premium-banner-badge">
                     <span class="badge">
@@ -4685,21 +5847,22 @@
     </div>
 
     <!-- Main Content -->
-    <main class="container-fluid flex-grow-1 main-content" style="padding-top: 70px;">
-        <div class="row g-3">
+    <main class="container-fluid flex-grow-1" style="padding-top: 0;">
+        <div class="row g-0">
             <div class="col-12 col-md-6">
                 <!-- Add Task (Compact & Attractive) - Reduced Height -->
-                <div class="task-form-compact mb-2" style="height: auto; min-height: 40vh; overflow-y: visible;">
-                    <div class="form-header">
+                <div class="task-form-compact" style="height: auto; min-height: 40vh; overflow-y: visible;">
+                    <div class="form-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px; padding: 1.2rem; margin-bottom: 0; box-shadow: 0 6px 20px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                                            <h5 class="form-title">
-                                <i class="fas fa-pencil-alt me-2 text-primary"></i>Add New Task
-                            </h5>
-                            <div class="form-subtitle">Create and organize your tasks efficiently</div>
+                                <h5 class="form-title" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                                    <i class="bi bi-plus-circle me-2" style="display: inline-block !important; font-size: 1.2rem; color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Add New Task
+                                </h5>
+                                <div class="form-subtitle" style="font-size: 0.5rem; line-height: 1.1; color: #34495e; margin-bottom: 0; text-shadow: 0 1px 2px rgba(255,255,255,0.8); position: relative; z-index: 2; font-weight: 500;">Create and organize your tasks efficiently</div>
                             </div>
-
                         </div>
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                        <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                     </div>
                     <form id="taskForm">
                         <!-- Primary Task Info -->
@@ -4707,13 +5870,13 @@
                             <div class="form-row">
                                 <div class="form-group main-title">
                                     <label for="taskTitle" class="form-label">
-                                        <i class="fas fa-pencil-alt me-1"></i>Task Title
+                                        <i class="bi bi-pencil me-1"></i>Task Title
                                     </label>
                                     <textarea class="form-control" id="taskTitle" placeholder="Enter task title... (Supports long voice input)" rows="1" style="min-height: 45px; resize: vertical; font-size: 0.9rem; line-height: 1.3;" required></textarea>
                                 </div>
                                 <div class="form-group priority-group">
                                     <label for="taskPriority" class="form-label">
-                                        <i class="fas fa-flag me-1"></i>Priority
+                                        <i class="bi bi-flag me-1"></i>Priority
                                     </label>
                                     <select class="form-control" id="taskPriority">
                                         <option value="low">Low</option>
@@ -4747,7 +5910,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="taskStatus" class="form-label">
-                                        <i class="fas fa-circle me-1"></i>Status
+                                        <i class="bi bi-circle-half me-1"></i>Status
                                     </label>
                                     <select class="form-control" id="taskStatus">
                                         <option value="pending" selected>Pending</option>
@@ -4776,30 +5939,34 @@
                                 <label for="taskDescription" class="form-label">
                                     <i class="bi bi-text-paragraph me-1"></i>Description
                                 </label>
-                                <textarea class="form-control" id="taskDescription" rows="2" placeholder="Add task description... (Supports long voice input)" style="min-height: 60px; resize: vertical; font-size: 0.85rem; line-height: 1.4;"></textarea>
+                                <textarea class="form-control" id="taskDescription" rows="1" placeholder="Add task description... (Supports long voice input)" style="min-height: 40px; max-height: 80px; resize: vertical; font-size: 0.85rem; line-height: 1.4;"></textarea>
                       
                             </div>
                         </div>
 
                         <!-- Team Assignment Section (Premium Only) -->
-                        <div id="teamAssignmentSection" class="form-section team-assignment-section task-option-section">
-                            <div class="team-assignment-header form-section-header">
+                        <div id="teamAssignmentSection" class="form-section team-assignment-section task-option-section premium-feature-card" style="position: relative;">
+                            <div class="team-assignment-header form-section-header d-flex align-items-center justify-content-between">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="assignToTeam">
                                     <label class="form-check-label" for="assignToTeam">
-                                        <i class="fas fa-users me-2"></i>Assign to Team
+                                        <i class="bi bi-people me-2"></i>Assign to Team
                                     </label>
                                 </div>
-                                <small class="info-text">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    Check this to create a team task that will show a "Team Task" label and team name
-                                </small>
+                                <span class="badge bg-warning text-dark ms-2">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
                             </div>
+                            <small class="info-text" style="font-size: 0.4rem; line-height: 1.0;">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Check this to create a team task that will show a "TEAM" label and team name
+                            </small>
+
                             <div class="team-assignment-body" id="teamAssignmentOptions" style="display: none; transition: all 0.3s ease;">
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="teamSelect" class="form-label">
-                                            <i class="fas fa-layer-group me-1"></i>Select Team
+                                            <i class="bi bi-diagram-3 me-1"></i>Select Team
                                         </label>
                                         <select class="form-control" id="teamSelect" name="teamId">
                                             <option value="">Select a team...</option>
@@ -4807,7 +5974,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="memberSelect" class="form-label">
-                                            <i class="fas fa-user me-1"></i>Assign to Member
+                                            <i class="bi bi-person me-1"></i>Assign to Member
                                         </label>
                                         <select class="form-control" id="memberSelect" name="assignedTo" disabled>
                                             <option value="">Select a team first...</option>
@@ -4816,9 +5983,9 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col-12">
-                                        <div class="alert alert-info py-2 mb-0">
-                                            <small>
-                                                <i class="fas fa-info-circle me-1"></i>
+                                        <div class="alert alert-info py-1 mb-0" style="display: flex; align-items: center; justify-content: center;">
+                                            <small style="white-space: nowrap;">
+                                                <i class="bi bi-info-circle me-1"></i>
                                                 <strong>Team Task:</strong> This task will be visible to the entire team and assigned to the selected member.
                                             </small>
                                         </div>
@@ -4829,42 +5996,54 @@
                         </div>
 
                         <!-- Recurring Task Options -->
-                        <div id="recurringTaskSection" class="form-section recurring-section task-option-section">
-                            <div class="form-section-header">
+                        <div id="recurringTaskSection" class="form-section recurring-section task-option-section premium-feature-card" style="position: relative;">
+                            <div class="form-section-header d-flex align-items-center justify-content-between">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="makeRecurring">
                                     <label class="form-check-label" for="makeRecurring">
                                         <i class="bi bi-arrow-repeat me-2"></i>Make this task recurring
                                     </label>
                                 </div>
+                                <span class="badge bg-warning text-dark ms-2">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </span>
                             </div>
+                            <small class="info-text" style="font-size: 0.4rem; line-height: 1.0;">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Check this to create a recurring task that will repeat based on the selected frequency
+                            </small>
+
                             <div class="form-section-body" id="recurringOptions" style="display: none;">
                                 <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="recurrenceType" class="form-label">Frequency</label>
+                                    <div class="form-group" style="flex: 0 0 30%;">
+                                        <label for="recurrenceType" class="form-label">
+                                            <i class="bi bi-arrow-repeat me-1"></i>Frequency
+                                        </label>
                                         <select class="form-control" id="recurrenceType">
                                             <option value="daily">Daily</option>
                                             <option value="weekly">Weekly</option>
                                             <option value="monthly">Monthly</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="recurrenceTime" class="form-label">Repeat Time</label>
+                                    <div class="form-group" style="flex: 0 0 35%;">
+                                        <label for="recurrenceTime" class="form-label">
+                                            <i class="bi bi-clock me-1"></i>Repeat Time
+                                        </label>
                                         <input type="time" class="form-control" id="recurrenceTime" 
                                                value="09:00">
                                     </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="recurrenceUntilDate" class="form-label">Until Date</label>
+                                    <div class="form-group" style="flex: 0 0 35%;">
+                                        <label for="recurrenceUntilDate" class="form-label">
+                                            <i class="bi bi-calendar-date me-1"></i>Until Date
+                                        </label>
                                         <input type="date" class="form-control" id="recurrenceUntilDate" 
                                                min="">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-12">
-                                        <div class="alert alert-info py-2 mb-0">
-                                            <small>
+                                        <div class="alert alert-info py-1 mb-0" style="display: flex; align-items: center; justify-content: center;">
+                                            <small style="white-space: nowrap;">
                                                 <i class="bi bi-info-circle me-1"></i>
                                                 <strong>Next occurrence:</strong> <span id="nextOccurrenceDisplay">Not set</span>
                                             </small>
@@ -4902,14 +6081,16 @@
             <div class="col-12 col-md-6">
                 
                 <!-- English Voice-to-Task Section -->
-                <div class="voice-section mb-3" id="englishVoiceSection">
-                    <div class="voice-header">
+                <div class="voice-section" id="englishVoiceSection">
+                    <div class="voice-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px; padding: 1.2rem; margin-bottom: 0; box-shadow: 0 6px 20px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);">
                         <div class="d-flex align-items-center justify-content-between mb-1">
-                            <h5 class="voice-title mb-0">
-                                <i class="fas fa-microphone me-2"></i>English Voice-to-Task
+                            <h5 class="voice-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-microphone me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>English Voice-to-Task
                             </h5>
                         </div>
-                        <p class="voice-subtitle">Speak in English to instantly create tasks with smart field detection</p>
+                        <p class="voice-subtitle" style="font-size: 0.6rem; line-height: 1.3; text-align: left; color: #34495e; margin-bottom: 0; text-shadow: 0 1px 2px rgba(255,255,255,0.8); position: relative; z-index: 2; font-weight: 500;">Speak in English to instantly create tasks with smart field detection</p>
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                        <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                     </div>
                     
                     <div class="voice-controls">
@@ -4921,7 +6102,7 @@
                                 <i class="fas fa-question-circle"></i>
                             </button>
                         </div>
-                        <div class="voice-status" id="voiceStatus">
+                        <div class="voice-status" id="voiceStatus" style="font-size: 0.5rem; line-height: 1.1;">
                             <i class="fas fa-info-circle me-2"></i>Click the microphone to start recording
                         </div>
                         <div class="voice-transcript" id="voiceTranscript" style="display: none;">
@@ -4936,39 +6117,29 @@
                 </div>
 
                 <!-- Multilingual Voice-to-Task Section (Premium Only) -->
-                <div class="voice-section mb-2 premium-feature-card compact" id="multilingualVoiceSection" style="height: auto; min-height: 25vh; overflow-y: visible; padding: 0.5rem;">
-                    <div class="voice-header">
+                <div class="voice-section mb-3 premium-feature-card" id="multilingualVoiceSection">
+                    <div class="voice-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 6px 20px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);">
                         <div class="d-flex align-items-center justify-content-between mb-1">
-                            <h5 class="voice-title mb-0">
-                                <i class="fas fa-globe-americas me-2"></i>Multilingual Voice-to-Task
+                            <h5 class="voice-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-globe-americas me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Multilingual Voice-to-Task
                             </h5>
-                            <span class="badge bg-warning text-dark">
+                            <span class="badge bg-warning text-dark" style="position: relative; z-index: 2;">
                                 <i class="fas fa-crown me-1"></i>Premium
                             </span>
                         </div>
-                        <p class="voice-subtitle">Speak in your native language and create tasks instantly</p>
+                        <p class="voice-subtitle" style="font-size: 0.5rem; line-height: 1.1; text-align: left; color: #34495e; margin-bottom: 0; text-shadow: 0 1px 2px rgba(255,255,255,0.8); position: relative; z-index: 2; font-weight: 500;">Speak in your native language and create tasks instantly</p>
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                        <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                     </div>
                     
-                    <!-- Premium Overlay for Free Users -->
-                    <div class="premium-overlay" id="multilingualPremiumOverlay">
-                        <div class="premium-overlay-content">
-                            <div class="premium-icon">
-                                <i class="fas fa-crown"></i>
-                            </div>
-                            <h5 class="premium-title">Premium Feature</h5>
-                            <p class="premium-description">Create tasks in 30+ languages with voice recognition</p>
-                            <button class="btn btn-warning btn-lg upgrade-btn" onclick="upgradeToPremium()">
-                                <i class="fas fa-crown me-2"></i>Upgrade to Premium
-                            </button>
-                        </div>
-                    </div>
+
                     
                     <!-- Language Selector -->
-                    <div class="language-selector mb-3">
-                        <label for="voiceLanguage" class="form-label fw-semibold" style="font-size: 1rem;">
+                    <div class="language-selector mb-2">
+                        <label for="voiceLanguage" class="form-label fw-semibold" style="font-size: 0.9rem;">
                             <i class="fas fa-language me-2"></i>Select Language
                         </label>
-                        <select class="form-select" id="voiceLanguage" style="font-size: 0.9rem;">
+                        <select class="form-select" id="voiceLanguage" style="font-size: 0.85rem;">
                             <option value="en-US">🇺🇸 English (US)</option>
                             <option value="en-GB">🇬🇧 English (UK)</option>
                             
@@ -5024,26 +6195,26 @@
                                 <i class="fas fa-question-circle"></i>
                             </button>
                         </div>
-                        <div class="voice-status" id="multilingualVoiceStatus" style="font-size: 0.85rem;">
+                        <div class="voice-status" id="multilingualVoiceStatus" style="font-size: 0.5rem; line-height: 1.1;">
                             <i class="fas fa-info-circle me-2"></i>Click the microphone to start recording
                         </div>
                         <div class="voice-transcript" id="multilingualVoiceTranscript" style="display: none;">
                             <div class="transcript-header">
-                                <strong style="font-size: 0.9rem;"><i class="fas fa-file-alt me-2"></i>Transcribed Text (will be added to form):</strong>
+                                <strong style="font-size: 0.8rem;"><i class="fas fa-file-alt me-2"></i>Transcribed Text:</strong>
                                 <div class="transcript-actions">
-                                    <button class="btn btn-sm btn-outline-primary" id="editTranscriptBtn" style="font-size: 0.8rem;">
+                                    <button class="btn btn-sm btn-outline-primary" id="editTranscriptBtn" style="font-size: 0.7rem; padding: 0.2rem 0.4rem;">
                                         <i class="fas fa-edit me-1"></i>Edit
                                     </button>
-                                    <button class="btn btn-sm btn-success" id="saveTranscriptBtn" style="font-size: 0.8rem;">
+                                    <button class="btn btn-sm btn-success" id="saveTranscriptBtn" style="font-size: 0.7rem; padding: 0.2rem 0.4rem;">
                                         <i class="fas fa-arrow-down me-1"></i>Add to Form
                                     </button>
-                                    <button class="btn btn-sm btn-outline-secondary" id="retryTranscriptBtn" style="font-size: 0.8rem;">
+                                    <button class="btn btn-sm btn-outline-secondary" id="retryTranscriptBtn" style="font-size: 0.7rem; padding: 0.2rem 0.4rem;">
                                         <i class="fas fa-redo me-1"></i>Retry
                                     </button>
                                 </div>
                             </div>
                             <div class="transcript-content">
-                                <textarea class="form-control" id="transcriptTextArea" rows="3" placeholder="Transcribed text will appear here..." style="font-size: 0.9rem;"></textarea>
+                                <textarea class="form-control" id="transcriptTextArea" rows="2" placeholder="Transcribed text will appear here..." style="font-size: 0.8rem;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -5095,6 +6266,7 @@
 
     <!-- Task Summary Tiles - Horizontal Layout -->
     <div class="task-summary-section mb-3">
+        
         <div class="row g-2">
             <div class="col-6 col-md-3">
                 <div class="summary-card">
@@ -5125,8 +6297,12 @@
 
     <!-- Task History Section -->
     <div class="task-history mb-4">
-        <div class="task-history-header">
-                                    <h5 class="section-title">Task History</h5>
+        <div class="task-history-header" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 6px 20px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);">
+            <h5 class="section-title" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                <i class="bi bi-clock-history me-2" style="color: #e74c3c; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Task History
+            </h5>
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+            <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
             <div class="task-filters">
                 <select class="filter-select" id="filterPriority">
                     <option value="">All Priorities</option>
@@ -5164,6 +6340,9 @@
                 <button class="btn btn-sm btn-outline-danger" id="clearAllDataBtn" title="Clear All Tasks">
                     <i class="bi bi-trash"></i>
                 </button>
+                <button class="btn btn-sm btn-outline-warning" id="clearHighlightsBtn" title="Clear Task Highlights" onclick="clearAllTaskHighlights()">
+                    <i class="bi bi-highlighter"></i>
+                </button>
             </div>
         </div>
         <div class="task-grid" id="taskGrid">
@@ -5185,10 +6364,12 @@
         <div class="col-12 col-md-6">
             <!-- Task Progress Overview -->
             <div class="dashboard-card mb-3 task-progress-card">
-                <div class="dashboard-card-header py-2">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-speedometer2 me-2"></i>Task Progress Overview
+                <div class="dashboard-card-header py-2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px 12px 0 0; padding: 1.2rem; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); border-bottom: none;">
+                    <h6 class="card-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-speedometer2 me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Task Progress Overview
                     </h6>
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                 </div>
                 <div class="dashboard-card-body py-2">
                     <div class="progress-overview">
@@ -5286,39 +6467,27 @@
             </div>
 
             <!-- Google Calendar Integration -->
-            <div class="dashboard-card mb-2 premium-feature-card compact-integration">
-                <div class="dashboard-card-header py-0">
+            <div class="dashboard-card mb-2 premium-feature-card" id="calendarIntegrationSection">
+                <div class="dashboard-card-header py-2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px 12px 0 0; padding: 1.2rem; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); border-bottom: none;">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="card-title mb-0">
-                            <i class="bi bi-calendar-event me-2"></i>Google Calendar Integration
+                        <h6 class="card-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                            <i class="bi bi-calendar-event me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Google Calendar Integration
                         </h6>
-                        <span class="premium-badge">
-                            <i class="fas fa-star me-1"></i>Premium
+                        <span class="badge bg-warning text-dark" style="position: relative; z-index: 2;">
+                            <i class="fas fa-crown me-1"></i>Premium
                         </span>
                     </div>
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                 </div>
-                <!-- Premium Overlay for Free Users -->
-                <div class="premium-overlay">
-                    <div class="premium-overlay-content">
-                        <div class="premium-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="premium-title">Premium Feature</div>
-                        <div class="premium-description">
-                            Connect your tasks to Google Calendar for seamless scheduling and reminders.
-                        </div>
-                        <button class="upgrade-btn" onclick="upgradeToPremium()">
-                            <i class="fas fa-arrow-up me-2"></i>Upgrade to Premium
-                        </button>
-                    </div>
-                </div>
-                <div class="dashboard-card-body py-0">
+                <div class="dashboard-card-body py-2">
+
                     <!-- Step 1: Connect to Google Calendar -->
-                    <div class="row mb-0">
+                    <div class="row mb-1">
                         <div class="col-12">
-                            <div class="d-flex align-items-center justify-content-between task-summary-tile compact-tile">
+                            <div class="d-flex align-items-center justify-content-between task-summary-tile">
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-0">
+                                    <h6 class="mb-1">
                                         <i class="bi bi-link-45deg me-2"></i>Step 1: Connect to Google Calendar
                                     </h6>
                                     <p class="mb-0 small">Sign in to your Google account to enable calendar sync</p>
@@ -5327,7 +6496,7 @@
                                     <div id="connection-status" class="mb-1">
                                         <span class="badge bg-secondary">Not Connected</span>
                                     </div>
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex gap-1">
                                         <button id="connect-google-calendar" class="btn btn-google btn-sm">
                                             <i class="bi bi-google me-1"></i>Connect
                                         </button>
@@ -5341,12 +6510,12 @@
                     </div>
 
                     <!-- Step 2: Sync Task to Google Calendar -->
-                    <div class="row mt-1">
+                    <div class="row">
                         <div class="col-12">
-                            <div class="task-summary-tile compact-tile">
+                            <div class="task-summary-tile">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
                                     <h6 class="mb-0">
-                                        <i class="bi bi-arrow-repeat me-2"></i>Step 2: Sync Task to Google Calendar
+                                        <i class="fas fa-redo me-2"></i>Step 2: Sync Task to Google Calendar
                                     </h6>
                                     <button id="sync-to-google-calendar" class="btn btn-primary btn-sm" disabled>
                                         <i class="bi bi-calendar-plus me-1"></i>Sync Task
@@ -5361,17 +6530,12 @@
                                     </span>
                                 </div>
                                 
-                                <!-- Frequency, Time & Until Date Fields -->
-                                <div id="calendar-sync-fields" class="mt-2">
-                                    <div class="calendar-fields-header mb-2">
-                                        <h6 class="mb-0 text-primary">
-                                            <i class="bi bi-gear me-1"></i>Calendar Event Settings
-                                        </h6>
-                                    </div>
-                                    <div class="row g-2">
+                                <!-- Frequency, Time & Until Date Fields (only shown when recurring task is selected) -->
+                                <div id="calendar-sync-fields" class="d-none">
+                                    <div class="row g-1">
                                         <div class="col-4">
                                             <label for="calendar-frequency" class="form-label small mb-1">
-                                                <i class="bi bi-arrow-repeat me-1"></i>Frequency
+                                                <i class="fas fa-redo me-1"></i>Frequency
                                             </label>
                                             <select id="calendar-frequency" class="form-select form-select-sm">
                                                 <option value="">Select Frequency</option>
@@ -5409,25 +6573,29 @@
         </div>
 
         <!-- Right Column: Recent Activity, Priority Distribution & Telegram Integration -->
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6 d-flex flex-column" style="gap: 1.5rem;">
             <!-- Recent Activity -->
-            <div class="dashboard-card mb-3" style="height: 280px;">
-                <div class="dashboard-card-header py-2">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-activity me-2"></i>Recent Activity
+            <div class="dashboard-card mb-3 flex-grow-1" style="min-height: 180px; height: auto;">
+                <div class="dashboard-card-header py-2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px 12px 0 0; padding: 1.2rem; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); border-bottom: none;">
+                    <h6 class="card-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-activity me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Recent Activity
                     </h6>
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                 </div>
-                <div class="dashboard-card-body py-2" style="height: 220px; overflow-y: auto;">
+                <div class="dashboard-card-body py-2" style="height: auto; overflow: visible; min-height: 120px;">
                     <div class="activity-list" id="recentActivityList" style="font-size: 0.85rem;"></div>
                 </div>
             </div>
 
             <!-- Priority Distribution -->
             <div class="dashboard-card mb-3" style="height: 200px;">
-                <div class="dashboard-card-header py-2">
-                    <h6 class="card-title mb-0">
-                        <i class="bi bi-pie-chart me-2"></i>Priority Distribution
+                <div class="dashboard-card-header py-2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px 12px 0 0; padding: 1.2rem; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); border-bottom: none;">
+                    <h6 class="card-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-pie-chart me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Priority Distribution
                     </h6>
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                 </div>
                 <div class="dashboard-card-body py-2" style="height: 140px;">
                     <div class="priority-chart" id="priorityChart"></div>
@@ -5435,37 +6603,27 @@
             </div>
 
             <!-- Telegram Voice-to-Task Integration -->
-            <div class="dashboard-card mb-2 premium-feature-card compact-integration" id="telegramIntegrationSection" style="position: relative; z-index: 1040;">
-                <div class="dashboard-card-header py-0">
+            <div class="dashboard-card mb-3 premium-feature-card" id="telegramIntegrationSection" style="position: relative; z-index: 10;">
+                <div class="dashboard-card-header py-2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 12px 12px 0 0; padding: 1.2rem; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); border-bottom: none;">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h6 class="card-title mb-0">
-                            <i class="fab fa-telegram me-2"></i>Telegram Voice-to-Task Integration
+                        <h6 class="card-title mb-0" style="color: #2c3e50; text-shadow: 0 1px 3px rgba(255,255,255,0.9); font-weight: 700; position: relative; z-index: 2; font-size: 1.1rem; letter-spacing: 0.5px;">
+                            <i class="fab fa-telegram me-2" style="color: #e74c3c; text-shadow: 0 1px 2px rgba(255,255,255,0.7);"></i>Telegram Voice-to-Task Integration
                         </h6>
-                        <span class="premium-badge">
+                        <span class="badge bg-warning text-dark" style="position: relative; z-index: 2;">
                             <i class="fas fa-crown me-1"></i>Premium
                         </span>
                     </div>
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.25) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; top: -25%; right: -10%; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
                 </div>
-                <div class="dashboard-card-body py-0">
-                    <!-- Premium Overlay for Free Users -->
-                    <div class="premium-overlay" id="telegramPremiumOverlay">
-                        <div class="premium-overlay-content">
-                            <div class="premium-icon">
-                                <i class="fas fa-crown"></i>
-                            </div>
-                            <h5 class="premium-title">Premium Feature</h5>
-                            <p class="premium-description">Connect your Telegram account and create tasks via voice messages</p>
-                            <button class="btn btn-warning btn-lg upgrade-btn" onclick="upgradeToPremium()">
-                                <i class="fas fa-crown me-2"></i>Upgrade to Premium
-                            </button>
-                        </div>
-                    </div>
+                <div class="dashboard-card-body py-2">
+
                     <!-- Step 1: Link Telegram Account -->
-                    <div class="row mb-0">
+                    <div class="row mb-1">
                         <div class="col-12">
-                            <div class="d-flex align-items-center justify-content-between task-summary-tile compact-tile">
+                            <div class="d-flex align-items-center justify-content-between task-summary-tile">
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-0">
+                                    <h6 class="mb-1">
                                         <i class="fas fa-link me-2"></i>Step 1: Link Telegram Account
                                     </h6>
                                     <p class="mb-0 small">Connect your Telegram account to enable voice-to-task features</p>
@@ -5488,11 +6646,11 @@
                     </div>
 
                     <!-- Step 2: Send Voice Messages -->
-                    <div class="row mt-1">
+                    <div class="row">
                         <div class="col-12">
-                            <div class="d-flex align-items-center justify-content-between task-summary-tile compact-tile">
+                            <div class="d-flex align-items-center justify-content-between task-summary-tile">
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-0">
+                                    <h6 class="mb-1">
                                         <i class="fas fa-microphone-alt me-2"></i>Step 2: Send Voice Messages
                                     </h6>
                                     <p class="mb-0 small">Send voice messages to our Telegram bot to create tasks instantly</p>
@@ -5513,20 +6671,20 @@
                     </div>
 
                     <!-- Status Messages -->
-                    <div id="telegramStatus" class="mt-1 d-none" style="position: relative; z-index: 1050;">
-                        <div class="alert alert-info border-2 border-info border-opacity-25">
+                    <div id="telegramStatus" class="mt-2 d-none" style="position: relative; z-index: 20;">
+                        <div class="alert alert-info border-2 border-info border-opacity-25 py-2">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-info-circle text-info me-2"></i>
                                 <div>
-                                    <h6 class="alert-heading mb-1" style="font-size: 0.9rem;">Telegram Status</h6>
-                                    <div id="telegramStatusText" style="font-size: 0.85rem;"></div>
+                                    <h6 class="alert-heading mb-1" style="font-size: 0.8rem;">Telegram Status</h6>
+                                    <div id="telegramStatusText" style="font-size: 0.75rem;"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Development Mode Indicator -->
-                    <div class="mt-1" id="developmentModeIndicator" style="display: none;">
+                    <div class="mt-2" id="developmentModeIndicator" style="display: none;">
                         <div class="alert alert-warning border-2 border-warning border-opacity-25">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-code text-warning me-2"></i>
@@ -5568,89 +6726,7 @@
         </div>
     </div>
 
-    <!-- Bottom Spacing to Prevent Footer Overlap -->
-    <div class="mb-4"></div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-5 mt-5" style="background: #000000 !important;">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5 class="footer-title">
-                        <i class="bi bi-check2-square me-2 text-primary"></i>QuickNotes AI
-                    </h5>
-                    <p class="text-light opacity-75 mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="bi bi-twitter"></i>
-                        </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="bi bi-linkedin"></i>
-                        </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="bi bi-github"></i>
-                        </a>
-                        <a href="#" class="text-light opacity-75 hover-opacity-100 transition-opacity fs-5">
-                            <i class="bi bi-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="footer-title">Product</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#features" class="footer-link">Features</a></li>
-                        <li class="mb-2"><a href="#pricing" class="footer-link">Pricing</a></li>
-                        <li class="mb-2"><a href="login.html" class="footer-link">Login</a></li>
-                        <li class="mb-2"><a href="login.html" class="footer-link">Sign Up</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="mb-3 fw-semibold">Company</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
-                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
-                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
-                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="mb-3 fw-semibold">Support</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="mb-3 fw-semibold">Legal</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
-                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
-                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
-                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <hr class="my-4 border-light opacity-25">
-            
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="mb-0 opacity-75">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <button class="btn btn-outline-light btn-sm" id="footerThemeToggle">
-                        <i class="bi bi-moon-fill"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
@@ -5661,7 +6737,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="syncDurationModalLabel">
-                        <i class="bi bi-calendar-plus me-2"></i>Sync Recurring Task to Google Calendar
+                        <i class="fas fa-calendar-plus me-2"></i>Sync Recurring Task to Google Calendar
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -5836,7 +6912,7 @@
                                     Use a quiet environment for better accuracy
                                 </div>
                                 <div class="tip-item">
-                                    <i class="bi bi-arrow-repeat text-success me-2"></i>
+                                    <i class="fas fa-redo text-success me-2"></i>
                                     You can edit fields manually after voice input
                                 </div>
                                 <div class="tip-item">
@@ -5916,7 +6992,9 @@
                             </h6>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <h6 class="fw-semibold mb-2">European Languages</h6>
+                                    <h6 class="fw-semibold mb-2">
+                                        <i class="fas fa-flag me-2"></i>European Languages
+                                    </h6>
                                     <ul class="list-unstyled">
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇺🇸 English (US/UK)</li>
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇪🇸 Spanish (Spain/Mexico)</li>
@@ -5929,7 +7007,9 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
-                                    <h6 class="fw-semibold mb-2">Indian Languages</h6>
+                                    <h6 class="fw-semibold mb-2">
+                                        <i class="fas fa-flag me-2"></i>Indian Languages
+                                    </h6>
                                     <ul class="list-unstyled">
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇮🇳 Hindi (हिंदी)</li>
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇮🇳 Bengali (বাংলা)</li>
@@ -5945,7 +7025,9 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
-                                    <h6 class="fw-semibold mb-2">Asian & Other Languages</h6>
+                                    <h6 class="fw-semibold mb-2">
+                                        <i class="fas fa-flag me-2"></i>Asian & Other Languages
+                                    </h6>
                                     <ul class="list-unstyled">
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇯🇵 Japanese (Japan)</li>
                                         <li><i class="bi bi-check-circle-fill text-success me-2"></i>🇰🇷 Korean (Korea)</li>
@@ -6519,7 +7601,7 @@
                                     Use a quiet environment for better accuracy
                                 </div>
                                 <div class="tip-item">
-                                    <i class="bi bi-arrow-repeat text-success me-2"></i>
+                                    <i class="fas fa-redo text-success me-2"></i>
                                     You can edit the transcribed text before saving
                                 </div>
                                 <div class="tip-item">
@@ -6723,7 +7805,7 @@
                                     Use a quiet environment for better accuracy
                                 </div>
                                 <div class="tip-item">
-                                    <i class="bi bi-arrow-repeat text-success me-2"></i>
+                                    <i class="fas fa-redo text-success me-2"></i>
                                     You can edit fields manually after voice input
                                 </div>
                                 <div class="tip-item">
@@ -7467,7 +8549,7 @@
         window.taskState = {
             tasks: [],
             currentPage: 1,
-            tasksPerPage: 8,
+                            tasksPerPage: 8,
             filters: {
                 priority: '',
                 status: '',
@@ -8297,7 +9379,7 @@
             }
         }
 
-        function renderTaskGrid() {
+        function renderTaskGrid(skipPaginationScroll = false) {
             let tasksToRender = window.taskState.tasks;
             
             // If no tasks from Firebase, show sample tasks
@@ -8346,7 +9428,27 @@
                 console.error('Task Grid element not found!');
             }
 
-            renderPagination(filteredTasks.length);
+            renderPagination(filteredTasks.length, skipPaginationScroll);
+            
+            // Highlight only the most recently updated task after rendering
+            setTimeout(() => {
+                const recentlyUpdatedTasks = tasksToShow.filter(task => 
+                    task.updatedAt && (new Date() - new Date(task.updatedAt)) < 5 * 60 * 1000
+                );
+                
+                if (recentlyUpdatedTasks.length > 0) {
+                    // Find the most recently updated task
+                    const mostRecentTask = recentlyUpdatedTasks.reduce((latest, current) => {
+                        const latestTime = new Date(latest.updatedAt).getTime();
+                        const currentTime = new Date(current.updatedAt).getTime();
+                        return currentTime > latestTime ? current : latest;
+                    });
+                    
+                    // Highlight only the most recent task
+                    highlightUpdatedTask(mostRecentTask.id);
+                    console.log(`[Task Highlight] Highlighted most recently updated task: ${mostRecentTask.title}`);
+                }
+            }, 200);
         }
 
         function getFilteredTasks(tasksArray = null) {
@@ -8397,8 +9499,6 @@
 
         function createTaskTile(task) {
             console.log('Creating task tile for:', task.title, 'Status:', task.status, 'Priority:', task.priority);
-            
-
             
             // Check if task is recurring - handle different data types
             let isRecurring = false;
@@ -8531,7 +9631,7 @@
             if (task.teamAssignment && task.teamAssignment.assignedToTeam) {
                 isTeamTask = true;
                 teamTaskLabel = `<div class="task-tile-team-label">
-                    <i class="fas fa-users"></i>
+                    <i class="bi bi-people"></i>
                     <span>TEAM</span>
                 </div>`;
                 teamName = task.teamAssignment.teamName || 'Unknown Team';
@@ -8540,7 +9640,7 @@
             } else if (task.taskType === 'team' && task.teamId && task.assignedTo) {
                 isTeamTask = true;
                 teamTaskLabel = `<div class="task-tile-team-label">
-                    <i class="fas fa-users"></i>
+                    <i class="bi bi-people"></i>
                     <span>TEAM</span>
                 </div>`;
                 teamName = task.teamName || 'Unknown Team';
@@ -8554,7 +9654,7 @@
             if (isTeamTask) {
                 console.log('[Task Tile] Team task label HTML:', teamTaskLabel);
                 console.log('[Task Tile] Team badge HTML:', `<div class="task-tile-team-badge">
-                    <i class="fas fa-users"></i>
+                    <i class="bi bi-people"></i>
                     <span>Team</span>
                 </div>`);
             }
@@ -8685,8 +9785,122 @@
             if (length > 100) return 'expanded';
             return '';
         }
+        
+        // Global variable to track the most recently updated task
+        window.mostRecentlyUpdatedTaskId = null;
+        
+        // Function to check if task should be on page 1 and navigate if needed
+        function checkAndNavigateToPage1(taskId) {
+            console.log(`[Page Navigation] Checking navigation for task ${taskId}`);
+            
+            const task = window.taskState.tasks.find(t => String(t.id) === String(taskId));
+            if (!task) {
+                console.log(`[Page Navigation] Task ${taskId} not found in taskState`);
+                return false;
+            }
+            
+            // Since updated tasks are sorted to the top, they should always be on page 1
+            // Let's force navigation to page 1 for any task update to ensure user sees it
+            console.log(`[Page Navigation] Task ${taskId} was updated, navigating to page 1 to show updated task`);
+            console.log(`[Page Navigation] Current page before navigation: ${window.taskState.currentPage}`);
+            
+            // Set current page to 1
+            window.taskState.currentPage = 1;
+            console.log(`[Page Navigation] Current page after setting to 1: ${window.taskState.currentPage}`);
+            
+            // Render the grid with the new page
+            renderTaskGrid();
+            
+            // Scroll to Task History section after navigation (only if not page loading)
+            if (!window.isPageLoading) {
+                setTimeout(() => {
+                    const taskHistorySection = document.querySelector('.task-history');
+                    if (taskHistorySection) {
+                        taskHistorySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        console.log(`[Page Navigation] Scrolled to Task History section`);
+                    } else {
+                        console.log(`[Page Navigation] Task History section not found`);
+                    }
+                }, 200);
+            } else {
+                console.log(`[Page Navigation] Skipping scroll to Task History section (page loading)`);
+            }
+            
+            return true; // Indicates navigation occurred
+        }
+        
+        // Function to highlight a recently updated task
+        function highlightUpdatedTask(taskId) {
+            // Clear any existing highlights first
+            clearAllTaskHighlights();
+            
+            // Set this as the most recently updated task
+            window.mostRecentlyUpdatedTaskId = taskId;
+            
+            const taskTile = document.querySelector(`[data-task-id="${taskId}"]`);
+            if (taskTile) {
+                // Add the recently-updated class
+                taskTile.classList.add('recently-updated');
+                
+                // Remove the highlight after 5 minutes
+                setTimeout(() => {
+                    if (window.mostRecentlyUpdatedTaskId === taskId) {
+                        taskTile.classList.remove('recently-updated');
+                        window.mostRecentlyUpdatedTaskId = null;
+                    }
+                }, 5 * 60 * 1000); // 5 minutes
+                
+                // Scroll to the task tile if it's not visible (only if not page loading)
+                if (!window.isPageLoading) {
+                    setTimeout(() => {
+                        taskTile.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+                
+                console.log(`[Task Highlight] Task ${taskId} highlighted as most recently updated`);
+            } else {
+                console.log(`[Task Highlight] Task tile not found for ID: ${taskId}`);
+            }
+        }
+        
+        // Function to clear all task highlights
+        function clearAllTaskHighlights() {
+            const highlightedTasks = document.querySelectorAll('.task-tile.recently-updated');
+            highlightedTasks.forEach(task => {
+                task.classList.remove('recently-updated');
+            });
+            console.log(`[Task Highlight] Cleared highlights from ${highlightedTasks.length} tasks`);
+        }
+        
+        // Global function to highlight updated tasks (can be called from anywhere)
+        window.highlightUpdatedTask = highlightUpdatedTask;
+        window.clearAllTaskHighlights = clearAllTaskHighlights;
+        window.checkAndNavigateToPage1 = checkAndNavigateToPage1;
+        
+        // Test function to simulate task update and navigation
+        window.testTaskUpdateNavigation = function(taskId) {
+            console.log(`[Test] Testing task update navigation for task ${taskId}`);
+            console.log(`[Test] Current page before test: ${window.taskState.currentPage}`);
+            
+            // Simulate updating the task's updatedAt field
+            const task = window.taskState.tasks.find(t => String(t.id) === String(taskId));
+            if (task) {
+                task.updatedAt = new Date().toISOString();
+                console.log(`[Test] Updated task.updatedAt to: ${task.updatedAt}`);
+                
+                // Test the navigation
+                const navigated = checkAndNavigateToPage1(taskId);
+                console.log(`[Test] Navigation result: ${navigated}`);
+                console.log(`[Test] Current page after test: ${window.taskState.currentPage}`);
+                
+                return navigated;
+            } else {
+                console.log(`[Test] Task ${taskId} not found`);
+                return false;
+            }
+        };
 
-        function renderPagination(totalTasks) {
+        function renderPagination(totalTasks, skipScroll = false) {
             const totalPages = Math.ceil(totalTasks / window.taskState.tasksPerPage);
             const pagination = document.getElementById('taskPagination');
             
@@ -8696,7 +9910,7 @@
                 // Previous button
                 paginationHTML += `
                     <li class="page-item ${window.taskState.currentPage === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="changePage(${window.taskState.currentPage - 1})">Previous</a>
+                        <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${window.taskState.currentPage - 1})">Previous</a>
                     </li>
                 `;
                 
@@ -8704,7 +9918,7 @@
                 for (let i = 1; i <= totalPages; i++) {
                     paginationHTML += `
                         <li class="page-item ${i === window.taskState.currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                            <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${i})">${i}</a>
                         </li>
                     `;
                 }
@@ -8712,7 +9926,7 @@
                 // Next button
                 paginationHTML += `
                     <li class="page-item ${window.taskState.currentPage === totalPages ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="changePage(${window.taskState.currentPage + 1})">Next</a>
+                        <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${window.taskState.currentPage + 1})">Next</a>
                     </li>
                 `;
                 
@@ -8720,11 +9934,32 @@
             }
         }
 
-        function changePage(page) {
+        function changePage(page, skipScroll = false) {
+            console.log('[Pagination] changePage called with page:', page);
             const totalPages = Math.ceil(getFilteredTasks().length / window.taskState.tasksPerPage);
+            console.log('[Pagination] Total pages:', totalPages);
             if (page >= 1 && page <= totalPages) {
                 window.taskState.currentPage = page;
-                renderTaskGrid();
+                console.log('[Pagination] Rendering task grid for page:', page);
+                renderTaskGrid(skipScroll);
+                
+                // Scroll to Task History section after rendering (only if not skipping and not page loading)
+                if (!skipScroll && !window.isPageLoading) {
+                    setTimeout(() => {
+                        console.log('[Pagination] Attempting to scroll to Task History section');
+                        const taskHistorySection = document.querySelector('.task-history');
+                        if (taskHistorySection) {
+                            console.log('[Pagination] Task History section found, scrolling...');
+                            taskHistorySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        } else {
+                            console.error('[Pagination] Task History section not found!');
+                        }
+                    }, 100);
+                } else {
+                    console.log('[Pagination] Skipping scroll to Task History section (skipScroll: ' + skipScroll + ', isPageLoading: ' + window.isPageLoading + ')');
+                }
+            } else {
+                console.log('[Pagination] Invalid page number:', page);
             }
         }
 
@@ -9159,6 +10394,9 @@
                 // Update all stats and UI immediately
                 updateTaskStats();
                 updateDashboardStats();
+                
+                // For new tasks, always go to page 1 since they should appear at the top
+                window.taskState.currentPage = 1;
                 renderTaskGrid();
                 
                 // Force refresh progress overview
@@ -9388,11 +10626,13 @@
                     });
                 }
                 
-                // Scroll to form
-                document.querySelector('.task-form-compact').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
+                // Scroll to form (only if not page loading)
+                if (!window.isPageLoading) {
+                    document.querySelector('.task-form-compact').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }
                 
                 showToast(`Editing task: "${task.title}"`, 'info');
             } else {
@@ -9482,7 +10722,19 @@
                     
                     updateTaskStats();
                     updateDashboardStats();
-                    renderTaskGrid();
+                    
+                    // Check if task should be on page 1 and navigate if needed
+                    const navigatedToPage1 = checkAndNavigateToPage1(taskId);
+                    
+                    // If no navigation occurred, render the current page
+                    if (!navigatedToPage1) {
+                        renderTaskGrid();
+                    }
+                    
+                    // Highlight the updated task
+                    setTimeout(() => {
+                        highlightUpdatedTask(taskId);
+                    }, navigatedToPage1 ? 500 : 300); // Longer delay if navigation occurred
                     
                     // Reset form properly
                     resetFormToAddMode();
@@ -9537,7 +10789,19 @@
                     
                     updateTaskStats();
                     updateDashboardStats();
-                    renderTaskGrid();
+                    
+                    // Check if task should be on page 1 and navigate if needed
+                    const navigatedToPage1 = checkAndNavigateToPage1(taskId);
+                    
+                    // If no navigation occurred, render the current page
+                    if (!navigatedToPage1) {
+                        renderTaskGrid();
+                    }
+                    
+                    // Highlight the updated task
+                    setTimeout(() => {
+                        highlightUpdatedTask(taskId);
+                    }, navigatedToPage1 ? 500 : 300); // Longer delay if navigation occurred
                     
                 } catch (error) {
                     console.error('Error updating task status:', error);
@@ -9569,6 +10833,9 @@
                     updateTaskStats();
                     updateDashboardStats();
                     renderTaskGrid();
+                    
+                    // Clear any existing highlights since the task was deleted
+                    clearAllTaskHighlights();
                     
                 } catch (error) {
                     console.error('Error deleting task:', error);
@@ -10142,11 +11409,11 @@
 
         // Check if user is premium
         function isPremiumUser() {
-            // This should be replaced with actual premium user checking logic
-            // For now, we'll simulate premium status
+            // Check multiple sources for premium status
             return localStorage.getItem('premium_user') === 'true' || 
                    sessionStorage.getItem('premium_user') === 'true' ||
-                   window.isPremiumUser === true;
+                   window.isPremiumUser === true ||
+                   window.userRole === 'premium';
         }
 
         // Connect to Google Calendar
@@ -10322,39 +11589,54 @@
         // Function to handle premium feature cards
         function initializePremiumFeatureCards() {
             const isPremium = isPremiumUser();
-            const premiumCards = document.querySelectorAll('.premium-feature-card');
             
             console.log('[Task] Initializing premium feature cards. Premium user:', isPremium);
-            console.log('[Task] Found premium cards:', premiumCards.length);
             
-            premiumCards.forEach((card, index) => {
-                console.log(`[Task] Processing premium card ${index + 1}:`, card.id || 'no-id');
-                
-                if (!isPremium) {
-                    card.classList.add('free-user');
-                    console.log(`[Task] Added 'free-user' class to card ${index + 1}`);
-                } else {
-                    card.classList.remove('free-user');
-                    console.log(`[Task] Removed 'free-user' class from card ${index + 1}`);
-                }
-            });
-            
-            // Force a re-render to ensure CSS is applied
-            setTimeout(() => {
-                premiumCards.forEach((card, index) => {
-                    const hasFreeUserClass = card.classList.contains('free-user');
-                    const overlay = card.querySelector('.premium-overlay');
-                    console.log(`[Task] Card ${index + 1} final state:`, {
-                        id: card.id || 'no-id',
-                        hasFreeUserClass: hasFreeUserClass,
-                        hasOverlay: !!overlay,
-                        overlayVisible: overlay ? overlay.style.opacity !== '0' : 'no-overlay'
-                    });
-                });
-            }, 100);
+            // Use the disability feature instead of masking
+            if (isPremium) {
+                enablePremiumFeaturesForPremiumUsers();
+            } else {
+                disablePremiumFeaturesForFreeUsers();
+            }
             
             console.log('[Task] Premium feature cards initialization completed');
         }
+        
+        // Make the function globally available
+        window.initializePremiumFeatureCards = initializePremiumFeatureCards;
+        
+        // Function to test premium disability feature
+        window.testPremiumDisability = function() {
+            console.log('[Task] Testing premium disability feature...');
+            
+            // Simulate free user
+            localStorage.removeItem('premium_user');
+            sessionStorage.removeItem('premium_user');
+            window.isPremiumUser = false;
+            window.userRole = 'free';
+            
+            // Disable premium features
+            disablePremiumFeaturesForFreeUsers();
+            
+            console.log('[Task] Premium disability test completed. All premium features should now be disabled.');
+            showToast('Premium disability test activated. All premium features are now disabled.', 'info');
+        };
+        
+        // Function to test premium enable feature
+        window.testPremiumEnable = function() {
+            console.log('[Task] Testing premium enable feature...');
+            
+            // Simulate premium user
+            localStorage.setItem('premium_user', 'true');
+            window.isPremiumUser = true;
+            window.userRole = 'premium';
+            
+            // Enable premium features
+            enablePremiumFeaturesForPremiumUsers();
+            
+            console.log('[Task] Premium enable test completed. All premium features should now be enabled.');
+            showToast('Premium enable test activated. All premium features are now enabled.', 'success');
+        };
 
         // Function to upgrade to premium
         window.upgradeToPremium = function() {
@@ -11312,7 +12594,9 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Set Frequency for Recurring Tasks</h5>
+                                    <h5 class="modal-title">
+                        <i class="fas fa-calendar-plus me-2"></i>Set Frequency for Recurring Tasks
+                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
@@ -11382,7 +12666,9 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Fix Recurring Tasks</h5>
+                                    <h5 class="modal-title">
+                        <i class="fas fa-wrench me-2"></i>Fix Recurring Tasks
+                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
@@ -11947,6 +13233,11 @@
                 console.log('[Task] Premium feature cards initialization completed');
             }, 1000);
             
+            // Also initialize premium features when user role is determined
+            if (typeof window.userRole !== 'undefined') {
+                initializePremiumFeatureCards();
+            }
+            
             // Add console commands for testing
             console.log('=== CALENDAR INTEGRATION COMMANDS ===');
             console.log('enablePremiumUser() - Enable premium user mode for testing');
@@ -11970,6 +13261,22 @@
             console.log('debugRecurringTasks() - Debug all recurring tasks');
             console.log('verifyFirebaseRecurringData() - Verify recurring data in Firebase');
             console.log('testFirebaseRecurringSave() - Test saving recurring data to Firebase');
+            console.log('=====================================');
+            console.log('=== PREMIUM DISABILITY FEATURE COMMANDS ===');
+                    console.log('testPremiumDisability() - Test premium disability feature (simulate free user)');
+        console.log('testPremiumEnable() - Test premium enable feature (simulate premium user)');
+        console.log('Note: Assign to Team & Make this task recurring subsections are hidden by default and only expand for premium users when checkbox is checked');
+        console.log('=== TASK HIGHLIGHTING & NAVIGATION COMMANDS ===');
+        console.log('highlightUpdatedTask(taskId) - Highlight a specific task as recently updated');
+        console.log('clearAllTaskHighlights() - Clear all task highlights');
+        console.log('checkAndNavigateToPage1(taskId) - Check if task should be on page 1 and navigate if needed');
+        console.log('testTaskUpdateNavigation(taskId) - Test task update navigation functionality');
+        console.log('Note: Only the most recently updated task is highlighted with green border and animation');
+        console.log('Note: Highlights are automatically applied when toggling status, editing, or updating tasks');
+        console.log('Note: When updating tasks on different pages, screen automatically moves to page 1');
+            console.log('disablePremiumFeaturesForFreeUsers() - Disable all premium features');
+            console.log('enablePremiumFeaturesForPremiumUsers() - Enable all premium features');
+            console.log('isPremiumUser() - Check current premium status');
             console.log('=====================================');
         });
 
@@ -12938,6 +14245,14 @@
 
         // Initialize page without debug buttons
         document.addEventListener('DOMContentLoaded', function() {
+            // Set flag to prevent other scroll functions during page load
+            window.isPageLoading = true;
+            console.log('[Page Load] Page loading flag set');
+            
+            // Force scroll to top of page on load
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            console.log('[Page Load] Scrolled to top of page');
+            
             // Check if data is loaded after a delay
             setTimeout(() => {
                 console.log('=== POST-INITIALIZATION CHECK ===');
@@ -12965,9 +14280,17 @@
                     console.log('No tasks found - ready for user to create tasks');
                 } else {
                     console.log('Final verification - Live tasks are loaded and visible');
-                    // Force one more render to ensure visibility
-                    renderTaskGrid();
+                    // Force one more render to ensure visibility (skip scroll on initial load)
+                    renderTaskGrid(true);
                 }
+                
+                // Clear the page loading flag after everything is done
+                setTimeout(() => {
+                    window.isPageLoading = false;
+                    console.log('[Page Load] Page loading flag cleared');
+                }, 3000);
+                
+
             }, 5000);
         });
         
@@ -13003,6 +14326,13 @@
                 // Force voice section icons to be visible
                 fixVoiceSectionIcons();
             }, 1000);
+        });
+        
+        // Ensure page scrolls to top on refresh/load
+        window.addEventListener('load', function() {
+            // Force scroll to top when page is fully loaded
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            console.log('[Page Load] Scrolled to top after full page load');
         });
 
         // Function to fix voice section icons specifically
@@ -13125,6 +14455,45 @@
             };
         }
         
+        // Newsletter subscription functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fix icon visibility for Add New Task heading
+            const addNewTaskIcon = document.querySelector('.form-title i.fas.fa-plus-circle');
+            if (addNewTaskIcon) {
+                addNewTaskIcon.style.display = 'inline-block';
+                addNewTaskIcon.style.visibility = 'visible';
+                addNewTaskIcon.style.opacity = '1';
+                addNewTaskIcon.style.fontSize = '1.2rem';
+                addNewTaskIcon.style.color = 'var(--primary-color)';
+            }
+            
+            // Fallback: If Font Awesome fails, create a simple plus icon
+            if (!addNewTaskIcon || !addNewTaskIcon.offsetWidth) {
+                const formTitle = document.querySelector('.form-title');
+                if (formTitle && !formTitle.querySelector('.fallback-icon')) {
+                    const fallbackIcon = document.createElement('span');
+                    fallbackIcon.className = 'fallback-icon';
+                    fallbackIcon.innerHTML = '➕';
+                    fallbackIcon.style.cssText = 'color: var(--primary-color); font-size: 1.2rem; margin-right: 0.5rem; display: inline-block;';
+                    formTitle.insertBefore(fallbackIcon, formTitle.firstChild);
+                }
+            }
+
+            // Simple Task History icon fix
+            const taskHistoryIcon = document.querySelector('.task-history-header .section-title i.fas.fa-history');
+            if (taskHistoryIcon) {
+                taskHistoryIcon.style.display = 'inline-block';
+                taskHistoryIcon.style.visibility = 'visible';
+                taskHistoryIcon.style.opacity = '1';
+                taskHistoryIcon.style.color = 'var(--primary-color)';
+                taskHistoryIcon.style.fontSize = '1.1rem';
+                taskHistoryIcon.style.marginRight = '0.5rem';
+            }
+
+
+
+        });
+        
         // Function to populate team dropdowns with sample data
         function populateTeamDropdowns() {
             const teamSelect = document.getElementById('teamSelect');
@@ -13190,6 +14559,242 @@
         }
 
 
+    </script>
+
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/theme.js"></script>
+
+
+    <script>
+        // Advanced Header Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.querySelector('.advanced-navbar');
+            const navProgressBar = document.querySelector('.nav-progress-bar');
+            
+            // Scroll-based navbar effects
+            function handleNavbarScroll() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Add scrolled class for styling changes
+                if (scrollTop > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                
+                // Update progress bar
+                if (navProgressBar) {
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (scrollTop / scrollHeight) * 100;
+                    navProgressBar.style.width = `${progress}%`;
+                }
+            }
+            
+            // Throttled scroll handler for better performance
+            let scrollTicking = false;
+            function updateNavbarOnScroll() {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        handleNavbarScroll();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+            
+            // Initialize navbar state
+            handleNavbarScroll();
+            
+            // Enhanced mobile menu functionality
+            const mobileToggle = document.querySelector('.advanced-toggler');
+            const navMenu = document.querySelector('.advanced-nav-menu');
+            
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    // Animate menu items
+                    const menuItems = navMenu.querySelectorAll('.nav-item');
+                    menuItems.forEach((item, index) => {
+                        if (!isExpanded) {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(-20px)';
+                            setTimeout(() => {
+                                item.style.transition = 'all 0.3s ease';
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        }
+                    });
+                });
+            }
+            
+            // Active link highlighting
+            function updateActiveLink() {
+                const sections = document.querySelectorAll('section[id]');
+                const navLinks = document.querySelectorAll('.advanced-nav-link');
+                
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveLink, { passive: true });
+            
+            // Enhanced theme toggle with animation
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon with animation
+                    const icon = this.querySelector('#themeIcon');
+                    if (icon) {
+                        icon.style.transform = 'rotate(180deg)';
+                        setTimeout(() => {
+                            icon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+                            icon.style.transform = 'rotate(0deg)';
+                        }, 150);
+                    }
+                    
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer py-5 mt-5" style="display: block !important; visibility: visible !important; opacity: 1 !important; background: #000000 !important; color: #f3f4f6 !important; position: relative !important; z-index: 9999 !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3 fw-bold">
+                        <i class="fas fa-check-double me-2 text-primary"></i>QuickNotes AI
+                    </h5>
+                    <p class="mb-4">Your intelligent task management companion. Stay organized, boost productivity, and achieve your goals with AI-powered insights.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link fs-5">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Product</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="dashboard.html" class="footer-link">Dashboard</a></li>
+                        <li class="mb-2"><a href="task.html" class="footer-link">Tasks</a></li>
+                        <li class="mb-2" id="footerTeamLink" style="display: none;"><a href="team.html" class="footer-link">Team</a></li>
+                        <li class="mb-2" id="footerTeamDashboardLink" style="display: none;"><a href="team-dashboard.html" class="footer-link">Team Dashboard</a></li>
+                        <li class="mb-2"><a href="premium.html" class="footer-link">Premium</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="about.html" class="footer-link">About</a></li>
+                        <li class="mb-2"><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li class="mb-2"><a href="careers.html" class="footer-link">Careers</a></li>
+                        <li class="mb-2"><a href="press.html" class="footer-link">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Status</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">API Docs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="mb-3 fw-semibold">Legal</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="privacy-policy.html" class="footer-link">Privacy</a></li>
+                        <li class="mb-2"><a href="terms-of-service.html" class="footer-link">Terms</a></li>
+                        <li class="mb-2"><a href="cookie-policy.html" class="footer-link">Cookies</a></li>
+                        <li class="mb-2"><a href="gdpr.html" class="footer-link">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-secondary opacity-25">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 QuickNotes AI. All rights reserved. | Last updated: July 2025</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-outline-primary btn-sm" id="footerThemeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Footer theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const footerThemeToggle = document.getElementById('footerThemeToggle');
+            if (footerThemeToggle) {
+                footerThemeToggle.addEventListener('click', function() {
+                    // Toggle theme
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-bs-theme', newTheme);
+                    
+                    // Update icon
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                    }
+                    
+                    // Store theme preference
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+        });
     </script>
 </body>
 </html>

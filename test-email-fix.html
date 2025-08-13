@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Fix Test - QuickNotesAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-success { background-color: #10b981; }
+        .status-error { background-color: #ef4444; }
+        .status-warning { background-color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="test-card">
+                    <div class="text-center mb-4">
+                        <h2><i class="bi bi-envelope-check"></i> Email Fix Test</h2>
+                        <p class="text-muted">Testing the fixed email functionality</p>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h6><i class="bi bi-info-circle"></i> What was fixed:</h6>
+                        <ul class="mb-0">
+                            <li>Fixed logical error in server.js where mock mode was executing even when Resend was available</li>
+                            <li>Properly structured the if/else logic for Resend vs Mock mode</li>
+                            <li>Server now correctly uses Resend API when available</li>
+                        </ul>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="bi bi-gear"></i> Configuration</h6>
+                                    <p><strong>API Key:</strong> <code>re_5dq8thU2_Jgn7sYmMuXUc5K5kZ1WbC9jU</code></p>
+                                    <p><strong>From Email:</strong> <code>onboarding@resend.dev</code></p>
+                                    <p><strong>Provider:</strong> Resend</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6><i class="bi bi-check-circle"></i> Expected Result</h6>
+                                    <p>Emails should now be sent via Resend API instead of mock mode</p>
+                                    <p>You should see emails in your Resend dashboard</p>
+                                    <p>Real emails should be delivered to inbox</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="testEmailBtn" class="btn btn-primary btn-lg">
+                            <i class="bi bi-send"></i> Test Email Sending
+                        </button>
+                    </div>
+
+                    <div id="result" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="bi bi-activity"></i> Test Result</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="resultContent"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <a href="dashboard.html" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('testEmailBtn').addEventListener('click', async function() {
+            const btn = this;
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Sending...';
+            
+            try {
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'chandrmc@gmail.com',
+                        summaryContent: 'This is a test email to verify the fix is working. The server should now use Resend API instead of mock mode.',
+                        summaryType: 'test',
+                        recipientName: 'Test User'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                resultDiv.style.display = 'block';
+                
+                if (result.success) {
+                    resultContent.innerHTML = `
+                        <div class="alert alert-success">
+                            <span class="status-indicator status-success"></span>
+                            <strong>Success!</strong> ${result.message}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Email ID:</strong> <code>${result.emailId}</code></p>
+                                <p><strong>Provider:</strong> ${result.provider}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Status:</strong> <span class="badge bg-success">Sent</span></p>
+                                <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+                            </div>
+                        </div>
+                        ${result.note ? `<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> ${result.note}</div>` : ''}
+                    `;
+                } else {
+                    resultContent.innerHTML = `
+                        <div class="alert alert-danger">
+                            <span class="status-indicator status-error"></span>
+                            <strong>Error!</strong> ${result.message}
+                        </div>
+                        <p><strong>Error Details:</strong> ${result.error || 'No details provided'}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultContent.innerHTML = `
+                    <div class="alert alert-danger">
+                        <span class="status-indicator status-error"></span>
+                        <strong>Network Error!</strong> ${error.message}
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-send"></i> Test Email Sending';
+            }
+        });
+    </script>
+</body>
+</html> 
